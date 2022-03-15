@@ -1,4 +1,4 @@
 module "kubernetes" {
   source = "./modules/kubernetes"
-  stage = "staging"
+  stage  = "staging"
 }
