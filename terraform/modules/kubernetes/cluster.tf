@@ -3,16 +3,18 @@ data "digitalocean_kubernetes_versions" "cluster" {
 }
 
 resource "digitalocean_vpc" "cluster-vpc" {
-  name     = "default-${var.region}"
-  region   = var.region
+  name   = "default-${var.region}"
+  region = var.region
 }
 
 resource "digitalocean_kubernetes_cluster" "cluster" {
-  name         = "${var.stage}-cluster"
-  region       = var.region
-  version      = data.digitalocean_kubernetes_versions.cluster.latest_version
-  auto_upgrade = true
-  vpc_uuid     = digitalocean_vpc.cluster-vpc.id
+  name          = "${lower(var.stage)}-cluster"
+  region        = var.region
+  version       = data.digitalocean_kubernetes_versions.cluster.latest_version
+  auto_upgrade  = true
+  surge_upgrade = true
+
+  vpc_uuid = digitalocean_vpc.cluster-vpc.id
 
   maintenance_policy {
     start_time = "04:00"

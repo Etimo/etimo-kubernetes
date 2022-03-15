@@ -1,3 +1,3 @@
 output "project_id" {
-    value = data.digitalocean_project.project.id
+  value = resource.digitalocean_project.project.id
 }
