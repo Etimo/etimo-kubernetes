@@ -2,8 +2,7 @@ data "digitalocean_kubernetes_versions" "cluster" {
   version_prefix = "1.21."
 }
 
-resource "digitalocean_vpc" "cluster-vpc" {
-  name   = "default-${var.region}"
+data "digitalocean_vpc" "cluster-vpc" {
   region = var.region
 }
 
@@ -14,7 +13,7 @@ resource "digitalocean_kubernetes_cluster" "cluster" {
   auto_upgrade  = true
   surge_upgrade = true
 
-  vpc_uuid = digitalocean_vpc.cluster-vpc.id
+  vpc_uuid = data.digitalocean_vpc.cluster-vpc.id
 
   maintenance_policy {
     start_time = "04:00"
