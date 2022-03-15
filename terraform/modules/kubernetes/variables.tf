@@ -1,4 +1,4 @@
-variable "stage" {}
+variable "environment" {}
 variable "region" {
   default = "fra1"
 }

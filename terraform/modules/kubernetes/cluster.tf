@@ -3,9 +3,8 @@ data "digitalocean_kubernetes_versions" "cluster" {
 }
 
 resource "digitalocean_vpc" "cluster-vpc" {
-  name     = "${var.stage}-cluster-vpc"
+  name     = "default-${var.region}"
   region   = var.region
-  ip_range = "10.10.10.0/24"
 }
 
 resource "digitalocean_kubernetes_cluster" "cluster" {
