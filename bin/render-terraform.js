@@ -20,12 +20,9 @@ hbsSeparator(handlebars);
 projectFolders.forEach((projectFolder) => {
   const project = projectFolder.split("/")[1];
   const stageYamlData = stages.map((stage) => {
-    const templates = {
-      "templates/terraform/project_main.hbs":
-        "terraform/project_" + project + "_" + stage + ".tf",
-    };
     const stageConfigFile = path.join(projectFolder, stage + ".yaml");
     if (fs.existsSync(stageConfigFile)) {
+      console.log(`Validating ${stageConfigFile}...`);
       const yamlData = fs.readFileSync(stageConfigFile).toString();
       const yamlDataParsed = yaml.parse(yamlData);
       yamlDataParsed.codename = project;
@@ -35,6 +32,7 @@ projectFolders.forEach((projectFolder) => {
         console.error(validationResult.error);
         process.exit(1);
       }
+      console.log(`  -> file is valid!`);
       return yamlDataParsed;
     }
     return null;
@@ -43,6 +41,10 @@ projectFolders.forEach((projectFolder) => {
   stageYamlData.forEach((stageData, index) => {
     if (stageData) {
       const stage = stages[index];
+      const templates = {
+        "templates/terraform/project_main.hbs":
+          "terraform/project_" + project + "_" + stage + ".tf",
+      };
       console.log(
         `Rendering terraform template for project ${project} stage ${stage}...`
       );

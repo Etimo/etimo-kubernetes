@@ -20,3 +20,4 @@ jobs:
       - run: yarn
       - run: yarn render:codeowners --dry-run
       - run: yarn render:terraform --dry-run
+        if: ${{ always() }}

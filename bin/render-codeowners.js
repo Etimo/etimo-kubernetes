@@ -21,6 +21,7 @@ hbsSeparator(handlebars);
 const projectOwners = projectFolders.reduce((value, projectFolder) => {
   const ownersConfigFile = path.join(projectFolder, "owners.yaml");
   if (fs.existsSync(ownersConfigFile)) {
+    console.log(`Validating ${ownersConfigFile}...`);
     const yamlData = fs.readFileSync(ownersConfigFile).toString();
     const yamlDataParsed = yaml.parse(yamlData);
     const validationResult = schemas.schemaOwners.validate(yamlDataParsed);
@@ -28,6 +29,7 @@ const projectOwners = projectFolders.reduce((value, projectFolder) => {
       console.error(validationResult.error);
       process.exit(1);
     }
+    console.log(`  -> file is valid!`);
     const project = projectFolder.split("/")[1];
     return { ...value, [project]: yamlDataParsed.owners };
   }
