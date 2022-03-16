@@ -8,6 +8,8 @@ on:
   push:
     paths:
       - "projects"
+      - "bin"
+      - ".github/workflows"
 jobs:
   check-project:
     timeout-minutes: 10
