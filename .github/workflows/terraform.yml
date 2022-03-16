@@ -40,11 +40,11 @@ jobs:
         run: terraform plan -no-color
         continue-on-error: true
 
-      - uses: izhangzhihao/delete-comment@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          delete_user_name: github-actions[bot]
-          issue_number: ${{ github.event.number }}
+      # - uses: izhangzhihao/delete-comment@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     delete_user_name: github-actions[bot]
+      #     issue_number: ${{ github.event.number }}
 
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
@@ -54,7 +54,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             // Remove old comment
-            const comments = github.rest.issues.listComments({
+            const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number
