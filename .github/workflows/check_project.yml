@@ -28,13 +28,10 @@ jobs:
         name: "Check that only one project is changed in this PR"
         run: ./bin/prevent-multiple-projects.sh
 
-      # - uses: marocchino/sticky-pull-request-comment@v2
-      #   with:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     number: ${{ steps.finder.outputs.pr }}
-      #     recreate: true
-      #     message: |
-      #       ⚠️ Warning, migrations found in pull request! Make sure to check compatibility before merging to main and deploying!!!
-      #       ```
-      #       ${{ steps.migrations.outputs.result }}
-      #       ```
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: ${{ failed() }}
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ steps.finder.outputs.pr }}
+          recreate: true
+          message: ⚠️ Multiple projects detected! Make sure you only provision 1 project per pull request.
