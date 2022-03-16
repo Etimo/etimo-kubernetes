@@ -29,7 +29,7 @@ jobs:
         run: ./bin/prevent-multiple-projects.sh
 
       - uses: marocchino/sticky-pull-request-comment@v2
-        if: ${{ failed() }}
+        if: ${{ failure() }}
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           number: ${{ steps.finder.outputs.pr }}
