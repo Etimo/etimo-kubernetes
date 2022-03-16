@@ -1,3 +1,3 @@
 variable "region" {
-    default = "fra1"
+  default = "fra1"
 }
