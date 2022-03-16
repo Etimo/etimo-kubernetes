@@ -50,7 +50,7 @@ jobs:
             github.rest.issues.deleteComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: comment.id
+              comment_id: comment[0].id
             })
 
       - name: Terraform Plan
@@ -73,13 +73,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Remove old comment
-            const comments = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number
-            })
-            console.log(comments)
+            // // Remove old comment
+            // const comments = await github.rest.issues.listComments({
+            //   owner: context.repo.owner,
+            //   repo: context.repo.repo,
+            //   issue_number: context.issue.number
+            // })
+            // console.log(comments)
 
             // Create new comment
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
