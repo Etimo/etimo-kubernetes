@@ -9,6 +9,14 @@ terraform {
       version = "~> 2.0"
     }
   }
+
+  cloud {
+    organization = "etimo"
+
+    workspaces {
+      name = "etimo-kubernetes"
+    }
+  }
 }
 
 provider "digitalocean" {
