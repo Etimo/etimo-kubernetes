@@ -6,10 +6,12 @@
   "author": "Daniel Winther <daniel.winther@etimo.se>",
   "license": "MIT",
   "scripts": {
-    "render:terraform": "node ./bin/render-terraform.js"
+    "render:terraform": "node ./bin/render-terraform.js",
+    "render:codeowners": "node ./bin/render-codeowners.js"
   },
   "devDependencies": {
     "commander": "^9.0.0",
+    "glob": "^7.2.0",
     "handlebars": "^4.7.7",
     "joi": "^17.6.0",
     "yaml": "^1.10.2"

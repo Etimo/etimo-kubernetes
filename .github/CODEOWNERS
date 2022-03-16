@@ -1,1 +1,11 @@
-* indrif
+# Base infrastructure
+bin/ @indrif
+lib/ @indrif
+templates/ @indrif
+terraform/ @indrif
+
+package.json @indrif
+yarn.lock @indrif
+
+# Projects
+projects/test @niclaslindstedt

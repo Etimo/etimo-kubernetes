@@ -4,8 +4,9 @@ const fs = require("fs");
 const yaml = require("yaml");
 const handlebars = require("handlebars");
 const schemas = require("../lib/schemas");
+const { hbsSeparator } = require("../lib/hbs-helpers");
 
-const stages = ["staging", "production"];
+const stages = require("../lib/stages");
 
 const options = program
   .option("--dry-run")
@@ -29,14 +30,6 @@ const templates = {
   "templates/terraform/project_main.hbs":
     "terraform/project_" + project + "_staging.tf",
 };
-
-handlebars.registerHelper("sep", function (options) {
-  if (options.data.last) {
-    return options.inverse();
-  } else {
-    return options.fn();
-  }
-});
 
 // Parse and validate stage configs
 const stageYamlData = stages.map((stage) => {

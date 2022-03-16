@@ -1,9 +1,13 @@
 # Base infrastructure
-templates/ @Etimo/kubernetes
-terraform/ @Etimo/kubernetes
-projects/ @Etimo/kubernetes
+bin/ @indrif
+lib/ @indrif
+templates/ @indrif
+terraform/ @indrif
+
+package.json @indrif
+yarn.lock @indrif
 
 # Projects
-{{#each projects as |item index|}}
-projects/{{this.codename}} {{#each this.owners}}{{this}}{{#sep}} {{/sep}}{{/each}}
+{{#each projects}}
+projects/{{@key}} {{#each this}}@{{this}}{{#sep}} {{/sep}}{{/each}}
 {{/each}}
