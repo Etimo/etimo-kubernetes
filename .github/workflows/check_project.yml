@@ -6,8 +6,8 @@ on:
       - reopened
       - synchronize
   push:
-    paths:
-      - "projects/**"
+    # paths:
+    #   - "projects/**"
 jobs:
   check-project:
     timeout-minutes: 10
