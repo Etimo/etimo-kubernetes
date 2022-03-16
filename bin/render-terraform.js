@@ -19,11 +19,11 @@ hbsSeparator(handlebars);
 // Parse and validate stage configs
 projectFolders.forEach((projectFolder) => {
   const project = projectFolder.split("/")[1];
-  const templates = {
-    "templates/terraform/project_main.hbs":
-      "terraform/project_" + project + "_staging.tf",
-  };
   const stageYamlData = stages.map((stage) => {
+    const templates = {
+      "templates/terraform/project_main.hbs":
+        "terraform/project_" + project + "_" + stage + ".tf",
+    };
     const stageConfigFile = path.join(projectFolder, stage + ".yaml");
     if (fs.existsSync(stageConfigFile)) {
       const yamlData = fs.readFileSync(stageConfigFile).toString();
