@@ -7,9 +7,9 @@ on:
       - synchronize
   push:
     paths:
-      - "projects"
-      - "bin"
-      - ".github/workflows"
+      - "projects/**/*"
+      - "bin/*"
+      - ".github/workflows/*.yml"
 jobs:
   check-project:
     timeout-minutes: 10
