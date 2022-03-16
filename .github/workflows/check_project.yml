@@ -9,7 +9,7 @@ on:
     branches-ignore:
       - main
     paths:
-      - "projects/"
+      - "projects/**"
 jobs:
   check-project:
     timeout-minutes: 10
