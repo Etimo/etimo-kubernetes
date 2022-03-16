@@ -6,10 +6,10 @@ on:
       - reopened
       - synchronize
   push:
-    paths:
-      - "projects/**/*"
-      - "bin/*"
-      - ".github/workflows/*.yml"
+    # paths:
+    #   - "projects/**/*"
+    #   - "bin/*"
+    #   - ".github/workflows/*.yml"
 jobs:
   check-project:
     timeout-minutes: 10
