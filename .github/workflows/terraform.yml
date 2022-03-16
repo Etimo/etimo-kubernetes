@@ -33,23 +33,23 @@ jobs:
         working-directory: terraform
         run: terraform validate -no-color
 
-      # - uses: actions/github-script@v6
-      #   if: github.event_name == 'pull_request'
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     script: |
-      #       const response = await github.rest.issues.listComments({
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         issue_number: context.issue.number
-      #       })
-      #       response.data.filter(comment => comment.body.indexOf("Terraform Format and Style") > -1).forEach(comment => {
-      #         github.rest.issues.deleteComment({
-      #           owner: context.repo.owner,
-      #           repo: context.repo.repo,
-      #           comment_id: comment.id
-      #         })
-      #       })
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const response = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            })
+            response.data.filter(comment => comment.body.indexOf("Terraform Format and Style") > -1).forEach(comment => {
+              github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: comment.id
+              })
+            })
 
       - name: Terraform Plan
         id: plan
