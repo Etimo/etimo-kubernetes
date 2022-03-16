@@ -7,6 +7,7 @@ module "environment" {
 module "kubernetes" {
   source = "./modules/kubernetes"
   stage  = "Staging"
+  region = var.region
 }
 
 module "project_bind" {
@@ -15,4 +16,9 @@ module "project_bind" {
   resources = [
     module.kubernetes.cluster_urn
   ]
+}
+
+resource "digitalocean_spaces_bucket" "hello-world" {
+  region = var.region
+  name = "hello-world"
 }

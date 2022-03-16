@@ -28,3 +28,25 @@ resource "digitalocean_kubernetes_cluster" "cluster" {
     max_nodes  = 1
   }
 }
+
+# resource "digitalocean_kubernetes_node_pool" "bar" {
+#   cluster_id = digitalocean_kubernetes_cluster.cluster.id
+
+#   name       = "compute-pool"
+#   size       = "c-2"
+#   node_count = 0
+#   min_nodes = 0
+#   max_nodes = 1
+#   tags       = ["compute"]
+
+#   # labels = {
+#   #   service  = "backend"
+#   #   priority = "high"
+#   # }
+
+#   # taint {
+#   #   key    = "workloadKind"
+#   #   value  = "database"
+#   #   effect = "NoSchedule"
+#   # }
+# }
