@@ -7,7 +7,7 @@ on:
       - synchronize
   push:
     paths:
-      - "projects"
+      - "projects/**/*.yaml"
 jobs:
   check-project:
     timeout-minutes: 10
