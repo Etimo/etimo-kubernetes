@@ -1,0 +1,17 @@
+{
+  "name": "etimo-kubernetes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Etimo/etimo-kubernetes.git",
+  "author": "Daniel Winther <daniel.winther@etimo.se>",
+  "license": "MIT",
+  "scripts": {
+    "render:terraform": "node ./bin/render-terraform.js"
+  },
+  "devDependencies": {
+    "commander": "^9.0.0",
+    "handlebars": "^4.7.7",
+    "joi": "^17.6.0",
+    "yaml": "^1.10.2"
+  }
+}

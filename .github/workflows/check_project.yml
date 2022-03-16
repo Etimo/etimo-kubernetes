@@ -1,0 +1,40 @@
+name: Check project
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - "projects/"
+jobs:
+  check-project:
+    timeout-minutes: 10
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+
+      # - uses: jwalton/gh-find-current-pr@v1
+      #   id: finder
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: prevent-multiple-projects
+        name: "Check that only one project is changed in this PR"
+        run: ./bin/prevent-multiple-projects.sh
+
+      # - uses: marocchino/sticky-pull-request-comment@v2
+      #   with:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     number: ${{ steps.finder.outputs.pr }}
+      #     recreate: true
+      #     message: |
+      #       ⚠️ Warning, migrations found in pull request! Make sure to check compatibility before merging to main and deploying!!!
+      #       ```
+      #       ${{ steps.migrations.outputs.result }}
+      #       ```

@@ -1,0 +1,9 @@
+# Base infrastructure
+templates/ @Etimo/kubernetes
+terraform/ @Etimo/kubernetes
+projects/ @Etimo/kubernetes
+
+# Projects
+{{#each projects as |item index|}}
+projects/{{this.codename}} {{#each this.owners}}{{this}}{{#sep}} {{/sep}}{{/each}}
+{{/each}}
