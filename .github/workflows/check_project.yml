@@ -6,8 +6,6 @@ on:
       - reopened
       - synchronize
   push:
-    branches-ignore:
-      - main
     paths:
       - "projects/**"
 jobs:
