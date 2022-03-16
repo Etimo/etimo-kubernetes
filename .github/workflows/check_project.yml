@@ -1,10 +1,10 @@
 name: Check project
 on:
-  # pull_request:
-  #   types:
-  #     - opened
-  #     - reopened
-  #     - synchronize
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
   push:
     paths:
       - "projects/**/*"
