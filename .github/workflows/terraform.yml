@@ -35,8 +35,6 @@ jobs:
 
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -46,11 +44,12 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number
             })
-            const comment = response.data.filter(comment => comment.body.indexOf("Terraform Format and Style") > -1)
-            github.rest.issues.deleteComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: comment[0].id
+            response.data.filter(comment => comment.body.indexOf("Terraform Format and Style") > -1).forEach(comment => {
+              github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: comment.id
+              })
             })
 
       - name: Terraform Plan
@@ -73,14 +72,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // // Remove old comment
-            // const comments = await github.rest.issues.listComments({
-            //   owner: context.repo.owner,
-            //   repo: context.repo.repo,
-            //   issue_number: context.issue.number
-            // })
-            // console.log(comments)
-
             // Create new comment
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
