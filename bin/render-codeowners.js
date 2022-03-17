@@ -8,6 +8,7 @@ const glob = require("glob");
 const schemas = require("../lib/schemas");
 const stages = require("../lib/stages");
 const { hbsSeparator } = require("../lib/hbs-helpers");
+const { getTemplate, renderToFile } = require("../lib/templates");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -38,17 +39,15 @@ const projectOwners = projectFolders.reduce((value, projectFolder) => {
 
 console.log(`Rendering codeowners template...`);
 const dest = ".github/CODEOWNERS";
-const templateStr = fs
-  .readFileSync("templates/github/codeowners.hbs")
-  .toString();
-const template = handlebars.compile(templateStr);
+const template = getTemplate(handlebars, "github", "codeowners.hbs");
 
 if (!dryRun) {
-  fs.writeFileSync(
-    dest,
-    template({
+  renderToFile(
+    template,
+    {
       projects: projectOwners,
-    })
+    },
+    dest
   );
   console.log(`  -> Rendered template to ${dest}!`);
 } else {
