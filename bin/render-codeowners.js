@@ -39,9 +39,9 @@ const projectOwners = projectFolders.reduce((value, projectFolder) => {
 
 console.log(`Rendering codeowners template...`);
 const dest = ".github/CODEOWNERS";
-const template = getTemplate(handlebars, "github", "codeowners.hbs");
 
 if (!dryRun) {
+  const template = getTemplate(handlebars, "github", "codeowners.hbs");
   renderToFile(
     template,
     {
@@ -53,3 +53,13 @@ if (!dryRun) {
 } else {
   console.log("  (Skipping rendering due to dryn run)");
 }
+
+const allOwners = Object.values(projectOwners).flat();
+const allOwnersNoDuplicates = allOwners.reduce((total, value) => {
+  total[value] = true;
+  return total;
+}, {});
+fs.writeFileSync(
+  "projects/all_owners",
+  Object.keys(allOwnersNoDuplicates).sort().join("\n")
+);
