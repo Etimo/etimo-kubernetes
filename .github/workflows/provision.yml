@@ -38,7 +38,7 @@ jobs:
           # Optional (recommended) mail server password:
           password: ${{secrets.MAIL_PASSWORD}}
           # Required mail subject:
-          subject: Github Actions job result
+          subject: Github Actions job result2
           # Required recipients' addresses:
           to: obiwan@example.com,yoda@example.com
           # Required sender full name (address can be skipped):
