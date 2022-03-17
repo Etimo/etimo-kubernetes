@@ -40,7 +40,7 @@ jobs:
           # Required mail subject:
           subject: Github Actions job result2
           # Required recipients' addresses:
-          to: obiwan@example.com,yoda@example.com
+          to: daniel.winther@etimo.se
           # Required sender full name (address can be skipped):
           from: Daniel Winther <daniel.winther@etimo.se>
           # Optional whether this connection use TLS (default is true if server_port is 465)
