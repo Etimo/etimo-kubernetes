@@ -8,7 +8,7 @@
   "scripts": {
     "render:terraform": "node ./bin/render-terraform.js",
     "render:codeowners": "node ./bin/render-codeowners.js",
-    "generate:csr": "./bin/generate-csr.sh",
+    "generate:user-certificate": "./bin/generate-user-certificate.sh",
     "render:csr": "node ./bin/render-csr.js"
   },
   "devDependencies": {

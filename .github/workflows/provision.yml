@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      # - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
-      # - run: yarn
-      # - run: yarn render:codeowners --dry-run
-      # - run: yarn render:terraform --dry-run
-      # - run: yarn render:codeowners
-      # - run: yarn render:terraform
+      - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+      - run: yarn
+      - run: yarn render:codeowners --dry-run
+      - run: yarn render:terraform --dry-run
+      - run: yarn render:codeowners
+      - run: yarn render:terraform
 
       # - name: Install doctl
       #   uses: digitalocean/action-doctl@v2

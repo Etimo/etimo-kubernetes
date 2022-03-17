@@ -22,7 +22,7 @@ if (validationResult.error) {
 }
 
 // Look for csr
-const csrFile = `${username}-fixed.csr`;
+const csrFile = `${username}-base64-encoded.csr`;
 if (!fs.existsSync(csrFile)) {
   console.error(`No csr file found (${csrFile}). Please create csr first.`);
   process.exit(1);
