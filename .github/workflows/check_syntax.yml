@@ -1,15 +1,15 @@
 name: Check syntax
 on:
   pull_request:
-    # types:
-    #   - opened
-    #   - reopened
-    #   - synchronize
+  # types:
+  #   - opened
+  #   - reopened
+  #   - synchronize
   push:
-    # branches-ignore:
-    #   - main
-    # paths:
-    #   - "projects/"
+    branches-ignore:
+      - main
+    paths:
+      - "projects/"
 jobs:
   check-syntax:
     timeout-minutes: 10
