@@ -1,8 +1,8 @@
 # Buckets, if any
 {{#each buckets}}
-resource "digitalocean_spaces_bucket" "{{../codename}}-{{name}}-{{../stage}}" {
+resource "digitalocean_spaces_bucket" "{{../project}}-{{name}}-{{../stage}}" {
   region = var.region
-  name   = "{{../codename}}-{{name}}-{{../stage}}"
+  name   = "{{../project}}-{{name}}-{{../stage}}"
 }
 {{/each}}
 

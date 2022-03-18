@@ -4,10 +4,11 @@ const fs = require("fs");
 
 const schemas = require("../lib/schemas");
 const { getTemplate, renderToFile } = require("../lib/templates");
+const { getFileContent } = require("../lib/file");
 
 // Cmd
 const options = program
-  .option("--username <username>")
+  .requiredOption("--username <username>")
   .option("--dry-run")
   .parse()
   .opts();
@@ -28,7 +29,7 @@ if (!fs.existsSync(csrFile)) {
   process.exit(1);
 }
 
-const csr = fs.readFileSync(csrFile).toString();
+const csr = getFileContent(csrFile);
 
 console.log(`Rendering csr template...`);
 const dest = `csr-${username}.yaml`;

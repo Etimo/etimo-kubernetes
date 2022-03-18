@@ -12,11 +12,14 @@ jobs:
       - uses: actions/checkout@v2
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: yarn
-      - run: yarn render:codeowners --dry-run
+
+      # Validate everything before trying something
+      - run: yarn render:owners --dry-run
       - run: yarn render:terraform --dry-run
-      - run: yarn render:codeowners
+
+      # Generate all files
+      - run: yarn render:owners
       - run: yarn render:terraform
-      - run: git diff
 
       # - name: Setup Terraform
       #   uses: hashicorp/setup-terraform@v1
@@ -44,20 +47,3 @@ jobs:
       #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       # - name: Save DigitalOcean kubeconfig with short-lived credentials
       #   run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 staging-cluster
-
-      - name: Send mail
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.MAIL_USERNAME}}
-          password: ${{secrets.MAIL_PASSWORD}}
-          subject: Github Actions job result2
-          to: daniel.winther@etimo.se
-          from: Daniel Winther <daniel.winther@etimo.se>
-          secure: true
-          body: Välkommen till Etimo Kubernetes!
-          html_body: Hello world # file://README.html
-          ignore_cert: true
-          convert_markdown: true
-          attachments: ./package.json

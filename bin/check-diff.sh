@@ -1,6 +1,8 @@
 #!/bin/bash
 
 git diff --cached --name-status | cat
+
+# Projects
 DELETED_FILES=$(git diff --cached --name-status | grep -E "^D")
 ADDED_FILES=$(git diff --cached --name-status | grep -E "^A")
 MODIFIED_FILES=$(git diff --cached --name-status | grep -E "^M")

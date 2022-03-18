@@ -1,7 +1,6 @@
 const { program } = require("commander");
 const path = require("path");
 const fs = require("fs");
-const yaml = require("yaml");
 const handlebars = require("handlebars");
 const glob = require("glob");
 
@@ -9,6 +8,8 @@ const schemas = require("../lib/schemas");
 const stages = require("../lib/stages");
 const { hbsSeparator } = require("../lib/hbs-helpers");
 const { getTemplate, renderToFile } = require("../lib/templates");
+const { validateYamlFile } = require("../lib/validations");
+const { getYamlContentParsed, getFileContent } = require("../lib/file");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -23,16 +24,13 @@ const projectOwners = projectFolders.reduce((value, projectFolder) => {
   const ownersConfigFile = path.join(projectFolder, "owners.yaml");
   if (fs.existsSync(ownersConfigFile)) {
     console.log(`Validating ${ownersConfigFile}...`);
-    const yamlData = fs.readFileSync(ownersConfigFile).toString();
-    const yamlDataParsed = yaml.parse(yamlData);
-    const validationResult = schemas.schemaOwners.validate(yamlDataParsed);
-    if (validationResult.error) {
-      console.error(validationResult.error);
-      process.exit(1);
-    }
+    const data = validateYamlFile(ownersConfigFile, schemas.schemaOwners);
     console.log(`  -> file is valid!`);
     const project = projectFolder.split("/")[1];
-    return { ...value, [project]: yamlDataParsed.owners };
+    return {
+      ...value,
+      [project]: data.owners,
+    };
   }
   return { ...value };
 }, {});
@@ -54,12 +52,17 @@ if (!dryRun) {
   console.log("  (Skipping rendering due to dryn run)");
 }
 
+console.log("Rendering all_owners...");
 const allOwners = Object.values(projectOwners).flat();
-const allOwnersNoDuplicates = allOwners.reduce((total, value) => {
+const allOwnersFile = "users/all_owners";
+const currentOwners = allOwners.reduce((total, value) => {
   total[value] = true;
   return total;
 }, {});
-fs.writeFileSync(
-  "projects/all_owners",
-  Object.keys(allOwnersNoDuplicates).sort().join("\n")
-);
+
+if (!dryRun) {
+  fs.writeFileSync(allOwnersFile, Object.keys(currentOwners).sort().join("\n"));
+  console.log(`  -> Rendered all_owners!`);
+} else {
+  console.log("  (Skipping rendering due to dry run)");
+}
