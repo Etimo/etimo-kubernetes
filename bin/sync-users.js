@@ -8,7 +8,7 @@ const nodemailer = require("nodemailer");
 const options = program.option("--dry-run").parse().opts();
 const dryRun = options.dryRun;
 
-console.log("Getting users from projects...");
+console.log("Getting users from projects in repo...");
 const existingUsersData = fs
   .readFileSync(consts.FILENAME_ALL_OWNERS)
   .toString();
