@@ -31,7 +31,7 @@ if (!dryRun) {
   // Perform sync
   usersToAdd.forEach((username) => {
     console.log(`Generating certificate for ${username}...`);
-    shelljs.exec(`./bin/generate-user-certificate.sh ${username}`);
+    shelljs.exec(`./bin/generate-user-certificate.js --username ${username}`);
   });
   usersToRemove.forEach((username) => {
     console.log(`Removing user certificate for ${username}...`);
