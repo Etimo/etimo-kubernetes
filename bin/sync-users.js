@@ -51,7 +51,9 @@ if (!dryRun) {
       process.exit(1);
     } else {
       console.log("  -> Kubeconfig is valid!");
-      // shelljs.exec(`node ./bin/send-kubeconfigs.js `)
+      shelljs.exec(
+        `yarn send:kubeconfig --username ${username} --mail-username ${process.env.MAIL_USERNAME} --mail-password ${process.env.MAIL_PASSWORD}`
+      );
     }
   });
   usersToRemove.forEach((username) => {

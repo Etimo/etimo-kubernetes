@@ -15,7 +15,8 @@
     "sync:users": "node ./bin/sync-users.js",
     "sync:projects": "node ./bin/sync-projects.js",
     "sync:cluster-info": "node ./bin/sync-cluster-info.js",
-    "clean": "./bin/clean.sh"
+    "clean": "./bin/clean.sh",
+    "send:kubeconfig": "node ./bin/send-kubeconfig.js"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
