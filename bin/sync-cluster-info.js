@@ -13,6 +13,7 @@ shelljs.pushd("terraform");
 const terraformOutputRes = shelljs
   .exec("terraform output -json", {
     silent: true,
+    shell: "/bin/bash",
   })
   .to("temp.txt");
 if (terraformOutputRes.code != 0) {
