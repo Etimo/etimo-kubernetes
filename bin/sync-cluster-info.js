@@ -20,14 +20,7 @@ if (terraformOutputRes.code != 0) {
 shelljs.popd();
 
 console.log("Validation terraform output...");
-console.log("WHAT WE FOUND:", terraformOutputRes.stdout.replace(/\n/g, ""));
-let terraformOutput = null;
-try {
-  terraformOutput = JSON.parse(terraformOutputRes.stdout);
-} catch (e) {
-  terraformOutput = JSON.parse(terraformOutputRes.stdout);
-}
-console.log(terraformOutput);
+const terraformOutput = JSON.parse(terraformOutputRes.stdout);
 const validationResult =
   schemas.schemaTerraformOutput.validate(terraformOutput);
 if (validationResult.error) {
