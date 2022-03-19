@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rm -v terraform/project_*.tf
-rm -v kubernetes/projects/*.yaml
-rm -v users/*
+rm -vf terraform/project_*.tf
+rm -vf kubernetes/projects/*.yaml
+rm -vf users/*
