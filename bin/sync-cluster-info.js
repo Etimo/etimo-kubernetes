@@ -20,7 +20,7 @@ if (terraformOutputRes.code != 0) {
 shelljs.popd();
 
 console.log("Validation terraform output...");
-console.log(terraformOutputRes.stdout);
+console.log("STDOUT:", terraformOutputRes.stdout);
 const terraformOutput = JSON.parse(terraformOutputRes.stdout);
 console.log(terraformOutput);
 const validationResult =
