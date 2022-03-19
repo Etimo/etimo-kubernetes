@@ -14,10 +14,10 @@ const existingProjects = getAllProjects();
 // Get users already in k8s
 console.log("Getting existing namespaces from kubernetes...");
 const namespaces = getAllNamespaces();
-
 console.log("Projects in repo:", existingProjects);
 console.log("Namespaces in kubernetes:", namespaces);
 
+// Calculate namespaces to add/remove
 const namespacesToAdd = new Set(
   [...existingProjects].filter((u) => !namespaces.has(u))
 );
@@ -28,6 +28,7 @@ console.log("Namespaces to add/update to kubernetes:", namespacesToAdd);
 console.log("Namespaces to remove from kubernetes:", namespacesToRemove);
 
 if (!dryRun) {
+  // Apply sync
   console.log(`Creating or updating project namespaces...`);
   shelljs.exec(`kubectl apply -f kubernetes/projects/`);
   namespacesToRemove.forEach((ns) => {

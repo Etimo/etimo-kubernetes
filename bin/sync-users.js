@@ -14,7 +14,6 @@ const existingUsersMap = getTotalUsers();
 // Get users already in k8s
 console.log("Getting existing users from kubernetes...");
 const kubernetesUsers = getAllUsers();
-
 console.log("Users in projects:", existingUsersMap);
 console.log("Users in kubernetes:", kubernetesUsers);
 

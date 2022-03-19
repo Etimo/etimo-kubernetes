@@ -1,10 +1,13 @@
 const { program } = require("commander");
 const handlebars = require("handlebars");
-const fs = require("fs");
-
 const schemas = require("../lib/schemas");
-const { getTemplate, renderToFile } = require("../lib/templates");
-const { getFileContent } = require("../lib/file");
+const {
+  getTemplate,
+  renderToFile,
+  assertValidData,
+} = require("../lib/templates");
+const { getFileContent, assertFile } = require("../lib/file");
+const { getCsrOutputFileForUsername } = require("../lib/consts");
 
 // Cmd
 const options = program
@@ -14,25 +17,16 @@ const options = program
   .opts();
 const username = options.username;
 const dryRun = options.dryRun;
+const csrFile = `${username}-base64-encoded.csr`;
 
 // Validation
-const validationResult = schemas.schemaGithubUsername.validate(username);
-if (validationResult.error) {
-  console.error(validationResult.error);
-  process.exit(1);
-}
+assertValidData(username, schemas.schemaGithubUsername);
+assertFile(csrFile, true);
 
-// Look for csr
-const csrFile = `${username}-base64-encoded.csr`;
-if (!fs.existsSync(csrFile)) {
-  console.error(`No csr file found (${csrFile}). Please create csr first.`);
-  process.exit(1);
-}
-
-const csr = getFileContent(csrFile);
-
+// Perform
 console.log(`Rendering csr template...`);
-const dest = `csr-${username}.yaml`;
+const csr = getFileContent(csrFile);
+const dest = getCsrOutputFileForUsername(username);
 const template = getTemplate(handlebars, "kubernetes", "csr.hbs");
 
 if (!dryRun) {

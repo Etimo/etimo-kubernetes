@@ -1,5 +1,6 @@
 const { program } = require("commander");
 const shelljs = require("shelljs");
+const { writeClusterInfo } = require("../lib/cluster-info");
 const schemas = require("../lib/schemas");
 
 // Cmd
@@ -16,6 +17,7 @@ if (terraformOutputRes.code != 0) {
   console.error("Unable to get output from terraform.");
   process.exit(1);
 }
+shelljs.popd();
 
 console.log("Validation terraform output...");
 const terraformOutput = JSON.parse(terraformOutputRes.stdout);
@@ -27,38 +29,19 @@ if (validationResult.error) {
 }
 console.log(`  -> data is valid!`);
 
+// Zip all the values together
+const terraformData = terraformOutput.cluster_ids.value.map((item, index) => ({
+  clusterId: terraformOutput.cluster_ids.value[index],
+  clusterName: terraformOutput.cluster_names.value[index],
+  clusterEndpoint: terraformOutput.cluster_endpoints.value[index],
+  stage: terraformOutput.stages.value[index],
+}));
+console.log(terraformData);
+writeClusterInfo(terraformData);
+
 // Extract ca from cluster
-terraformOutput.cluster_id.value.forEach((id) => {
-  shelljs.exec(`../bin/doctl-extract-ca.sh ${id} etimo-staging`);
+terraformData.forEach((data) => {
+  shelljs.exec(
+    `./bin/doctl-extract-ca.sh ${data.clusterId} ${data.clusterName}`
+  );
 });
-
-// // Get users already in k8s
-// console.log("Getting existing users from kubernetes...");
-// const kubernetesUsers = getAllUsers();
-
-// console.log("Users in projects:", existingUsersMap);
-// console.log("Users in kubernetes:", kubernetesUsers);
-
-// // Calculate users to add and remove
-// const usersToAdd = new Set(
-//   [...existingUsersMap].filter((u) => !kubernetesUsers.has(u))
-// );
-// const usersToRemove = new Set(
-//   [...kubernetesUsers].filter((u) => !existingUsersMap.has(u))
-// );
-// console.log("Users to add to kubernetes:", usersToAdd);
-// console.log("Users to remove from kubernetes:", usersToRemove);
-
-// if (!dryRun) {
-//   // Perform sync
-//   usersToAdd.forEach((username) => {
-//     console.log(`Generating certificate for ${username}...`);
-//     shelljs.exec(`./bin/generate-user-certificate.sh ${username}`);
-//   });
-//   usersToRemove.forEach((username) => {
-//     console.log(`Removing user certificate for ${username}...`);
-//     shelljs.exec(`kubectl delete csr ${username}`);
-//   });
-// } else {
-//   console.log("  -> Not applying users because of dry run");
-// }
