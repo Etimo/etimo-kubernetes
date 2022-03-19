@@ -18,13 +18,12 @@ jobs:
       - run: yarn render:terraform --dry-run
 
       # Generate all files
-      - run: yarn render:owners
-      - run: yarn render:terraform
+      - run: yarn all
 
-      # - name: Setup Terraform
-      #   uses: hashicorp/setup-terraform@v1
-      #   with:
-      #     cli_config_credentials_token: ${{ secrets.TERRAFORM_API_TOKEN }}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_API_TOKEN }}
 
       # - name: Terraform Format
       #   id: fmt
