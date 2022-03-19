@@ -11,5 +11,9 @@ output "cluster_id" {
 }
 
 output "cluster_endpoint" {
-  value = module.kubernetes.endpoint
+  value = module.kubernetes.cluster_endpoint
+}
+
+output "cluster_name" {
+  value = module.kubernetes.cluster_name
 }

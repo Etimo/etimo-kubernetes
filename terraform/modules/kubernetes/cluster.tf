@@ -7,7 +7,7 @@ data "digitalocean_vpc" "cluster-vpc" {
 }
 
 resource "digitalocean_kubernetes_cluster" "cluster" {
-  name          = "${lower(var.stage)}-cluster"
+  name          = "etimo-${lower(var.stage)}"
   region        = var.region
   version       = data.digitalocean_kubernetes_versions.cluster.latest_version
   auto_upgrade  = true
