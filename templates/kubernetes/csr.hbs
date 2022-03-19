@@ -2,6 +2,8 @@ apiVersion: certificates.k8s.io/v1
 kind: CertificateSigningRequest
 metadata:
   name: {{username}}
+  labels:
+    provisioner: etimo-kubernetes
 spec:
   groups:
   - system:authenticated
