@@ -14,7 +14,7 @@
     "sync": "yarn sync:cluster-info && yarn sync:projects && yarn sync:users",
     "sync:users": "node ./bin/sync-users.js",
     "sync:projects": "node ./bin/sync-projects.js",
-    "sync:cluster-info": "cd terraform && terraform output -json > cluster-info.json && cat cluster-info.json && cd .. && node ./bin/sync-cluster-info.js",
+    "sync:cluster-info": "./bin/terraform-extract-output.sh && node ./bin/sync-cluster-info.js",
     "clean": "./bin/clean.sh"
   },
   "devDependencies": {
