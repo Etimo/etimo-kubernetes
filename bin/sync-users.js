@@ -2,6 +2,7 @@ const { program } = require("commander");
 const shelljs = require("shelljs");
 const { getTotalUsers } = require("../lib/projects");
 const { getAllUsers } = require("../lib/kubernetes");
+const { getKubeconfigFileForUsername } = require("../lib/consts");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -34,6 +35,13 @@ if (!dryRun) {
     shelljs.exec(
       `node ./bin/generate-user-certificate.js --username ${username}`
     );
+    console.log(`Generating kubeconfig for user ${username}...`);
+    shelljs.exec(
+      `node ./bin/generate-user-kubeconfig.js --username ${username}`
+    );
+    console.log(`Verifying new kubeconfig for user ${username}...`);
+    const kubeconfigFile = getKubeconfigFileForUsername(username);
+    shelljs.exec(`kubectl --kubeconfig ${kubeconfigFile} version`);
   });
   usersToRemove.forEach((username) => {
     console.log(`Removing user certificate for ${username}...`);
