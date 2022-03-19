@@ -41,7 +41,14 @@ if (!dryRun) {
     );
     console.log(`Verifying new kubeconfig for user ${username}...`);
     const kubeconfigFile = getKubeconfigFileForUsername(username);
-    shelljs.exec(`kubectl --kubeconfig ${kubeconfigFile} version`);
+    const res = shelljs.exec(`kubectl --kubeconfig ${kubeconfigFile} version`);
+    if (res.code !== 0) {
+      // Something is wrong, delete csr so we can try again
+      shelljs.exec(`kubectl delete csr ${username}`);
+      process.exit(1);
+    } else {
+      // shelljs.exec(`node ./bin/send-kubeconfigs.js `)
+    }
   });
   usersToRemove.forEach((username) => {
     console.log(`Removing user certificate for ${username}...`);
