@@ -10,18 +10,14 @@ const dryRun = options.dryRun;
 // Get total list of users in all projects
 console.log("Getting output from terraform...");
 shelljs.pushd("terraform");
-const terraformOutputRes = shelljs
-  .exec("terraform output -json", {
-    silent: true,
-    shell: "/bin/bash",
-  })
-  .to("temp.txt");
+const terraformOutputRes = shelljs.exec("terraform output -json", {
+  silent: true,
+});
 if (terraformOutputRes.code != 0) {
   console.error("Unable to get output from terraform.");
   process.exit(1);
 }
 shelljs.popd();
-shelljs.cat("temp.txt");
 
 console.log("Validation terraform output...");
 console.log("STDOUT:", terraformOutputRes.stdout);
@@ -48,6 +44,6 @@ writeClusterInfo(terraformData);
 // Extract ca from cluster
 terraformData.forEach((data) => {
   shelljs.exec(
-    `./bin/doctl-extract-ca.sh ${data.clusterId} ${data.clusterName}`
+    `node ./bin/doctl-extract-ca.js --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
   );
 });
