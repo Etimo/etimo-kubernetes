@@ -1,7 +1,6 @@
 const { program } = require("commander");
 const shelljs = require("shelljs");
 const { writeClusterInfo } = require("../lib/cluster-info");
-const { getFileContent } = require("../lib/file");
 const schemas = require("../lib/schemas");
 
 // Cmd
@@ -9,20 +8,25 @@ const options = program.option("--dry-run").parse().opts();
 const dryRun = options.dryRun;
 
 // Get total list of users in all projects
-// console.log("Getting output from terraform...");
-// shelljs.pushd("terraform");
-// const terraformOutputRes = shelljs.exec("terraform output -json", {
-//   silent: true,
-// });
-// if (terraformOutputRes.code != 0) {
-//   console.error("Unable to get output from terraform.");
-//   process.exit(1);
-// }
-// shelljs.popd();
+console.log("Getting output from terraform...");
+shelljs.pushd("terraform");
+const terraformOutputRes = shelljs.exec("terraform output -json", {
+  silent: true,
+});
+if (terraformOutputRes.code != 0) {
+  console.error("Unable to get output from terraform.");
+  process.exit(1);
+}
+shelljs.popd();
 
 console.log("Validation terraform output...");
-const output = getFileContent("cluster-info.json");
-const terraformOutput = JSON.parse(output);
+console.log("WHAT WE FOUND:", terraformOutputRes.stdout.replace(/\n/g, ""));
+let terraformOutput = null;
+try {
+  terraformOutput = JSON.parse(terraformOutputRes.stdout);
+} catch (e) {
+  terraformOutput = JSON.parse(terraformOutputRes.stdout);
+}
 console.log(terraformOutput);
 const validationResult =
   schemas.schemaTerraformOutput.validate(terraformOutput);
