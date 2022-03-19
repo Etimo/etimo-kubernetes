@@ -1,20 +1,7 @@
 module "environment" {
   source = "./modules/environment"
+  count = length(var.stages)
   name   = "etimo"
-  stage  = "Staging"
-}
-
-module "kubernetes" {
-  source = "./modules/kubernetes"
-  stage  = "Staging"
+  stage  = var.stages[count.index]
   region = var.region
 }
-
-module "project_bind" {
-  source     = "./modules/project_bind"
-  project_id = module.environment.project_id
-  resources = [
-    module.kubernetes.cluster_urn
-  ]
-}
-
