@@ -44,9 +44,13 @@ if (!dryRun) {
     const res = shelljs.exec(`kubectl --kubeconfig ${kubeconfigFile} version`);
     if (res.code !== 0) {
       // Something is wrong, delete csr so we can try again
+      console.log(
+        "  -> Kubeconfig is not valid! Removing user csr so it can be created again..."
+      );
       shelljs.exec(`kubectl delete csr ${username}`);
       process.exit(1);
     } else {
+      console.log("  -> Kubeconfig is valid!");
       // shelljs.exec(`node ./bin/send-kubeconfigs.js `)
     }
   });
