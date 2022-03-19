@@ -10,14 +10,17 @@ const dryRun = options.dryRun;
 // Get total list of users in all projects
 console.log("Getting output from terraform...");
 shelljs.pushd("terraform");
-const terraformOutputRes = shelljs.exec("terraform output -json", {
-  silent: true,
-});
+const terraformOutputRes = shelljs
+  .exec("terraform output -json", {
+    silent: true,
+  })
+  .to("temp.txt");
 if (terraformOutputRes.code != 0) {
   console.error("Unable to get output from terraform.");
   process.exit(1);
 }
 shelljs.popd();
+shelljs.cat("temp.txt");
 
 console.log("Validation terraform output...");
 console.log("STDOUT:", terraformOutputRes.stdout);
