@@ -44,5 +44,4 @@ jobs:
       - name: Save DigitalOcean kubeconfig with short-lived credentials
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 etimo-staging
 
-      # Generate all files
       - run: yarn all

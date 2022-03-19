@@ -21,6 +21,7 @@ shelljs.popd();
 
 console.log("Validation terraform output...");
 const terraformOutput = JSON.parse(terraformOutputRes.stdout);
+console.log(terraformOutput);
 const validationResult =
   schemas.schemaTerraformOutput.validate(terraformOutput);
 if (validationResult.error) {
