@@ -1,8 +1,5 @@
 const { program } = require("commander");
 const shelljs = require("shelljs");
-const fs = require("fs");
-const consts = require("../lib/consts");
-const nodemailer = require("nodemailer");
 const { getTotalUsers } = require("../lib/projects");
 const { getAllUsers } = require("../lib/kubernetes");
 
