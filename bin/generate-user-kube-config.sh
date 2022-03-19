@@ -22,8 +22,8 @@ if [ ! -f $KEY_FILE ]; then
 fi
 
 # TODO: Create one entry per cluster
-kubectl config set-cluster $CLUSTER_NAME --server=$CLUSTER_SERVER --certificate-authority=ca.crt --kubeconfig=$KUBECONFIG_FILE --embed-certs
-kubectl config set-cluster test --server=$CLUSTER_SERVER --certificate-authority=ca.crt --kubeconfig=$KUBECONFIG_FILE --embed-certs
+kubectl config set-cluster $CLUSTER_NAME --server=$CLUSTER_SERVER --certificate-authority=ca.$CLUSTER_NAME.crt --kubeconfig=$KUBECONFIG_FILE --embed-certs
+kubectl config set-cluster test --server=$CLUSTER_SERVER --certificate-authority=ca.$CLUSTER_NAME.crt --kubeconfig=$KUBECONFIG_FILE --embed-certs
 kubectl config set-credentials $USERNAME --client-certificate=$CERT_FILE --client-key=$KEY_FILE --embed-certs --kubeconfig=$KUBECONFIG_FILE
 kubectl config set-context $CLUSTER_NAME --cluster=$CLUSTER_NAME --user=$USERNAME --kubeconfig=$KUBECONFIG_FILE #--namespace=$PROJECT
 kubectl --kubeconfig $KUBECONFIG_FILE config use-context $CLUSTER_NAME
