@@ -1,9 +1,9 @@
 const { program } = require("commander");
-const shelljs = require("shelljs");
-const fs = require("fs");
 const consts = require("../lib/consts");
 const glob = require("glob");
 const nodemailer = require("nodemailer");
+const handlebars = require("handlebars");
+const { getTemplate } = require("../lib/templates");
 
 // Cmd
 const options = program
@@ -27,11 +27,14 @@ const transporter = nodemailer.createTransport({
 
 glob.sync(`*${consts.KUBECONFIG_SUFFIX}`).forEach(async (filename) => {
   const username = filename.replace(consts.KUBECONFIG_SUFFIX, "");
+  const context = {
+    username,
+  };
   const message = {
     from: "daniel.winther@etimo.se",
     to: "daniel.winther@etimo.se",
-    subject: "Välkommen till Etimo Kubernetes!",
-    html: "<p>Bifogat finner du din personliga configfil för Kubernetes. Du kan läsa mer om hur du använder den <a href='#'>här</a>.</p>",
+    subject: getTemplate(handlebars, "email", "subject.hbs")(context),
+    html: getTemplate(handlebars, "email", "body.hbs")(context),
     attachments: [
       {
         path: filename,

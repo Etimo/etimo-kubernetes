@@ -3,37 +3,25 @@ const shelljs = require("shelljs");
 const fs = require("fs");
 const consts = require("../lib/consts");
 const nodemailer = require("nodemailer");
+const { getTotalUsers } = require("../lib/projects");
+const { getAllUsers } = require("../lib/kubernetes");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
 const dryRun = options.dryRun;
 
+// Get total list of users in all projects
 console.log("Getting users from projects in repo...");
-const existingUsersData = fs
-  .readFileSync(consts.FILENAME_ALL_OWNERS)
-  .toString();
-const existingUsersMap = new Set(
-  existingUsersData.split("\n").filter((s) => s.length > 0)
-);
+const existingUsersMap = getTotalUsers();
 
 // Get users already in k8s
 console.log("Getting existing users from kubernetes...");
-const res = shelljs.exec("kubectl get csr", { silent: true });
-if (res.code !== 0) {
-  console.error("Unable to get users in kubernetes.");
-  process.exit(1);
-}
-const kubernetesUsers = new Set(
-  res.stdout
-    .split("\n")
-    .filter((s) => s.length > 0)
-    .slice(1)
-    .map((s) => s.split(" ")[0])
-);
+const kubernetesUsers = getAllUsers();
 
 console.log("Users in projects:", existingUsersMap);
 console.log("Users in kubernetes:", kubernetesUsers);
 
+// Calculate users to add and remove
 const usersToAdd = new Set(
   [...existingUsersMap].filter((u) => !kubernetesUsers.has(u))
 );
@@ -44,6 +32,7 @@ console.log("Users to add to kubernetes:", usersToAdd);
 console.log("Users to remove from kubernetes:", usersToRemove);
 
 if (!dryRun) {
+  // Perform sync
   usersToAdd.forEach((username) => {
     console.log(`Generating certificate for ${username}...`);
     shelljs.exec(`./bin/generate-user-certificate.sh ${username}`);

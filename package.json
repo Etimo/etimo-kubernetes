@@ -10,6 +10,7 @@
     "render": "yarn render:projects && yarn render:owners",
     "render:projects": "node ./bin/render-projects.js",
     "render:owners": "node ./bin/render-owners.js",
+    "render:csr": "node ./bin/render-csr.js",
     "sync": "yarn sync:projects && yarn sync:users",
     "sync:users": "node ./bin/sync-users.js",
     "sync:projects": "node ./bin/sync-projects.js",

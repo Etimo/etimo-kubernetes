@@ -1,36 +1,19 @@
 const { program } = require("commander");
 const shelljs = require("shelljs");
-const fs = require("fs");
-const glob = require("glob");
-const consts = require("../lib/consts");
-const nodemailer = require("nodemailer");
+const { getAllProjects } = require("../lib/projects");
+const { getAllNamespaces } = require("../lib/kubernetes");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
 const dryRun = options.dryRun;
 
+// Get total list of projects
 console.log("Getting current from projects in repo...");
-const existingProjects = new Set(
-  glob.sync("projects/*", {}).map((p) => p.split("/")[1])
-);
+const existingProjects = getAllProjects();
 
 // Get users already in k8s
 console.log("Getting existing namespaces from kubernetes...");
-const res = shelljs.exec(
-  "kubectl get namespace --selector provisioner=etimo-kubernetes",
-  { silent: true }
-);
-if (res.code !== 0) {
-  console.error("Unable to get namespaces in kubernetes.");
-  process.exit(1);
-}
-const namespaces = new Set(
-  res.stdout
-    .split("\n")
-    .filter((s) => s.length > 0)
-    .slice(1)
-    .map((s) => s.split(" ")[0])
-);
+const namespaces = getAllNamespaces();
 
 console.log("Projects in repo:", existingProjects);
 console.log("Namespaces in kubernetes:", namespaces);
