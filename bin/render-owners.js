@@ -5,11 +5,10 @@ const handlebars = require("handlebars");
 const glob = require("glob");
 
 const schemas = require("../lib/schemas");
-const stages = require("../lib/stages");
 const { hbsSeparator } = require("../lib/hbs-helpers");
 const { getTemplate, renderToFile } = require("../lib/templates");
 const { validateYamlFile } = require("../lib/validations");
-const { getYamlContentParsed, getFileContent } = require("../lib/file");
+const { getProjectOwnersFile } = require("../lib/consts");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -21,7 +20,7 @@ hbsSeparator(handlebars);
 
 // Parse and validate stage configs
 const projectOwners = projectFolders.reduce((value, projectFolder) => {
-  const ownersConfigFile = path.join(projectFolder, "owners.yaml");
+  const ownersConfigFile = getProjectOwnersFile(projectFolder);
   if (fs.existsSync(ownersConfigFile)) {
     console.log(`Validating ${ownersConfigFile}...`);
     const data = validateYamlFile(ownersConfigFile, schemas.schemaOwners);
