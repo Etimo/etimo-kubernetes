@@ -5,3 +5,4 @@ node_modules/
 *-csr-*.yaml
 *-kubeconfig-*.yaml
 cluster-info.json
+/temp/

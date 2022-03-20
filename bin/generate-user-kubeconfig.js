@@ -11,6 +11,7 @@ const {
   getCertFileForUsername,
   getKeyFileForUsername,
   getKubeconfigFileForUsername,
+  getCaFileForCluster,
 } = require("../lib/consts");
 const { assertFile } = require("../lib/file");
 
@@ -39,8 +40,9 @@ const cluster = getClusterInfoForStage(stage);
 console.log(`Generating kubeconfig for cluster ${cluster.clusterName}...`);
 if (!dryRun) {
   shelljs.config.silent = true;
+  const caFile = getCaFileForCluster(cluster.clusterName);
   shelljs.exec(
-    `kubectl config set-cluster ${cluster.clusterName} --server=${cluster.clusterEndpoint} --certificate-authority=ca.${cluster.clusterName}.crt --kubeconfig=${kubeconfigFile} --embed-certs`
+    `kubectl config set-cluster ${cluster.clusterName} --server=${cluster.clusterEndpoint} --certificate-authority=${caFile} --kubeconfig=${kubeconfigFile} --embed-certs`
   );
   shelljs.exec(
     `kubectl config set-credentials ${username} --client-certificate=${certFile} --client-key=${keyFile} --embed-certs --kubeconfig=${kubeconfigFile}`

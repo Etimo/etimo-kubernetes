@@ -7,6 +7,7 @@ const { getTemplate, assertValidData } = require("../lib/templates");
 const { schemaGithubUsername } = require("../lib/schemas");
 const { assertFile } = require("../lib/file");
 const { getKubeconfigFileForUsername } = require("../lib/consts");
+const { readClusterInfo } = require("../lib/cluster-info");
 
 // Cmd
 const options = program
@@ -20,12 +21,16 @@ const dryRun = options.dryRun;
 const username = options.username;
 const mailUsername = options.mailUsername;
 const mailPassword = options.mailPassword;
-const kubeconfigFile = getKubeconfigFileForUsername(username);
 
 // Validate
 assertValidData(username, schemaGithubUsername);
-assertFile(kubeconfigFile, true);
+assertFile(consts.FILENAME_CLUSTER_INFO, true);
 
+const clusterInfo = readClusterInfo();
+const attachments = clusterInfo.map((cluster) => {
+  const stage = cluster.stage;
+  const kubeconfigFile = getKubeconfigFileForUsername(username, stage);
+});
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
