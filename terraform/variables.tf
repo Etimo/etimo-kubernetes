@@ -4,5 +4,5 @@ variable "region" {
 
 variable "stages" {
   type    = list(string)
-  default = ["Staging"] #, "Production"
+  default = ["Staging", "Production"]
 }
