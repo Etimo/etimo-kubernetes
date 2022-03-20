@@ -40,10 +40,12 @@ jobs:
 
       - name: Terraform Plan
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: terraform
         run: terraform plan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: terraform
         run: terraform apply -auto-approve
 
       - name: Install doctl
