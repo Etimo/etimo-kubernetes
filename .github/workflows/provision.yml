@@ -14,14 +14,6 @@ jobs:
           token: ${{ secrets.PUSH_TOKEN }}
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: yarn
-      - run: |
-          date > hello.txt
-          git config --global user.email "release"
-          git config --global user.name "release@users.noreply.github.com"
-          git add hello.txt
-          git commit -m "Hello world"
-          git push
-          exit 1
 
       # Validate everything before trying something
       - run: yarn render:owners --dry-run
@@ -71,8 +63,8 @@ jobs:
 
       - name: Commit and push release
         run: |
-          git config --global user.email "github-actions[bot]"
-          git config --global user.name "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.email ""
+          git config --global user.name "release"
           git add .
           git commit -m "release: $(date +"%Y-%m-%dT%H:%M:%SZ") [skip ci]"
           git push
