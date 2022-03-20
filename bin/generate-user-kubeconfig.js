@@ -23,7 +23,7 @@ const options = program
   .parse()
   .opts();
 const username = options.username;
-const dryRun = options.dryRun;
+const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 const stage = options.stage;
 const kubeconfigFile = getKubeconfigFileForUsername(username, stage);
 const keyFile = getKeyFileForUsername(username, stage);

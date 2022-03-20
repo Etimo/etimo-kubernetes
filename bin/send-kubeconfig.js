@@ -17,7 +17,7 @@ const options = program
   .requiredOption("--mail-password <mail_password>")
   .parse()
   .opts();
-const dryRun = options.dryRun;
+const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 const username = options.username;
 const mailUsername = options.mailUsername;
 const mailPassword = options.mailPassword;

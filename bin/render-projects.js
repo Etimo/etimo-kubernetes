@@ -10,7 +10,7 @@ const { getYamlContentParsed, getFileContent } = require("../lib/file");
 const { renderToFile } = require("../lib/templates");
 
 const options = program.option("--dry-run").parse().opts();
-const dryRun = options.dryRun;
+const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 const projectFolders = glob.sync("projects/*");
 

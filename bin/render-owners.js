@@ -13,7 +13,7 @@ const { getYamlContentParsed, getFileContent } = require("../lib/file");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
-const dryRun = options.dryRun;
+const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Get a list of projects
 const projectFolders = glob.sync("projects/*");

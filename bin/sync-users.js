@@ -13,7 +13,7 @@ const { readClusterInfo } = require("../lib/cluster-info");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
-const dryRun = options.dryRun;
+const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Validate
 assertFile(consts.FILENAME_CLUSTER_INFO, true);

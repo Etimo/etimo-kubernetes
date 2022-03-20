@@ -5,7 +5,7 @@ const schemas = require("../lib/schemas");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
-const dryRun = options.dryRun;
+const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Get total list of users in all projects
 console.log("Getting output from terraform...");
