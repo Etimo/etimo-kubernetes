@@ -20,7 +20,9 @@ hbsSeparator(handlebars);
 
 // Parse and validate stage configs
 const projectOwners = projectFolders.reduce((value, projectFolder) => {
-  const ownersConfigFile = getProjectOwnersFile(projectFolder);
+  const project = projectFolder.split("/")[1];
+  const ownersConfigFile = getProjectOwnersFile(project);
+  console.log(ownersConfigFile);
   if (fs.existsSync(ownersConfigFile)) {
     console.log(`Validating ${ownersConfigFile}...`);
     const data = validateYamlFile(ownersConfigFile, schemas.schemaOwners);
