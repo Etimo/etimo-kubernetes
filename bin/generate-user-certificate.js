@@ -4,41 +4,51 @@ const schemas = require("../lib/schemas");
 const { assertValidData } = require("../lib/templates");
 const {
   getCertFileForUsername,
-  getCsrFileForUsername,
   getCsrOutputFileForUsername,
 } = require("../lib/consts");
 const { assertFile } = require("../lib/file");
+const consts = require("../lib/consts");
+const { readClusterInfo } = require("../lib/cluster-info");
+const { getContext, getKubectlForContext } = require("../lib/kubernetes");
 
 // Cmd
 const options = program
   .requiredOption("--username <username>")
+  .requiredOption("--cluster-name <cluster_name>")
+  .requiredOption("--stage <stage>")
   .option("--dry-run")
   .parse()
   .opts();
 const username = options.username;
 const dryRun = options.dryRun;
-const certFile = getCertFileForUsername(username);
-const csrFile = getCsrFileForUsername(username);
-const csrOutputFile = getCsrOutputFileForUsername(username);
+const stage = options.stage;
+const clusterName = options.clusterName;
+const certFile = getCertFileForUsername(username, stage);
+const csrOutputFile = getCsrOutputFileForUsername(username, stage);
+const context = getContext(clusterName);
+const kubectlWithContext = getKubectlForContext(context);
 
-// Validation
+// Validate
 assertValidData(username, schemas.schemaGithubUsername);
-assertFile(certFile, false);
+assertFile(consts.FILENAME_CLUSTER_INFO, true);
 
 // Perform
 if (!dryRun) {
   console.log(`Generating certificate for ${username}...`);
-  shelljs.exec(`node ./bin/generate-csr.js --username ${username}`);
-  shelljs.exec(`yarn render:csr --username ${username}`);
-  shelljs.exec(`kubectl apply -f ${csrOutputFile}`);
-  shelljs.exec(`kubectl certificate approve ${username}`);
-  shelljs
-    .exec(`kubectl get csr ${username} -o jsonpath='{.status.certificate}'`, {
+  shelljs.exec(
+    `node ./bin/generate-csr.js --username ${username} --stage ${stage}`
+  );
+  shelljs.exec(`yarn render:csr --username ${username} --stage ${stage}`);
+  kubectlWithContext(`apply -f ${csrOutputFile}`);
+  kubectlWithContext(`certificate approve ${username}`);
+  kubectlWithContext(
+    `get csr ${username} -o jsonpath='{.status.certificate}'`,
+    {
       silent: true,
-    })
+    }
+  )
     .exec(`base64 --decode`, { silent: true })
     .to(certFile);
-  shelljs.rm(csrFile);
   console.log(`  -> Generated certificate in ${certFile}`);
 } else {
   console.log("  -> Skipping due to dry run");

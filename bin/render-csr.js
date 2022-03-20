@@ -7,17 +7,23 @@ const {
   assertValidData,
 } = require("../lib/templates");
 const { getFileContent, assertFile } = require("../lib/file");
-const { getCsrOutputFileForUsername } = require("../lib/consts");
+const {
+  getCsrOutputFileForUsername,
+  getCsrFileForUsername,
+  getEncodedCsrFileForUsername,
+} = require("../lib/consts");
 
 // Cmd
 const options = program
   .requiredOption("--username <username>")
+  .requiredOption("--stage <stage>")
   .option("--dry-run")
   .parse()
   .opts();
 const username = options.username;
 const dryRun = options.dryRun;
-const csrFile = `${username}-base64-encoded.csr`;
+const stage = options.stage;
+const csrFile = getEncodedCsrFileForUsername(username, stage);
 
 // Validation
 assertValidData(username, schemas.schemaGithubUsername);
@@ -26,7 +32,7 @@ assertFile(csrFile, true);
 // Perform
 console.log(`Rendering csr template...`);
 const csr = getFileContent(csrFile);
-const dest = getCsrOutputFileForUsername(username);
+const dest = getCsrOutputFileForUsername(username, stage);
 const template = getTemplate(handlebars, "kubernetes", "csr.hbs");
 
 if (!dryRun) {

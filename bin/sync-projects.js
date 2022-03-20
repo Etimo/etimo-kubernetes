@@ -1,40 +1,65 @@
 const { program } = require("commander");
-const shelljs = require("shelljs");
-const { getAllProjects } = require("../lib/projects");
-const { getAllNamespaces } = require("../lib/kubernetes");
+const { getAllProjectsForStage } = require("../lib/projects");
+const {
+  getAllNamespaces,
+  getContext,
+  getKubectlForContext,
+} = require("../lib/kubernetes");
+const stages = require("../lib/stages");
+const { readClusterInfo } = require("../lib/cluster-info");
+const { assertFile } = require("../lib/file");
+const consts = require("../lib/consts");
+const glob = require("glob");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
 const dryRun = options.dryRun;
 
-// Get total list of projects
-console.log("Getting current from projects in repo...");
-const existingProjects = getAllProjects();
+// Validate
+assertFile(consts.FILENAME_CLUSTER_INFO, true);
 
-// Get users already in k8s
-console.log("Getting existing namespaces from kubernetes...");
-const namespaces = getAllNamespaces();
-console.log("Projects in repo:", existingProjects);
-console.log("Namespaces in kubernetes:", namespaces);
+// Perform
+const clusterInfo = readClusterInfo();
+clusterInfo.forEach((cluster) => {
+  const stage = cluster.stage.toLowerCase();
+  const clusterName = cluster.clusterName;
+  const kubectlWithContext = getKubectlForContext(getContext(clusterName));
 
-// Calculate namespaces to add/remove
-const namespacesToAdd = new Set(
-  [...existingProjects].filter((u) => !namespaces.has(u))
-);
-const namespacesToRemove = new Set(
-  [...namespaces].filter((u) => !existingProjects.has(u))
-);
-console.log("Namespaces to add/update to kubernetes:", namespacesToAdd);
-console.log("Namespaces to remove from kubernetes:", namespacesToRemove);
+  // Get total list of projects
+  console.log(`Getting current projects in repo for stage ${stage}...`);
+  const existingProjects = getAllProjectsForStage(stage);
 
-if (!dryRun) {
-  // Apply sync
-  console.log(`Creating or updating project namespaces...`);
-  shelljs.exec(`kubectl apply -f kubernetes/projects/`);
-  namespacesToRemove.forEach((ns) => {
-    console.log(`Removing namespace ${ns}...`);
-    shelljs.exec(`kubectl delete namespace ${ns}`);
-  });
-} else {
-  console.log("  -> Not applying changes because of dry run");
-}
+  // Get users already in k8s
+  console.log(`Getting existing namespaces from kubernetes in ${stage}...`);
+  const namespaces = getAllNamespaces(kubectlWithContext);
+  console.log("Projects in repo:", existingProjects);
+  console.log("Namespaces in kubernetes:", namespaces);
+
+  // Calculate namespaces to add/remove
+  const namespacesToAdd = new Set(
+    [...existingProjects].filter((u) => !namespaces.has(u))
+  );
+  const namespacesToRemove = new Set(
+    [...namespaces].filter((u) => !existingProjects.has(u))
+  );
+  console.log("Namespaces to add/update to kubernetes:", namespacesToAdd);
+  console.log("Namespaces to remove from kubernetes:", namespacesToRemove);
+
+  if (!dryRun) {
+    // Apply sync
+    if (glob.sync(`kubernetes/projects/*_${stage}.yaml`).length > 0) {
+      console.log(`Creating or updating project namespaces...`);
+      kubectlWithContext(`apply -f kubernetes/projects/*_${stage}.yaml`);
+      namespacesToRemove.forEach((ns) => {
+        console.log(`Removing namespace ${ns}...`);
+        kubectlWithContext(`delete namespace ${ns}`);
+      });
+    } else {
+      console.log(
+        "Skipping updating projects in this namespace because could not find any projects"
+      );
+    }
+  } else {
+    console.log("  -> Not applying changes because of dry run");
+  }
+});

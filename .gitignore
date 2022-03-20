@@ -2,6 +2,6 @@ node_modules/
 *.csr
 *.crt
 *.key
-csr-*.yaml
-*-kubeconfig.yaml
+*-csr-*.yaml
+*-kubeconfig-*.yaml
 cluster-info.json

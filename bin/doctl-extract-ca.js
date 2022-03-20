@@ -1,10 +1,6 @@
 const { program } = require("commander");
 const shelljs = require("shelljs");
-const consts = require("../lib/consts");
-const schemas = require("../lib/schemas");
 const { getCaFileForCluster } = require("../lib/consts");
-const { assertValidData } = require("../lib/templates");
-const { assertFile } = require("../lib/file");
 
 // Cmd
 const options = program

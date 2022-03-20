@@ -11,11 +11,16 @@ const { assertValidData } = require("../lib/templates");
 const { assertFile } = require("../lib/file");
 
 // Cmd
-const options = program.requiredOption("--username <username>").parse().opts();
+const options = program
+  .requiredOption("--username <username>")
+  .requiredOption("--stage <stage>")
+  .parse()
+  .opts();
 const username = options.username;
-const keyFile = getKeyFileForUsername(username);
-const csrFile = getCsrFileForUsername(username);
-const encodedCsrFile = getEncodedCsrFileForUsername(username);
+const stage = options.stage;
+const keyFile = getKeyFileForUsername(username, stage);
+const csrFile = getCsrFileForUsername(username, stage);
+const encodedCsrFile = getEncodedCsrFileForUsername(username, stage);
 
 // Validation
 assertValidData(username, schemas.schemaGithubUsername);
