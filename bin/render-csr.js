@@ -1,15 +1,10 @@
 const { program } = require("commander");
 const handlebars = require("handlebars");
 const schemas = require("../lib/schemas");
-const {
-  getTemplate,
-  renderToFile,
-  assertValidData,
-} = require("../lib/templates");
+const { getTemplate, renderToFile } = require("../lib/templates");
 const { getFileContent, assertFile } = require("../lib/file");
 const {
   getCsrOutputFileForUsername,
-  getCsrFileForUsername,
   getEncodedCsrFileForUsername,
 } = require("../lib/consts");
 
@@ -26,7 +21,7 @@ const stage = options.stage;
 const csrFile = getEncodedCsrFileForUsername(username, stage);
 
 // Validation
-assertValidData(username, schemas.schemaGithubUsername);
+schemas.assertValidData(username, schemas.schemaGithubUsername);
 assertFile(csrFile, true);
 
 // Perform

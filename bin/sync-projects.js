@@ -10,6 +10,7 @@ const { readClusterInfo } = require("../lib/cluster-info");
 const { assertFile } = require("../lib/file");
 const consts = require("../lib/consts");
 const glob = require("glob");
+const { getKubernetesProjectYamlFile } = require("../lib/consts");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -47,18 +48,15 @@ clusterInfo.forEach((cluster) => {
 
   if (!dryRun) {
     // Apply sync
-    if (glob.sync(`kubernetes/projects/*_${stage}.yaml`).length > 0) {
-      console.log(`Creating or updating project namespaces...`);
-      kubectlWithContext(`apply -f kubernetes/projects/*_${stage}.yaml`);
-      namespacesToRemove.forEach((ns) => {
-        console.log(`Removing namespace ${ns}...`);
-        kubectlWithContext(`delete namespace ${ns}`);
-      });
-    } else {
-      console.log(
-        "Skipping updating projects in this namespace because could not find any projects"
-      );
-    }
+    console.log(`Creating or updating project namespaces...`);
+    namespacesToAdd.forEach((ns) => {
+      const filename = getKubernetesProjectYamlFile(ns, stage);
+      kubectlWithContext(`apply -f ${filename}`);
+    });
+    namespacesToRemove.forEach((ns) => {
+      console.log(`Removing namespace ${ns}...`);
+      kubectlWithContext(`delete namespace ${ns}`);
+    });
   } else {
     console.log("  -> Not applying changes because of dry run");
   }

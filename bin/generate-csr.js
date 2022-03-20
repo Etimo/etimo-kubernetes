@@ -7,7 +7,6 @@ const {
   getCsrFileForUsername,
   getEncodedCsrFileForUsername,
 } = require("../lib/consts");
-const { assertValidData } = require("../lib/templates");
 const { assertFile } = require("../lib/file");
 
 // Cmd
@@ -23,7 +22,7 @@ const csrFile = getCsrFileForUsername(username, stage);
 const encodedCsrFile = getEncodedCsrFileForUsername(username, stage);
 
 // Validation
-assertValidData(username, schemas.schemaGithubUsername);
+schemas.assertValidData(username, schemas.schemaGithubUsername);
 assertFile(keyFile, false);
 assertFile(csrFile, false);
 assertFile(encodedCsrFile, false);

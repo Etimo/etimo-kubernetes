@@ -1,14 +1,12 @@
 const { program } = require("commander");
 const shelljs = require("shelljs");
 const schemas = require("../lib/schemas");
-const { assertValidData } = require("../lib/templates");
 const {
   getCertFileForUsername,
   getCsrOutputFileForUsername,
 } = require("../lib/consts");
 const { assertFile } = require("../lib/file");
 const consts = require("../lib/consts");
-const { readClusterInfo } = require("../lib/cluster-info");
 const { getContext, getKubectlForContext } = require("../lib/kubernetes");
 
 // Cmd
@@ -29,7 +27,7 @@ const context = getContext(clusterName);
 const kubectlWithContext = getKubectlForContext(context);
 
 // Validate
-assertValidData(username, schemas.schemaGithubUsername);
+schemas.assertValidData(username, schemas.schemaGithubUsername);
 assertFile(consts.FILENAME_CLUSTER_INFO, true);
 
 // Perform

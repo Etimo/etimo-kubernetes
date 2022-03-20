@@ -17,6 +17,9 @@ const projectFolders = glob.sync("projects/*");
 // Parse and validate stage configs
 projectFolders.forEach((projectFolder) => {
   const project = projectFolder.split("/")[1];
+  console.log(`Validating project name ${project}...`);
+  schemas.assertValidData(project, schemas.schemaProjectName);
+  console.log("  -> project name is valid!");
   stages.forEach((stage) => {
     const stageConfigFile = path.join(projectFolder, stage + ".yaml");
     if (fs.existsSync(stageConfigFile)) {
