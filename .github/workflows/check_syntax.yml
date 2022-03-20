@@ -19,5 +19,4 @@ jobs:
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: yarn
       - run: yarn render:owners --dry-run
-      - run: yarn render:terraform --dry-run
-        if: ${{ always() }}
+      - run: yarn render:projects --dry-run
