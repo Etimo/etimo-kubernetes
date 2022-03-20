@@ -58,6 +58,12 @@ jobs:
           doctl kubernetes cluster kubeconfig save --expiry-seconds 600 etimo-production
 
       - run: yarn all
+
+      - run: |
+          git add .
+          git commit -m "release: $(date +"%Y-%m-%dT%H:%M:%SZ") [skip ci]"
+          git push
+
         env:
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
