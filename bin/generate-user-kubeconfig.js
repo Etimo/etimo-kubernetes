@@ -1,12 +1,8 @@
 const { program } = require("commander");
 const shelljs = require("shelljs");
 const consts = require("../lib/consts");
-const {
-  readClusterInfo,
-  getClusterInfoForStage,
-} = require("../lib/cluster-info");
+const { getClusterInfoForStage } = require("../lib/cluster-info");
 const schemas = require("../lib/schemas");
-const { assertValidData } = require("../lib/templates");
 const {
   getCertFileForUsername,
   getKeyFileForUsername,
@@ -30,7 +26,7 @@ const keyFile = getKeyFileForUsername(username, stage);
 const certFile = getCertFileForUsername(username, stage);
 
 // Validation
-assertValidData(username, schemas.schemaGithubUsername);
+schemas.assertValidData(username, schemas.schemaGithubUsername);
 assertFile(consts.FILENAME_CLUSTER_INFO, true);
 assertFile(keyFile, true);
 assertFile(certFile, true);
