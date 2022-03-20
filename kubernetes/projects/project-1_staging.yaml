@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "project-1"
+  labels:
+    provisioner: etimo-kubernetes
+---
