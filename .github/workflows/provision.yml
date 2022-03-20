@@ -19,7 +19,7 @@ jobs:
           git config --global user.email "release"
           git config --global user.name "release@users.noreply.github.com"
           git add hello.txt
-          git commit "Hello world"
+          git commit -m "Hello world"
           git push
           exit 1
 
