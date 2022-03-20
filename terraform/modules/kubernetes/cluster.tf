@@ -1,5 +1,4 @@
 data "digitalocean_kubernetes_versions" "cluster" {
-  version_prefix = "1.21."
 }
 
 data "digitalocean_vpc" "cluster-vpc" {
