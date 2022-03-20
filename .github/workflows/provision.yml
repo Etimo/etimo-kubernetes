@@ -10,8 +10,18 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PUSH_TOKEN }}
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: yarn
+      - run: |
+          date > hello.txt
+          git config --global user.email "release"
+          git config --global user.name "release@users.noreply.github.com"
+          git add hello.txt
+          git commit "Hello world"
+          git push
+          exit 1
 
       # Validate everything before trying something
       - run: yarn render:owners --dry-run
