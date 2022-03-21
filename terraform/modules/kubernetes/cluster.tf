@@ -1,12 +1,3 @@
-provider "helm" {
-  kubernetes {
-    host                   = digitalocean_kubernetes_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(digitalocean_kubernetes_cluster.cluster.cluster_ca_certificate)
-    client_certificate     = base64decode(digitalocean_kubernetes_cluster.cluster.client_certificate)
-    client_key             = base64decode(digitalocean_kubernetes_cluster.cluster.client_key)
-  }
-}
-
 data "digitalocean_kubernetes_versions" "cluster" {
 }
 
@@ -58,30 +49,3 @@ resource "digitalocean_kubernetes_cluster" "cluster" {
 #   #   effect = "NoSchedule"
 #   # }
 # }
-
-resource "helm_release" "sealed-secrets" {
-  name       = "sealed-secrets"
-  repository = "https://bitnami-labs.github.io/sealed-secrets"
-  chart      = "sealed-secrets"
-  version    = "2.1.4"
-
-  # values = [
-  #   "${file("values.yaml")}"
-  # ]
-
-  # set {
-  #   name  = "cluster.enabled"
-  #   value = "true"
-  # }
-
-  # set {
-  #   name  = "metrics.enabled"
-  #   value = "true"
-  # }
-
-  # set {
-  #   name  = "service.annotations.prometheus\\.io/port"
-  #   value = "9127"
-  #   type  = "string"
-  # }
-}
