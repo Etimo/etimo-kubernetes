@@ -13,8 +13,10 @@ jobs:
         with:
           token: ${{ secrets.PUSH_TOKEN }}
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+      - run: |
+          git clone git@github.com:Etimo/employees.git
+          exit 1
       - run: yarn
-
       # Validate everything before trying something
       - run: yarn render:owners --dry-run
       - run: yarn render:projects --dry-run
@@ -40,11 +42,6 @@ jobs:
         working-directory: terraform
         run: terraform validate -no-color
 
-      - name: Terraform Plan
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        working-directory: terraform
-        run: terraform plan
-
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: terraform
@@ -60,15 +57,16 @@ jobs:
           doctl kubernetes cluster kubeconfig save --expiry-seconds 600 etimo-production
 
       - run: yarn all
+      - run: yarn all
+        env:
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
 
       - name: Commit and push release
+        continue-on-error: true
         run: |
           git config --global user.email ""
           git config --global user.name "release"
           git add .
           git commit -m "release: $(date +"%Y-%m-%dT%H:%M:%SZ") [skip ci]"
           git push
-
-        env:
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
