@@ -13,11 +13,11 @@ jobs:
         with:
           token: ${{ secrets.PUSH_TOKEN }}
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
-      - run: |
-          git clone https://indrif:${PUSH_TOKEN}@github.com/Etimo/employees.git
-          exit 1
-        env:
-          PUSH_TOKEN: ${{ secrets.PUSH_TOKEN}}
+      # - run: |
+      #     git clone https://indrif:${PUSH_TOKEN}@github.com/Etimo/employees.git
+      #     exit 1
+      #   env:
+      #     PUSH_TOKEN: ${{ secrets.PUSH_TOKEN}}
       - run: yarn
       # Validate everything before trying something
       - run: yarn render:owners --dry-run
