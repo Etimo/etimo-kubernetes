@@ -49,3 +49,30 @@ resource "digitalocean_kubernetes_cluster" "cluster" {
 #   #   effect = "NoSchedule"
 #   # }
 # }
+
+resource "helm_release" "sealed-secrets" {
+  name       = "sealed-secrets"
+  repository = "https://bitnami-labs.github.io/sealed-secrets"
+  chart      = "sealed-secrets"
+  version    = "1.17.3"
+
+  # values = [
+  #   "${file("values.yaml")}"
+  # ]
+
+  # set {
+  #   name  = "cluster.enabled"
+  #   value = "true"
+  # }
+
+  # set {
+  #   name  = "metrics.enabled"
+  #   value = "true"
+  # }
+
+  # set {
+  #   name  = "service.annotations.prometheus\\.io/port"
+  #   value = "9127"
+  #   type  = "string"
+  # }
+}
