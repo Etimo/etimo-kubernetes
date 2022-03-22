@@ -51,7 +51,7 @@ clusterInfo.forEach((cluster) => {
   if (!dryRun) {
     // Apply sync
     console.log(`Creating or updating project namespaces...`);
-    namespacesToAdd.forEach((ns) => {
+    existingProjects.forEach((ns) => {
       const filename = getKubernetesProjectYamlFile(ns, stage);
       kubectlWithContext(`apply -f ${filename}`);
     });
