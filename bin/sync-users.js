@@ -5,6 +5,7 @@ const {
   getAllUsers,
   getKubectlForContext,
   getContext,
+  saveDataset,
 } = require("../lib/kubernetes");
 const { getKubeconfigFileForUsername } = require("../lib/consts");
 const { assertFile } = require("../lib/file");
@@ -34,6 +35,7 @@ clusterInfo.forEach((cluster) => {
   const kubernetesUsers = getAllUsers(kubectlWithContext);
   console.log("  Users in projects:", existingUsersMap);
   console.log("  Users in kubernetes:", kubernetesUsers);
+  const usersAdded = [];
 
   // Calculate users to add and remove
   const usersToAdd = new Set(
@@ -70,6 +72,7 @@ clusterInfo.forEach((cluster) => {
         process.exit(1);
       } else {
         console.log("  -> Kubeconfig is valid!");
+        usersAdded.push(username);
         // shelljs.exec(
         //   `yarn send:kubeconfig --username ${username} --mail-username ${process.env.MAIL_USERNAME} --mail-password ${process.env.MAIL_PASSWORD}`
         // );
@@ -78,6 +81,10 @@ clusterInfo.forEach((cluster) => {
     usersToRemove.forEach((username) => {
       console.log(`Removing user certificate for ${username}...`);
       kubectlWithContext(`delete csr ${username}`);
+    });
+    const users = [...new Set([...kubernetesUsers, ...usersAdded])];
+    saveDataset(kubectlWithContext, "users", {
+      users,
     });
   } else {
     console.log("  -> Not applying users because of dry run");
