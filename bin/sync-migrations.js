@@ -8,34 +8,33 @@ const { getKubectlForContext, getContext } = require("../lib/kubernetes");
 const { renderToFile, getTemplate } = require("../lib/templates");
 const handlebars = require("handlebars");
 const { hbsToJson } = require("../lib/hbs-helpers");
-const { MIGRATIONS_YAML } = require("../lib/consts");
+const { getMigrationYamlFile } = require("../lib/consts");
 const crypto = require("crypto");
 const { getFileContent } = require("../lib/file");
+const { readClusterInfo } = require("../lib/cluster-info");
 
 // Cmd
-const options = program
-  .requiredOption("--cluster-name <cluster_name>")
-  .option("--to <to>")
-  .option("--dry-run")
-  .parse()
-  .opts();
-const clusterName = options.clusterName;
+const options = program.option("--to <to>").option("--dry-run").parse().opts();
 const to = options.to;
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
-const context = getContext(clusterName);
-const kubectlWithContext = getKubectlForContext(context, 4);
 hbsToJson(handlebars);
 
 // Perform
 const allMigrations = getAllMigrations();
 console.log("All migrations:", allMigrations);
-const appliedMigrations = getAppliedMigrations(kubectlWithContext) || {};
 
-if (!dryRun) {
-  const dest = MIGRATIONS_YAML;
-  const toNumber = to ? parseInt(to) : null;
+const clusterInfo = readClusterInfo();
+clusterInfo.forEach((cluster) => {
+  const stage = cluster.stage.toLowerCase();
+  const clusterName = cluster.clusterName;
+  const context = getContext(clusterName);
+  const kubectlWithContext = getKubectlForContext(context);
+  const appliedMigrations = getAppliedMigrations(kubectlWithContext) || {};
   console.log(`Applying migrations to ${clusterName}...`);
-  console.log(appliedMigrations);
+
+  const dest = getMigrationYamlFile(stage);
+  const toNumber = to ? parseInt(to) : null;
+  console.log("Applied migrations:", appliedMigrations);
   const migrations = allMigrations.reduce((total, migrationFile) => {
     const number = getMigrationNumberFromFile(migrationFile);
     const shasum = crypto.createHash("sha1");
@@ -54,7 +53,11 @@ if (!dryRun) {
       // Apply migration
       console.log(`  Running migration ${migrationFile}...`);
       const module = require("../" + migrationFile);
-      module.up(kubectlWithContext, context);
+      if (!dryRun) {
+        module.up(kubectlWithContext, context);
+      } else {
+        console.log("-> Skipping due to dry run");
+      }
       return {
         ...total,
         [migrationFile]: { checksum, ts: new Date().toISOString() },
@@ -62,7 +65,11 @@ if (!dryRun) {
     } else if (appliedMigration && toNumber !== null && number > toNumber) {
       console.log(`  Unapply... ${migrationFile}`);
       const module = require("../" + migrationFile);
-      module.down(kubectlWithContext, context);
+      if (!dryRun) {
+        module.down(kubectlWithContext, context);
+      } else {
+        console.log("    -> Skipping due to dry run");
+      }
       return {
         ...total,
         [migrationFile]: undefined,
@@ -78,16 +85,18 @@ if (!dryRun) {
   }, {});
 
   // Render yaml to apply
-  renderToFile(
-    getTemplate(handlebars, "kubernetes", "migrations.hbs"),
-    {
-      migrations: new handlebars.SafeString(JSON.stringify(migrations)),
-    },
-    dest
-  );
+  if (!dryRun) {
+    renderToFile(
+      getTemplate(handlebars, "kubernetes", "migrations.hbs"),
+      {
+        migrations: new handlebars.SafeString(JSON.stringify(migrations)),
+      },
+      dest
+    );
 
-  // ...and apply it
-  kubectlWithContext(`apply -f ${dest}`);
-} else {
-  console.log("  (Skipping rendering due to dryn run)");
-}
+    // ...and apply it
+    kubectlWithContext(`apply -f ${dest}`);
+  } else {
+    console.log("  (Skip updating state due to dryn run)");
+  }
+});
