@@ -15,6 +15,7 @@
     "sync:users": "node ./bin/sync-users.js",
     "sync:projects": "node ./bin/sync-projects.js",
     "sync:cluster-info": "node ./bin/sync-cluster-info.js",
+    "sync:migrations": "node ./bin/sync-migrations.js",
     "clean": "./bin/clean.sh",
     "send:kubeconfig": "node ./bin/send-kubeconfig.js"
   },

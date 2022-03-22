@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: migrations
+  namespace: default
+  labels:
+    provisioner: etimo-kubernetes
+data:
+  applied: |
+    {{migrations}}
+---
