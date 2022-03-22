@@ -82,10 +82,11 @@ clusterInfo.forEach((cluster) => {
       console.log(`Removing user certificate for ${username}...`);
       kubectlWithContext(`delete csr ${username}`);
     });
-    const users = [...new Set([...kubernetesUsers, ...usersAdded])];
-    saveDataset(kubectlWithContext, "users", {
-      users,
-    });
+    const users = [...kubernetesUsers, ...usersAdded].reduce(
+      (total, username) => ({ ...total, [username]: true }),
+      {}
+    );
+    saveDataset(kubectlWithContext, "users", users);
   } else {
     console.log("  -> Not applying users because of dry run");
   }
