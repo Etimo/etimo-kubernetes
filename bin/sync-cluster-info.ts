@@ -1,8 +1,9 @@
-const { program } = require("commander");
-const shelljs = require("shelljs");
-const { writeClusterInfo } = require("../lib/cluster-info");
-const schemas = require("../lib/schemas");
-const { logArgv } = require("../lib/utils");
+import { program } from "commander";
+import shelljs from "shelljs";
+import { writeClusterInfo } from "../lib/cluster-info";
+import { TerraformOutput } from "../lib/interfaces";
+import * as schemas from "../lib/schemas";
+import { logArgv } from "../lib/utils";
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -22,7 +23,9 @@ if (terraformOutputRes.code != 0) {
 shelljs.popd();
 
 console.log("Validation terraform output...");
-const terraformOutput = JSON.parse(terraformOutputRes.stdout);
+const terraformOutput = JSON.parse(
+  terraformOutputRes.stdout
+) as TerraformOutput;
 const validationResult =
   schemas.schemaTerraformOutput.validate(terraformOutput);
 if (validationResult.error) {
@@ -39,11 +42,12 @@ const terraformData = terraformOutput.cluster_ids.value.map((item, index) => ({
   stage: terraformOutput.stages.value[index],
 }));
 console.log(terraformData);
-writeClusterInfo(terraformData);
-
-// Extract ca from cluster
-terraformData.forEach((data) => {
-  shelljs.exec(
-    `node ./bin/doctl-extract-ca.js --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
-  );
-});
+if (!dryRun) {
+  writeClusterInfo(terraformData);
+  // Extract ca from cluster
+  terraformData.forEach((data) => {
+    shelljs.exec(
+      `ts-node ./bin/doctl-extract-ca.ts --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
+    );
+  });
+}

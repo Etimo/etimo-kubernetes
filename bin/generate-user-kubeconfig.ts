@@ -1,15 +1,15 @@
-const { program } = require("commander");
-const shelljs = require("shelljs");
-const consts = require("../lib/consts");
-const { getClusterInfoForStage } = require("../lib/cluster-info");
-const schemas = require("../lib/schemas");
-const {
+import { program } from "commander";
+import shelljs from "shelljs";
+import * as consts from "../lib/consts";
+import { getClusterInfoForStage } from "../lib/cluster-info";
+import * as schemas from "../lib/schemas";
+import {
   getCertFileForUsername,
   getKeyFileForUsername,
   getKubeconfigFileForUsername,
   getCaFileForCluster,
-} = require("../lib/consts");
-const { assertFile } = require("../lib/file");
+} from "../lib/consts";
+import { assertFile } from "../lib/file";
 
 // Cmd
 const options = program

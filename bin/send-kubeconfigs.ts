@@ -1,19 +1,17 @@
-const { program } = require("commander");
-const consts = require("../lib/consts");
-const fs = require("fs");
-const nodemailer = require("nodemailer");
-const handlebars = require("handlebars");
-const { getTemplate } = require("../lib/templates");
-const glob = require("glob");
-const { assertFile } = require("../lib/file");
-const {
-  getKubeconfigFileForUsername,
+import { program } from "commander";
+import * as consts from "../lib/consts";
+import nodemailer from "nodemailer";
+import handlebars from "handlebars";
+import { getTemplate } from "../lib/templates";
+import glob from "glob";
+import { assertFile } from "../lib/file";
+import {
   getKubeconfigsGlob,
   getUsernameFromKubeconfigFile,
-} = require("../lib/consts");
-const { readClusterInfo } = require("../lib/cluster-info");
-const { getRecipientFromGithubUsername } = require("../lib/email");
-const { getUsernameFromGithubUsername } = require("../lib/users");
+} from "../lib/consts";
+import { readClusterInfo } from "../lib/cluster-info";
+import { getUsernameFromGithubUsername } from "../lib/users";
+import { UserAttachments, TotalAttachments } from "../lib/interfaces";
 
 // Cmd
 const options = program
@@ -34,22 +32,27 @@ const attachmentsPerUser = clusterInfo.map((cluster) => {
   const stage = cluster.stage;
   const kubeconfigs = glob.sync(getKubeconfigsGlob(stage));
   console.log(getKubeconfigsGlob(stage), kubeconfigs);
-  return kubeconfigs.reduce((total, filename) => {
-    const username = getUsernameFromKubeconfigFile(filename, stage);
-    total[username] = filename;
-    return total;
-  }, {});
+  return kubeconfigs.reduce(
+    (total, filename) => ({
+      ...total,
+      [getUsernameFromKubeconfigFile(filename, stage)]: filename,
+    }),
+    {} as UserAttachments
+  );
 });
 console.log("Found the following kubeconfigs:", attachmentsPerUser);
-const totalAttachments = attachmentsPerUser.reduce((total, item) => {
-  Object.keys(item).forEach((username) => {
-    if (!(username in total)) {
-      total[username] = [];
-    }
-    total[username] = total[username].concat(item[username]);
-  });
-  return total;
-}, {});
+const totalAttachments = attachmentsPerUser.reduce(
+  (total: TotalAttachments, item) => {
+    Object.keys(item).forEach((username) => {
+      if (!(username in total)) {
+        total[username] = [];
+      }
+      total[username] = total[username].concat(item[username]);
+    });
+    return total;
+  },
+  {} as TotalAttachments
+);
 
 Object.keys(totalAttachments).forEach((username) => {
   const attachments = totalAttachments[username].map((path) => ({ path }));
