@@ -8,6 +8,7 @@ const {
   getKubectlForContext,
   getContext,
   saveDataset,
+  getValidConfigMapKey,
 } = require("../lib/kubernetes");
 const { renderToFile, getTemplate } = require("../lib/templates");
 const handlebars = require("handlebars");
@@ -46,7 +47,9 @@ clusterInfo.forEach((cluster) => {
     const shasum = crypto.createHash("sha1");
     shasum.update(getFileContent(migrationFile));
     const checksum = shasum.digest("hex");
-    const appliedMigration = appliedMigrations[migrationFile];
+    const migrationFileKey = getValidConfigMapKey(migrationFile);
+    const appliedMigration = appliedMigrations[migrationFileKey];
+    console.log(appliedMigration);
     if (appliedMigration && appliedMigration.checksum !== checksum) {
       // Migration has been changed
       console.error(
@@ -93,16 +96,6 @@ clusterInfo.forEach((cluster) => {
   // Render yaml to apply
   if (!dryRun) {
     saveDataset(kubectlWithContext, "migrations", migrations);
-    // renderToFile(
-    //   getTemplate(handlebars, "kubernetes", "migrations.hbs"),
-    //   {
-    //     migrations: new handlebars.SafeString(JSON.stringify(migrations)),
-    //   },
-    //   dest
-    // );
-
-    // // ...and apply it
-    // kubectlWithContext(`apply -f ${dest}`);
   } else {
     console.log("  (Skip updating state due to dryn run)");
   }

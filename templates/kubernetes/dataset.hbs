@@ -6,6 +6,7 @@ metadata:
   labels:
     provisioner: etimo-kubernetes
 data:
-  applied: |
-    {{data}}
+  {{#each data}}
+  {{@key}}: {{{this}}}
+  {{/each}}
 ---
