@@ -12,7 +12,7 @@
     "render:owners": "node ./bin/render-owners.js",
     "render:csr": "node ./bin/render-csr.js",
     "sync": "yarn sync:cluster-info && yarn sync:projects && yarn sync:users && yarn sync:migrations",
-    "sync:users": "node ./bin/sync-users.js",
+    "sync:users": "ts-node ./bin/sync-users.ts",
     "sync:projects": "node ./bin/sync-projects.js",
     "sync:cluster-info": "node ./bin/sync-cluster-info.js",
     "sync:migrations": "node ./bin/sync-migrations.js",
@@ -33,6 +33,8 @@
     "prettier": "^2.6.0",
     "pretty-quick": "^3.1.3",
     "shelljs": "^0.8.5",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2",
     "yaml": "^1.10.2"
   }
 }
