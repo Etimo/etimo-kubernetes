@@ -11,7 +11,7 @@
     "render:projects": "node ./bin/render-projects.js",
     "render:owners": "node ./bin/render-owners.js",
     "render:csr": "node ./bin/render-csr.js",
-    "sync": "yarn sync:cluster-info && yarn sync:projects && yarn sync:users",
+    "sync": "yarn sync:cluster-info && yarn sync:projects && yarn sync:users && yarn sync:migrations",
     "sync:users": "node ./bin/sync-users.js",
     "sync:projects": "node ./bin/sync-projects.js",
     "sync:cluster-info": "node ./bin/sync-cluster-info.js",
