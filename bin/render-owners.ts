@@ -8,6 +8,7 @@ import { getTemplate, renderToFile } from "../lib/templates";
 import { validateYamlFile } from "../lib/validations";
 import { getProjectOwnersFile } from "../lib/consts";
 import { logArgv } from "../lib/utils";
+import { Owners, ProjectOwners } from "../lib/interfaces";
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -19,9 +20,6 @@ const projectFolders = glob.sync("projects/*");
 hbsSeparator(handlebars);
 
 // Parse and validate stage configs
-interface ProjectOwners {
-  [key: string]: string[];
-}
 const projectOwners = projectFolders.reduce((value, projectFolder) => {
   const project = projectFolder.split("/")[1];
   const ownersConfigFile = getProjectOwnersFile(project);
@@ -59,9 +57,6 @@ if (!dryRun) {
 console.log("Rendering all_owners...");
 const allOwners = Object.values(projectOwners).flat();
 const allOwnersFile = "users/all_owners";
-interface Owners {
-  [key: string]: boolean;
-}
 const currentOwners = allOwners.reduce(
   (total, value) => ({
     ...total,

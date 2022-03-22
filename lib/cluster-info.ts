@@ -1,14 +1,6 @@
 import * as fs from "fs";
 import { FILENAME_CLUSTER_INFO } from "./consts";
-
-interface Cluster {
-  clusterId: string;
-  clusterName: string;
-  clusterEndpoint: string;
-  stage: string;
-}
-
-type Clusters = Array<Cluster>;
+import { Clusters } from "./interfaces";
 
 export const writeClusterInfo = (clusterInfo: Clusters) =>
   fs.writeFileSync(FILENAME_CLUSTER_INFO, JSON.stringify(clusterInfo, null, 2));

@@ -11,6 +11,7 @@ import {
 } from "../lib/consts";
 import { readClusterInfo } from "../lib/cluster-info";
 import { getUsernameFromGithubUsername } from "../lib/users";
+import { UserAttachments, TotalAttachments } from "../lib/interfaces";
 
 // Cmd
 const options = program
@@ -27,9 +28,6 @@ const mailPassword = options.mailPassword;
 assertFile(consts.FILENAME_CLUSTER_INFO, true);
 
 const clusterInfo = readClusterInfo();
-interface AttachmentsPerUser {
-  [key: string]: string;
-}
 const attachmentsPerUser = clusterInfo.map((cluster) => {
   const stage = cluster.stage;
   const kubeconfigs = glob.sync(getKubeconfigsGlob(stage));
@@ -39,13 +37,10 @@ const attachmentsPerUser = clusterInfo.map((cluster) => {
       ...total,
       [getUsernameFromKubeconfigFile(filename, stage)]: filename,
     }),
-    {} as AttachmentsPerUser
+    {} as UserAttachments
   );
 });
 console.log("Found the following kubeconfigs:", attachmentsPerUser);
-interface TotalAttachments {
-  [key: string]: string[];
-}
 const totalAttachments = attachmentsPerUser.reduce(
   (total: TotalAttachments, item) => {
     Object.keys(item).forEach((username) => {

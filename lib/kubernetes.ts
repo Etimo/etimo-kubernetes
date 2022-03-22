@@ -2,15 +2,7 @@ import shelljs from "shelljs";
 import { getTempFilename } from "./file";
 import { renderToFile, getTemplate } from "./templates";
 import handlebars from "handlebars";
-
-export type KubeCtlWithContext = (
-  cmd: string,
-  options?: shelljs.ExecOptions
-) =>
-  | shelljs.ExecOutputReturnValue
-  | shelljs.ShellArray
-  | shelljs.ShellString
-  | shelljs.ShellReturnValue;
+import { KubeCtlWithContext } from "./interfaces";
 
 export const getAllNamespaces = (kubectlWithContext: KubeCtlWithContext) => {
   const res = kubectlWithContext(

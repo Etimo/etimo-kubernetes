@@ -1,6 +1,7 @@
 import { program } from "commander";
 import shelljs from "shelljs";
 import { writeClusterInfo } from "../lib/cluster-info";
+import { TerraformOutput } from "../lib/interfaces";
 import * as schemas from "../lib/schemas";
 import { logArgv } from "../lib/utils";
 
@@ -8,17 +9,6 @@ import { logArgv } from "../lib/utils";
 const options = program.option("--dry-run").parse().opts();
 logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
-
-interface TerraformString {
-  value: string[];
-}
-
-interface TerraformOutput {
-  cluster_endpoints: TerraformString;
-  cluster_ids: TerraformString;
-  cluster_names: TerraformString;
-  stages: TerraformString;
-}
 
 // Get total list of users in all projects
 console.log("Getting output from terraform...");
@@ -52,11 +42,12 @@ const terraformData = terraformOutput.cluster_ids.value.map((item, index) => ({
   stage: terraformOutput.stages.value[index],
 }));
 console.log(terraformData);
-writeClusterInfo(terraformData);
-
-// Extract ca from cluster
-terraformData.forEach((data) => {
-  shelljs.exec(
-    `ts-node ./bin/doctl-extract-ca.ts --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
-  );
-});
+if (!dryRun) {
+  writeClusterInfo(terraformData);
+  // Extract ca from cluster
+  terraformData.forEach((data) => {
+    shelljs.exec(
+      `ts-node ./bin/doctl-extract-ca.ts --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
+    );
+  });
+}

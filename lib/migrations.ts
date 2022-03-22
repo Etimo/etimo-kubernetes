@@ -1,14 +1,11 @@
 import glob from "glob";
 import { MIGRATIONS_GLOB } from "./consts";
-import { getDataset, KubeCtlWithContext } from "./kubernetes";
-
-interface AppliedMigration {
-  checksum: string;
-  ts: string;
-}
-interface AppliedMigrations {
-  [key: string]: AppliedMigration;
-}
+import {
+  AppliedMigration,
+  AppliedMigrations,
+  KubeCtlWithContext,
+} from "./interfaces";
+import { getDataset } from "./kubernetes";
 
 export const getAppliedMigrations = (
   kubectlWithContext: KubeCtlWithContext
