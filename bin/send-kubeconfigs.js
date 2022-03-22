@@ -52,7 +52,7 @@ const totalAttachments = attachmentsPerUser.reduce((total, item) => {
 }, {});
 
 Object.keys(totalAttachments).forEach((username) => {
-  const attachments = totalAttachments[username];
+  const attachments = totalAttachments[username].map((path) => ({ path }));
   console.log(`Rendering email for ${username}...`);
   const context = {
     username,
