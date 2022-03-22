@@ -1,21 +1,19 @@
-const { program } = require("commander");
-const shelljs = require("shelljs");
-const { getTotalUsers } = require("../lib/projects");
-const {
+import { program } from "commander";
+import shelljs from "shelljs";
+import { getTotalUsers } from "../lib/projects";
+import {
   getAllUsers,
   getKubectlForContext,
   getContext,
   saveDataset,
-} = require("../lib/kubernetes");
-const { getKubeconfigFileForUsername } = require("../lib/consts");
-const { assertFile } = require("../lib/file");
-const consts = require("../lib/consts");
-const { readClusterInfo } = require("../lib/cluster-info");
-const { logArgv } = require("../lib/utils");
+} from "../lib/kubernetes";
+import { getKubeconfigFileForUsername } from "../lib/consts";
+import { assertFile } from "../lib/file";
+import * as consts from "../lib/consts";
+import { readClusterInfo } from "../lib/cluster-info";
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
-logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Validate
@@ -35,7 +33,7 @@ clusterInfo.forEach((cluster) => {
   const kubernetesUsers = getAllUsers(kubectlWithContext);
   console.log("  Users in projects:", existingUsersMap);
   console.log("  Users in kubernetes:", kubernetesUsers);
-  const usersAdded = [];
+  const usersAdded: string[] = [];
 
   // Calculate users to add and remove
   const usersToAdd = new Set(
@@ -52,11 +50,11 @@ clusterInfo.forEach((cluster) => {
     usersToAdd.forEach((username) => {
       console.log(`Generating certificate for ${username}...`);
       shelljs.exec(
-        `node ./bin/generate-user-certificate.js --username ${username} --cluster-name ${clusterName} --stage ${stage}`
+        `ts-node ./bin/generate-user-certificate.ts --username ${username} --cluster-name ${clusterName} --stage ${stage}`
       );
       console.log(`Generating kubeconfig for user ${username}...`);
       shelljs.exec(
-        `node ./bin/generate-user-kubeconfig.js --username ${username} --stage ${stage}`
+        `ts-node ./bin/generate-user-kubeconfig.ts --username ${username} --stage ${stage}`
       );
       console.log(`Verifying new kubeconfig for user ${username}...`);
       const kubeconfigFile = getKubeconfigFileForUsername(username, stage);

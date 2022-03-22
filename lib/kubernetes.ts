@@ -1,9 +1,18 @@
-const shelljs = require("shelljs");
-const { getTempFilename, setFileContent } = require("./file");
-const { renderToFile, getTemplate } = require("./templates");
-const handlebars = require("handlebars");
+import shelljs from "shelljs";
+import { getTempFilename } from "./file";
+import { renderToFile, getTemplate } from "./templates";
+import handlebars from "handlebars";
 
-const getAllNamespaces = (kubectlWithContext) => {
+export type KubeCtlWithContext = (
+  cmd: string,
+  options?: shelljs.ExecOptions
+) =>
+  | shelljs.ExecOutputReturnValue
+  | shelljs.ShellArray
+  | shelljs.ShellString
+  | shelljs.ShellReturnValue;
+
+export const getAllNamespaces = (kubectlWithContext: KubeCtlWithContext) => {
   const res = kubectlWithContext(
     `get namespace --selector provisioner=etimo-kubernetes`,
     { silent: false }
@@ -21,9 +30,12 @@ const getAllNamespaces = (kubectlWithContext) => {
   );
 };
 
-const getDataset = (kubectlWithContext, dataset) => {
+export const getDataset = <T>(
+  kubectlWithContext: KubeCtlWithContext,
+  name: string
+): Record<string, T> | null => {
   const res = kubectlWithContext(
-    `--namespace default get configmap ${dataset} -o jsonpath='{.data}'`,
+    `--namespace default get configmap ${name} -o jsonpath='{.data}'`,
     { silent: true }
   );
   if (res.code === 1) {
@@ -39,10 +51,14 @@ const getDataset = (kubectlWithContext, dataset) => {
   }, {});
 };
 
-const saveDataset = (kubectlWithContext, dataset, object) => {
+export const saveDataset = (
+  kubectlWithContext: KubeCtlWithContext,
+  name: string,
+  object: Record<string, unknown>
+) => {
   const filename = getTempFilename();
   const data = Object.keys(object).reduce((total, key) => {
-    const validKey = getValidConfigMapKey(key);
+    const validKey = getConfigMapKey(key);
     return {
       ...total,
       [validKey]: JSON.stringify(JSON.stringify(object[key])),
@@ -51,7 +67,7 @@ const saveDataset = (kubectlWithContext, dataset, object) => {
   renderToFile(
     getTemplate(handlebars, "kubernetes", "dataset.hbs"),
     {
-      name: dataset,
+      name: name,
       data,
     },
     filename
@@ -61,7 +77,9 @@ const saveDataset = (kubectlWithContext, dataset, object) => {
   });
 };
 
-const getAllUsers = (kubectlWithContext) => {
+export const getAllUsers = (
+  kubectlWithContext: KubeCtlWithContext
+): Set<string> => {
   const data = getDataset(kubectlWithContext, "users");
   if (data === null) {
     return new Set();
@@ -70,7 +88,10 @@ const getAllUsers = (kubectlWithContext) => {
   return new Set(Object.keys(data));
 };
 
-const getKubectlForContext = (context, indentOutput = 0) => {
+export const getKubectlForContext = (
+  context: string,
+  indentOutput = 0
+): KubeCtlWithContext => {
   console.log(`Preparing kubectl context ${context}`);
   return (cmd, options) => {
     const res = shelljs.exec(`kubectl --context ${context} ${cmd}`, {
@@ -88,16 +109,6 @@ const getKubectlForContext = (context, indentOutput = 0) => {
   };
 };
 
-const getContext = (clusterName) => `do-fra1-${clusterName}`;
+export const getContext = (clusterName: string) => `do-fra1-${clusterName}`;
 
-const getValidConfigMapKey = (key) => key.replace(/[^a-z0-9]/g, "_");
-
-module.exports = {
-  getValidConfigMapKey,
-  getAllUsers,
-  getAllNamespaces,
-  getDataset,
-  saveDataset,
-  getContext,
-  getKubectlForContext,
-};
+export const getConfigMapKey = (key: string) => key.replace(/[^a-z0-9]/g, "_");

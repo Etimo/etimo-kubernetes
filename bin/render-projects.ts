@@ -1,14 +1,14 @@
-const { program } = require("commander");
-const path = require("path");
-const fs = require("fs");
-const handlebars = require("handlebars");
-const schemas = require("../lib/schemas");
-const stages = require("../lib/stages");
-const glob = require("glob");
-const { validateYamlFile } = require("../lib/validations");
-const { getYamlContentParsed, getFileContent } = require("../lib/file");
-const { renderToFile } = require("../lib/templates");
-const { logArgv } = require("../lib/utils");
+import { program } from "commander";
+import path from "path";
+import fs from "fs";
+import handlebars from "handlebars";
+import * as schemas from "../lib/schemas";
+import stages from "../lib/stages";
+import glob from "glob";
+import { validateYamlFile } from "../lib/validations";
+import { getYamlContentParsed, getFileContent } from "../lib/file";
+import { renderToFile } from "../lib/templates";
+import { logArgv } from "../lib/utils";
 
 const options = program.option("--dry-run").parse().opts();
 logArgv();
@@ -48,7 +48,7 @@ projectFolders.forEach((projectFolder) => {
   stageYamlData.forEach((stageData, index) => {
     if (stageData) {
       const stage = stages[index];
-      const templates = {
+      const templates: Record<string, string> = {
         "templates/terraform/project_main.hbs":
           "terraform/project_" + project + "_" + stage + ".tf",
         "templates/kubernetes/project.hbs":

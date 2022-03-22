@@ -1,13 +1,13 @@
-const { program } = require("commander");
-const shelljs = require("shelljs");
-const consts = require("../lib/consts");
-const schemas = require("../lib/schemas");
-const {
+import { program } from "commander";
+import shelljs from "shelljs";
+import * as consts from "../lib/consts";
+import * as schemas from "../lib/schemas";
+import {
   getKeyFileForUsername,
   getCsrFileForUsername,
   getEncodedCsrFileForUsername,
-} = require("../lib/consts");
-const { assertFile } = require("../lib/file");
+} from "../lib/consts";
+import { assertFile } from "../lib/file";
 
 // Cmd
 const options = program

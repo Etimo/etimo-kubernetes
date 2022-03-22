@@ -1,13 +1,13 @@
-const { program } = require("commander");
-const shelljs = require("shelljs");
-const schemas = require("../lib/schemas");
-const {
+import { program } from "commander";
+import shelljs from "shelljs";
+import * as schemas from "../lib/schemas";
+import {
   getCertFileForUsername,
   getCsrOutputFileForUsername,
-} = require("../lib/consts");
-const { assertFile } = require("../lib/file");
-const consts = require("../lib/consts");
-const { getContext, getKubectlForContext } = require("../lib/kubernetes");
+} from "../lib/consts";
+import { assertFile, getTempFilename, setFileContent } from "../lib/file";
+import * as consts from "../lib/consts";
+import { getContext, getKubectlForContext } from "../lib/kubernetes";
 
 // Cmd
 const options = program
@@ -34,19 +34,20 @@ assertFile(consts.FILENAME_CLUSTER_INFO, true);
 if (!dryRun) {
   console.log(`Generating certificate for ${username}...`);
   shelljs.exec(
-    `node ./bin/generate-csr.js --username ${username} --stage ${stage}`
+    `ts-node ./bin/generate-csr.ts --username ${username} --stage ${stage}`
   );
   shelljs.exec(`yarn render:csr --username ${username} --stage ${stage}`);
   kubectlWithContext(`apply -f ${csrOutputFile}`);
   kubectlWithContext(`certificate approve ${username}`);
-  kubectlWithContext(
+  const tempfile = getTempFilename();
+  const res = kubectlWithContext(
     `get csr ${username} -o jsonpath='{.status.certificate}'`,
     {
       silent: true,
     }
-  )
-    .exec(`base64 --decode`, { silent: true })
-    .to(certFile);
+  );
+  setFileContent(tempfile, res.stdout);
+  shelljs.cat(tempfile).exec(`base64 --decode`, { silent: true }).to(certFile);
   console.log(`  -> Generated certificate in ${certFile}`);
 } else {
   console.log("  -> Skipping due to dry run");

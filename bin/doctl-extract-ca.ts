@@ -1,7 +1,7 @@
-const { program } = require("commander");
-const shelljs = require("shelljs");
-const { getCaFileForCluster } = require("../lib/consts");
-const chalk = require("chalk");
+import { program } from "commander";
+import shelljs from "shelljs";
+import { getCaFileForCluster } from "../lib/consts";
+import chalk from "chalk";
 
 // Cmd
 const options = program

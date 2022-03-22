@@ -1,13 +1,24 @@
-const { program } = require("commander");
-const shelljs = require("shelljs");
-const { writeClusterInfo } = require("../lib/cluster-info");
-const schemas = require("../lib/schemas");
-const { logArgv } = require("../lib/utils");
+import { program } from "commander";
+import shelljs from "shelljs";
+import { writeClusterInfo } from "../lib/cluster-info";
+import * as schemas from "../lib/schemas";
+import { logArgv } from "../lib/utils";
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
 logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
+
+interface TerraformString {
+  value: string[];
+}
+
+interface TerraformOutput {
+  cluster_endpoints: TerraformString;
+  cluster_ids: TerraformString;
+  cluster_names: TerraformString;
+  stages: TerraformString;
+}
 
 // Get total list of users in all projects
 console.log("Getting output from terraform...");
@@ -22,7 +33,9 @@ if (terraformOutputRes.code != 0) {
 shelljs.popd();
 
 console.log("Validation terraform output...");
-const terraformOutput = JSON.parse(terraformOutputRes.stdout);
+const terraformOutput = JSON.parse(
+  terraformOutputRes.stdout
+) as TerraformOutput;
 const validationResult =
   schemas.schemaTerraformOutput.validate(terraformOutput);
 if (validationResult.error) {
@@ -44,6 +57,6 @@ writeClusterInfo(terraformData);
 // Extract ca from cluster
 terraformData.forEach((data) => {
   shelljs.exec(
-    `node ./bin/doctl-extract-ca.js --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
+    `ts-node ./bin/doctl-extract-ca.ts --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
   );
 });

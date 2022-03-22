@@ -1,30 +1,26 @@
-const { program } = require("commander");
-const {
+import { program } from "commander";
+import {
   getAppliedMigrations,
   getAllMigrations,
   getMigrationNumberFromFile,
-} = require("../lib/migrations");
-const {
+} from "../lib/migrations";
+import {
   getKubectlForContext,
   getContext,
   saveDataset,
-  getValidConfigMapKey,
-} = require("../lib/kubernetes");
-const { renderToFile, getTemplate } = require("../lib/templates");
-const handlebars = require("handlebars");
-const { hbsToJson } = require("../lib/hbs-helpers");
-const { getMigrationYamlFile } = require("../lib/consts");
-const crypto = require("crypto");
-const { getFileContent } = require("../lib/file");
-const { readClusterInfo } = require("../lib/cluster-info");
-const { logArgv } = require("../lib/utils");
+  getConfigMapKey,
+} from "../lib/kubernetes";
+import { getMigrationYamlFile } from "../lib/consts";
+import crypto from "crypto";
+import { getFileContent } from "../lib/file";
+import { readClusterInfo } from "../lib/cluster-info";
+import { logArgv } from "../lib/utils";
 
 // Cmd
 const options = program.option("--to <to>").option("--dry-run").parse().opts();
 logArgv();
 const to = options.to;
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
-hbsToJson(handlebars);
 
 // Perform
 const allMigrations = getAllMigrations();
@@ -47,7 +43,7 @@ clusterInfo.forEach((cluster) => {
     const shasum = crypto.createHash("sha1");
     shasum.update(getFileContent(migrationFile));
     const checksum = shasum.digest("hex");
-    const migrationFileKey = getValidConfigMapKey(migrationFile);
+    const migrationFileKey = getConfigMapKey(migrationFile);
     const appliedMigration = appliedMigrations[migrationFileKey];
     console.log(appliedMigration);
     if (appliedMigration && appliedMigration.checksum !== checksum) {
@@ -55,10 +51,7 @@ clusterInfo.forEach((cluster) => {
       console.error(
         `Mismatch in checksum for ${migrationFile}. Currently ${checksum} but applied ${appliedMigration.checksum}.`
       );
-    } else if (
-      !appliedMigration &&
-      ((toNumber !== null && toNumber >= number) || toNumber === null)
-    ) {
+    } else if (!appliedMigration) {
       // Apply migration
       console.log(`  Running migration ${migrationFile}...`);
       const module = require("../" + migrationFile);
@@ -71,18 +64,18 @@ clusterInfo.forEach((cluster) => {
         ...total,
         [migrationFile]: { checksum, ts: new Date().toISOString() },
       };
-    } else if (appliedMigration && toNumber !== null && number > toNumber) {
-      console.log(`  Unapply... ${migrationFile}`);
-      const module = require("../" + migrationFile);
-      if (!dryRun) {
-        module.down(kubectlWithContext, context);
-      } else {
-        console.log("    -> Skipping due to dry run");
-      }
-      return {
-        ...total,
-        [migrationFile]: undefined,
-      };
+      // } else if (appliedMigration && toNumber !== null && number > toNumber) {
+      //   console.log(`  Unapply... ${migrationFile}`);
+      //   const module from "../" + migrationFile);
+      //   if (!dryRun) {
+      //     module.down(kubectlWithContext, context);
+      //   } else {
+      //     console.log("    -> Skipping due to dry run");
+      //   }
+      //   return {
+      //     ...total,
+      //     [migrationFile]: undefined,
+      //   };
     } else {
       // Already applied
       console.log(`  (Migration ${migrationFile} already applied!)`);

@@ -1,14 +1,13 @@
-const { program } = require("commander");
-const path = require("path");
-const fs = require("fs");
-const handlebars = require("handlebars");
-const glob = require("glob");
-const schemas = require("../lib/schemas");
-const { hbsSeparator } = require("../lib/hbs-helpers");
-const { getTemplate, renderToFile } = require("../lib/templates");
-const { validateYamlFile } = require("../lib/validations");
-const { getProjectOwnersFile } = require("../lib/consts");
-const { logArgv } = require("../lib/utils");
+import { program } from "commander";
+import fs from "fs";
+import handlebars from "handlebars";
+import glob from "glob";
+import * as schemas from "../lib/schemas";
+import { hbsSeparator } from "../lib/hbs-helpers";
+import { getTemplate, renderToFile } from "../lib/templates";
+import { validateYamlFile } from "../lib/validations";
+import { getProjectOwnersFile } from "../lib/consts";
+import { logArgv } from "../lib/utils";
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -20,6 +19,9 @@ const projectFolders = glob.sync("projects/*");
 hbsSeparator(handlebars);
 
 // Parse and validate stage configs
+interface ProjectOwners {
+  [key: string]: string[];
+}
 const projectOwners = projectFolders.reduce((value, projectFolder) => {
   const project = projectFolder.split("/")[1];
   const ownersConfigFile = getProjectOwnersFile(project);
@@ -35,7 +37,7 @@ const projectOwners = projectFolders.reduce((value, projectFolder) => {
     };
   }
   return { ...value };
-}, {});
+}, {} as ProjectOwners);
 
 console.log(`Rendering codeowners template...`);
 const dest = ".github/CODEOWNERS";
@@ -57,10 +59,16 @@ if (!dryRun) {
 console.log("Rendering all_owners...");
 const allOwners = Object.values(projectOwners).flat();
 const allOwnersFile = "users/all_owners";
-const currentOwners = allOwners.reduce((total, value) => {
-  total[value] = true;
-  return total;
-}, {});
+interface Owners {
+  [key: string]: boolean;
+}
+const currentOwners = allOwners.reduce(
+  (total, value) => ({
+    ...total,
+    [value]: true,
+  }),
+  {} as Owners
+);
 
 if (!dryRun) {
   fs.writeFileSync(allOwnersFile, Object.keys(currentOwners).sort().join("\n"));

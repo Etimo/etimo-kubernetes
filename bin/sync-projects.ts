@@ -1,17 +1,15 @@
-const { program } = require("commander");
-const { getAllProjectsForStage } = require("../lib/projects");
-const {
+import { program } from "commander";
+import { getAllProjectsForStage } from "../lib/projects";
+import {
   getAllNamespaces,
   getContext,
   getKubectlForContext,
-} = require("../lib/kubernetes");
-const stages = require("../lib/stages");
-const { readClusterInfo } = require("../lib/cluster-info");
-const { assertFile } = require("../lib/file");
-const consts = require("../lib/consts");
-const glob = require("glob");
-const { getKubernetesProjectYamlFile } = require("../lib/consts");
-const { logArgv } = require("../lib/utils");
+} from "../lib/kubernetes";
+import { readClusterInfo } from "../lib/cluster-info";
+import { assertFile } from "../lib/file";
+import * as consts from "../lib/consts";
+import { getKubernetesProjectYamlFile } from "../lib/consts";
+import { logArgv } from "../lib/utils";
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();

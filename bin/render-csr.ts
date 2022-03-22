@@ -1,13 +1,13 @@
-const { program } = require("commander");
-const handlebars = require("handlebars");
-const schemas = require("../lib/schemas");
-const { getTemplate, renderToFile } = require("../lib/templates");
-const { getFileContent, assertFile } = require("../lib/file");
-const {
+import { program } from "commander";
+import handlebars from "handlebars";
+import * as schemas from "../lib/schemas";
+import { getTemplate, renderToFile } from "../lib/templates";
+import { getFileContent, assertFile } from "../lib/file";
+import {
   getCsrOutputFileForUsername,
   getEncodedCsrFileForUsername,
-} = require("../lib/consts");
-const { logArgv } = require("../lib/utils");
+} from "../lib/consts";
+import { logArgv } from "../lib/utils";
 
 // Cmd
 const options = program
