@@ -80,8 +80,9 @@ Object.keys(totalAttachments).forEach((username) => {
         pass: mailPassword,
       },
     });
-    transporter.sendMail(message).then((res) => console.log(res));
-    console.log("    -> Email sent!");
+    transporter.sendMail(message).then((res) => {
+      console.log("    -> Email sent!");
+    });
   } else {
     console.log("    -> Skipping email sending because of dry run");
   }
