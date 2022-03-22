@@ -7,6 +7,7 @@ const {
   getCsrOutputFileForUsername,
   getEncodedCsrFileForUsername,
 } = require("../lib/consts");
+const { logArgv } = require("../lib/utils");
 
 // Cmd
 const options = program

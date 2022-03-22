@@ -17,7 +17,7 @@
     "sync:cluster-info": "node ./bin/sync-cluster-info.js",
     "sync:migrations": "node ./bin/sync-migrations.js",
     "clean": "./bin/clean.sh",
-    "send:kubeconfig": "node ./bin/send-kubeconfig.js"
+    "send:kubeconfigs": "node ./bin/send-kubeconfigs.js"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
