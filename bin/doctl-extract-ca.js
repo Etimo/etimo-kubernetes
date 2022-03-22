@@ -1,6 +1,7 @@
 const { program } = require("commander");
 const shelljs = require("shelljs");
 const { getCaFileForCluster } = require("../lib/consts");
+const chalk = require("chalk");
 
 // Cmd
 const options = program
@@ -8,6 +9,7 @@ const options = program
   .requiredOption("--cluster-name <name>")
   .parse()
   .opts();
+console.info(chalk.blue(process.argv.join(" ")));
 const clusterName = options.clusterName;
 const clusterId = options.clusterId;
 const caFile = getCaFileForCluster(clusterName);

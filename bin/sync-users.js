@@ -10,9 +10,11 @@ const { getKubeconfigFileForUsername } = require("../lib/consts");
 const { assertFile } = require("../lib/file");
 const consts = require("../lib/consts");
 const { readClusterInfo } = require("../lib/cluster-info");
+const { logArgv } = require("../lib/utils");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
+logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Validate

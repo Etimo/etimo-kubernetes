@@ -15,6 +15,7 @@ const options = program
   .option("--dry-run")
   .parse()
   .opts();
+logArgv();
 const username = options.username;
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 const stage = options.stage;

@@ -4,7 +4,11 @@ const {
   getAllMigrations,
   getMigrationNumberFromFile,
 } = require("../lib/migrations");
-const { getKubectlForContext, getContext } = require("../lib/kubernetes");
+const {
+  getKubectlForContext,
+  getContext,
+  saveDataset,
+} = require("../lib/kubernetes");
 const { renderToFile, getTemplate } = require("../lib/templates");
 const handlebars = require("handlebars");
 const { hbsToJson } = require("../lib/hbs-helpers");
@@ -12,9 +16,11 @@ const { getMigrationYamlFile } = require("../lib/consts");
 const crypto = require("crypto");
 const { getFileContent } = require("../lib/file");
 const { readClusterInfo } = require("../lib/cluster-info");
+const { logArgv } = require("../lib/utils");
 
 // Cmd
 const options = program.option("--to <to>").option("--dry-run").parse().opts();
+logArgv();
 const to = options.to;
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 hbsToJson(handlebars);
@@ -86,16 +92,17 @@ clusterInfo.forEach((cluster) => {
 
   // Render yaml to apply
   if (!dryRun) {
-    renderToFile(
-      getTemplate(handlebars, "kubernetes", "migrations.hbs"),
-      {
-        migrations: new handlebars.SafeString(JSON.stringify(migrations)),
-      },
-      dest
-    );
+    saveDataset(kubectlWithContext, "migrations", migrations);
+    // renderToFile(
+    //   getTemplate(handlebars, "kubernetes", "migrations.hbs"),
+    //   {
+    //     migrations: new handlebars.SafeString(JSON.stringify(migrations)),
+    //   },
+    //   dest
+    // );
 
-    // ...and apply it
-    kubectlWithContext(`apply -f ${dest}`);
+    // // ...and apply it
+    // kubectlWithContext(`apply -f ${dest}`);
   } else {
     console.log("  (Skip updating state due to dryn run)");
   }

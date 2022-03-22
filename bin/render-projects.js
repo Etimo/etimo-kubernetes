@@ -8,8 +8,10 @@ const glob = require("glob");
 const { validateYamlFile } = require("../lib/validations");
 const { getYamlContentParsed, getFileContent } = require("../lib/file");
 const { renderToFile } = require("../lib/templates");
+const { logArgv } = require("../lib/utils");
 
 const options = program.option("--dry-run").parse().opts();
+logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 const projectFolders = glob.sync("projects/*");

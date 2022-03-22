@@ -2,9 +2,11 @@ const { program } = require("commander");
 const shelljs = require("shelljs");
 const { writeClusterInfo } = require("../lib/cluster-info");
 const schemas = require("../lib/schemas");
+const { logArgv } = require("../lib/utils");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
+logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Get total list of users in all projects

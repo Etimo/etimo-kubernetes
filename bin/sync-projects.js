@@ -11,9 +11,11 @@ const { assertFile } = require("../lib/file");
 const consts = require("../lib/consts");
 const glob = require("glob");
 const { getKubernetesProjectYamlFile } = require("../lib/consts");
+const { logArgv } = require("../lib/utils");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
+logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Validate

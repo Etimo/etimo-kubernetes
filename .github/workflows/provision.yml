@@ -59,10 +59,10 @@ jobs:
           # doctl kubernetes cluster kubeconfig save --expiry-seconds 600 etimo-production
 
       - run: yarn all
-      - run: yarn all
-        env:
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+      # - run: yarn all
+      #   env:
+      #     MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+      #     MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
 
       - name: Commit and push release
         continue-on-error: true

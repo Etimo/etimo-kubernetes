@@ -3,15 +3,16 @@ const path = require("path");
 const fs = require("fs");
 const handlebars = require("handlebars");
 const glob = require("glob");
-
 const schemas = require("../lib/schemas");
 const { hbsSeparator } = require("../lib/hbs-helpers");
 const { getTemplate, renderToFile } = require("../lib/templates");
 const { validateYamlFile } = require("../lib/validations");
 const { getProjectOwnersFile } = require("../lib/consts");
+const { logArgv } = require("../lib/utils");
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
+logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Get a list of projects
