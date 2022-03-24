@@ -1,3 +1,129 @@
+<div id="top"></div>
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="https://kubernetes.io/images/nav_logo.svg" alt="Logo" width="400" height="100">
+  </a>
+
+  <h3>Etimo Kubernetes</h3>
+
+  <!-- <p align="center">
+    <a href="https://github.com/Etimo/etimo-kubernetes"><strong>Explore the docs »</strong></a>
+    <br />
+    <a href="https://github.com/Etimo/etimo-kubernetes">View Demo</a>
+    ·
+    <a href="https://github.com/Etimo/etimo-kubernetes/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/Etimo/etimo-kubernetes/issues">Request Feature</a>
+  </p> -->
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+<!-- ABOUT THE PROJECT -->
+
+## About The Project
+
+> A managed kubernetes cluster with light-weight tooling to simplify, unify and give faster possibilities to host and manage arbitrary Etimo Open projects in a standardised way.
+
+This project aims to give employees at Etimo the possibility to work with Kubernetes at Etimo Open but without everyone having to invent the wheel for setting up and managing a cluster. In this way we can learn more, work more together and lower the barrier to start and host new Etimo Open projects.
+
+One of the question that always arise when we are starting or want to start a new project is:
+
+> "Where and how do we host this?"
+
+We want to remove this barrier to simplify the process. Usually everyone does things their own way (which of course can be fine since we all want to learn new stuff) but this results in lots of different accounts registered across different services. Often these accounts are tied to personal accounts. Some of these are paid for by Etimo which creates a lot of hassle and administration.
+
+A lot of us also want to work more with Kubernetes. And Kubernetes is a hot technology which makes it even more important for us to be able to work with it and learn more.
+
+The point of this project is not in any way to abstract the Kubernetes part. We want to be able to work with Kubernetes
+
+## Goals
+
+This project was created the certain goals in mind:
+
+1. **Don't abstract away Kubernetes** - i.e. don't create a lot of custom tooling to hide Kubernetes from the projects. We want the tooling to be as light-weight as possible and do the bare minimum to get you started.
+2. **Easy onboarding for new projects** - it should be easy and quick to setup a project.
+3. **Full access to an isolated namespace** - each individual project can decide what to run, how to deploy it etc. You should have full access to your own space but not be able to destroy other projects.
+4. **Unified and easy hosting** - all projects should be hosted and optionally exposed on a single domain with automatic TLS certificates using Let's encrypt.
+5. **A central hub for sharing Kubernetes knowledge** - even though everyone is free to do their stuff the way they like, there should still be a place to discuss solutions and help other projects with Kubernetes specific stuff.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Getting Started
+
+Head over to the wiki to read more!
+
+### Prerequisites
+
+The following tools are needed:
+
+- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) - to be able to communicate with the cluster
+
+## Roadmap
+
+- [x] Manage infrastructure using Terraform
+- [x] Able to manage multiple clusters (staging/production)
+- [x] Provision namespaces for projects using PRs
+- [x] Automatically create kubeconfigs for each user that is onboarded
+- [ ] Add RBAC to give full access to the namespaces you are collaborating on
+- [ ] Add RBAC to give read access to the whole cluster
+
+See the [open issues](https://github.com/Etimo/etimo-kubernetes/issues) for a full list of proposed features (and known issues).
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- CONTRIBUTING -->
+
+<!-- ## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#top">back to top</a>)</p> -->
+
+<!-- LICENSE -->
+
+<!-- ## License
+
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#top">back to top</a>)</p> -->
+
 # etimo-kubernetes
 
 - Generate certificate signing request (csr) for user
