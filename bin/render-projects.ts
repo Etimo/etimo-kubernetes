@@ -9,7 +9,10 @@ import { validateYamlFile } from "../lib/validations";
 import { getYamlContentParsed, getFileContent } from "../lib/file";
 import { renderToFile } from "../lib/templates";
 import { logArgv } from "../lib/utils";
-import { getKubernetesProjectYamlFile } from "../lib/consts";
+import {
+  getKubernetesProjectYamlFile,
+  getProjectOwnersFile,
+} from "../lib/consts";
 
 const options = program.option("--dry-run").parse().opts();
 logArgv();
@@ -23,6 +26,14 @@ projectFolders.forEach((projectFolder) => {
   console.log(`Validating project name ${project}...`);
   schemas.assertValidData(project, schemas.schemaProjectName);
   console.log("  -> project name is valid!");
+  const ownersFile = getProjectOwnersFile(project);
+
+  // Validate owners file
+  console.log(`Validating ${ownersFile}...`);
+  validateYamlFile(ownersFile, schemas.schemaOwners);
+  console.log(`  -> file is valid!`);
+
+  // Validate each stage file
   stages.forEach((stage) => {
     const stageConfigFile = path.join(projectFolder, stage + ".yaml");
     if (fs.existsSync(stageConfigFile)) {
@@ -38,10 +49,16 @@ projectFolders.forEach((projectFolder) => {
 // Perform action
 projectFolders.forEach((projectFolder) => {
   const project = projectFolder.split("/")[1];
+  const ownersFile = getProjectOwnersFile(project);
+  const ownersData = getYamlContentParsed(ownersFile);
   const stageYamlData = stages.map((stage) => {
     const stageConfigFile = path.join(projectFolder, stage + ".yaml");
     if (fs.existsSync(stageConfigFile)) {
-      return { ...getYamlContentParsed(stageConfigFile), project };
+      return {
+        ...getYamlContentParsed(stageConfigFile),
+        project,
+        ...ownersData,
+      };
     }
     return null;
   });
@@ -63,14 +80,11 @@ projectFolders.forEach((projectFolder) => {
         const template = handlebars.compile(getFileContent(key));
 
         if (!dryRun) {
-          renderToFile(
-            template,
-            {
-              ...stageData,
-              stage,
-            },
-            dest
-          );
+          const context = {
+            ...stageData,
+            stage,
+          };
+          renderToFile(template, context, dest);
           console.log(`  -> Rendered template to ${dest}!`);
         } else {
           console.log("  (Skipping rendering due to dryn run)");

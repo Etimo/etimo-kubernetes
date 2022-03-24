@@ -53,8 +53,12 @@ clusterInfo.forEach((cluster) => {
 
   if (!dryRun) {
     // Apply sync
-    console.log(`Creating or updating project namespaces...`);
-    kubectlWithContext(`apply -f ${consts.getKubernetesProjectPath(stage)}`);
+    console.log(
+      `Creating or updating projects from ${consts.getKubernetesProjectPath(
+        stage
+      )}...`
+    );
+    kubectlWithContext(`apply -f ${consts.getKubernetesProjectPath(stage)}/`);
     namespacesToRemove.forEach((ns) => {
       console.log(`Removing namespace ${ns}...`);
       kubectlWithContext(`delete namespace ${ns}`);

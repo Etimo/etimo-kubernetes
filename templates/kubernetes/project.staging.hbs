@@ -18,3 +18,29 @@ spec:
     requests.memory: 0.5Gi
     limits.cpu: "1"
     limits.memory: 1Gi
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: "{{project}}"
+  name: "{{project}}-developer"
+rules:
+- apiGroups: ["", "extensions", "apps"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: "{{project}}-developers"
+  namespace: "{{project}}"
+roleRef:
+  kind: Role
+  name: "{{project}}-developer"
+  apiGroup: ""
+subjects:
+{{#each owners}}
+- kind: User
+  name: "{{this}}"
+  apiGroup: ""
+{{/each}}

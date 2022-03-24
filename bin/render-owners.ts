@@ -6,7 +6,7 @@ import * as schemas from "../lib/schemas";
 import { hbsSeparator } from "../lib/hbs-helpers";
 import { getTemplate, renderToFile } from "../lib/templates";
 import { validateYamlFile } from "../lib/validations";
-import { getProjectOwnersFile } from "../lib/consts";
+import { FILENAME_ALL_OWNERS, getProjectOwnersFile } from "../lib/consts";
 import { logArgv } from "../lib/utils";
 import { Owners, ProjectOwners } from "../lib/interfaces";
 
@@ -56,7 +56,6 @@ if (!dryRun) {
 
 console.log("Rendering all_owners...");
 const allOwners = Object.values(projectOwners).flat();
-const allOwnersFile = "users/all_owners";
 const currentOwners = allOwners.reduce(
   (total, value) => ({
     ...total,
@@ -66,7 +65,10 @@ const currentOwners = allOwners.reduce(
 );
 
 if (!dryRun) {
-  fs.writeFileSync(allOwnersFile, Object.keys(currentOwners).sort().join("\n"));
+  fs.writeFileSync(
+    FILENAME_ALL_OWNERS,
+    Object.keys(currentOwners).sort().join("\n")
+  );
   console.log(`  -> Rendered all_owners!`);
 } else {
   console.log("  (Skipping rendering due to dry run)");
