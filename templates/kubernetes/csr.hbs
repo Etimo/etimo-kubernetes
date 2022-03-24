@@ -9,5 +9,6 @@ spec:
   - system:authenticated
   request: {{{csr}}}
   signerName: kubernetes.io/kube-apiserver-client
+  expirationSeconds: 31536000  # 1 year
   usages:
   - client auth
