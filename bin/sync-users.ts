@@ -71,14 +71,12 @@ clusterInfo.forEach((cluster) => {
       } else {
         console.log("  -> Kubeconfig is valid!");
         usersAdded.push(username);
-        // shelljs.exec(
-        //   `yarn send:kubeconfig --username ${username} --mail-username ${process.env.MAIL_USERNAME} --mail-password ${process.env.MAIL_PASSWORD}`
-        // );
       }
     });
     usersToRemove.forEach((username) => {
-      console.log(`Removing user certificate for ${username}...`);
-      kubectlWithContext(`delete csr ${username}`);
+      // console.log(`Removing user certificate for ${username}...`);
+      // kubectlWithContext(`delete csr ${username}`);
+      kubernetesUsers.delete(username);
     });
     const users = [...kubernetesUsers, ...usersAdded].reduce(
       (total, username) => ({ ...total, [username]: true }),
