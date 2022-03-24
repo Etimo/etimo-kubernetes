@@ -9,6 +9,7 @@ import { validateYamlFile } from "../lib/validations";
 import { getYamlContentParsed, getFileContent } from "../lib/file";
 import { renderToFile } from "../lib/templates";
 import { logArgv } from "../lib/utils";
+import { getKubernetesProjectYamlFile } from "../lib/consts";
 
 const options = program.option("--dry-run").parse().opts();
 logArgv();
@@ -51,8 +52,8 @@ projectFolders.forEach((projectFolder) => {
       const templates: Record<string, string> = {
         "templates/terraform/project_main.hbs":
           "terraform/project_" + project + "_" + stage + ".tf",
-        "templates/kubernetes/project.hbs":
-          "kubernetes/projects/" + project + "_" + stage + ".yaml",
+        [`templates/kubernetes/project.${stage}.hbs`]:
+          getKubernetesProjectYamlFile(project, stage),
       };
       console.log(
         `Rendering templates for project ${project} stage ${stage}...`

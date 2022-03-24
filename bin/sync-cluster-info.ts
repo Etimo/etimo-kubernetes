@@ -39,7 +39,7 @@ const terraformData = terraformOutput.cluster_ids.value.map((item, index) => ({
   clusterId: terraformOutput.cluster_ids.value[index],
   clusterName: terraformOutput.cluster_names.value[index],
   clusterEndpoint: terraformOutput.cluster_endpoints.value[index],
-  stage: terraformOutput.stages.value[index],
+  stage: terraformOutput.stages.value[index].toLowerCase(),
 }));
 console.log(terraformData);
 if (!dryRun) {

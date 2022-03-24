@@ -24,7 +24,7 @@ console.log("Getting users from projects in repo...");
 const existingUsersMap = getTotalUsers();
 const clusterInfo = readClusterInfo();
 clusterInfo.forEach((cluster) => {
-  const stage = cluster.stage.toLowerCase();
+  const stage = cluster.stage;
   const clusterName = cluster.clusterName;
   const kubectlWithContext = getKubectlForContext(getContext(clusterName));
 

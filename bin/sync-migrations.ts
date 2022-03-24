@@ -28,7 +28,7 @@ console.log("All migrations:", allMigrations);
 
 const clusterInfo = readClusterInfo();
 clusterInfo.forEach((cluster) => {
-  const stage = cluster.stage.toLowerCase();
+  const stage = cluster.stage;
   const clusterName = cluster.clusterName;
   const context = getContext(clusterName);
   const kubectlWithContext = getKubectlForContext(context);
@@ -45,7 +45,6 @@ clusterInfo.forEach((cluster) => {
     const checksum = shasum.digest("hex");
     const migrationFileKey = getConfigMapKey(migrationFile);
     const appliedMigration = appliedMigrations[migrationFileKey];
-    console.log(appliedMigration);
     if (appliedMigration && appliedMigration.checksum !== checksum) {
       // Migration has been changed
       console.error(
@@ -78,7 +77,9 @@ clusterInfo.forEach((cluster) => {
       //   };
     } else {
       // Already applied
-      console.log(`  (Migration ${migrationFile} already applied!)`);
+      console.log(
+        `  (Migration ${migrationFile} already applied at ${appliedMigration.ts})`
+      );
     }
     return {
       ...total,

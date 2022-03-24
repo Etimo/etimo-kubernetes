@@ -7,7 +7,7 @@ import { KubeCtlWithContext } from "./interfaces";
 export const getAllNamespaces = (kubectlWithContext: KubeCtlWithContext) => {
   const res = kubectlWithContext(
     `get namespace --selector provisioner=etimo-kubernetes`,
-    { silent: false }
+    { silent: true }
   );
   if (res.code !== 0) {
     console.error("Unable to get namespaces in kubernetes.");

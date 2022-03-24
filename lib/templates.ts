@@ -17,4 +17,11 @@ export const renderToFile = (
   template: H.TemplateDelegate,
   data: unknown,
   dest: string
-) => fs.writeFileSync(dest, template(data));
+) => {
+  // Make sure path exists
+  const p = path.dirname(dest);
+  if (!fs.existsSync(p)) {
+    fs.mkdirSync(p, { recursive: true });
+  }
+  fs.writeFileSync(dest, template(data));
+};

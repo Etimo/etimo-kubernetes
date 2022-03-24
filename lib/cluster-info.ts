@@ -9,5 +9,5 @@ export const readClusterInfo = (): Clusters =>
 
 export const getClusterInfoForStage = (stage: string) => {
   const info = readClusterInfo();
-  return info.filter((c) => c.stage.toLowerCase() === stage.toLowerCase())[0];
+  return info.filter((c) => c.stage === stage)[0];
 };

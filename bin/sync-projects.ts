@@ -22,17 +22,22 @@ assertFile(consts.FILENAME_CLUSTER_INFO, true);
 // Perform
 const clusterInfo = readClusterInfo();
 clusterInfo.forEach((cluster) => {
-  const stage = cluster.stage.toLowerCase();
+  const stage = cluster.stage;
   const clusterName = cluster.clusterName;
   const kubectlWithContext = getKubectlForContext(getContext(clusterName));
+
+  // Update infra commons
+  console.log(`Creating or updating common infra setup for ${stage}...`);
+  kubectlWithContext(`apply -f kubernetes/infra/${stage}/`);
 
   // Get total list of projects
   console.log(`Getting current projects in repo for stage ${stage}...`);
   const existingProjects = getAllProjectsForStage(stage);
 
-  // Get users already in k8s
+  // Get projects already in k8s
   console.log(`Getting existing namespaces from kubernetes in ${stage}...`);
   const namespaces = getAllNamespaces(kubectlWithContext);
+
   console.log("Projects in repo:", existingProjects);
   console.log("Namespaces in kubernetes:", namespaces);
 
@@ -49,10 +54,7 @@ clusterInfo.forEach((cluster) => {
   if (!dryRun) {
     // Apply sync
     console.log(`Creating or updating project namespaces...`);
-    existingProjects.forEach((ns) => {
-      const filename = getKubernetesProjectYamlFile(ns, stage);
-      kubectlWithContext(`apply -f ${filename}`);
-    });
+    kubectlWithContext(`apply -f ${consts.getKubernetesProjectPath(stage)}`);
     namespacesToRemove.forEach((ns) => {
       console.log(`Removing namespace ${ns}...`);
       kubectlWithContext(`delete namespace ${ns}`);
