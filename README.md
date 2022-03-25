@@ -82,8 +82,9 @@ Head over to the [docs](docs/) to read more!
 - [x] Able to manage multiple clusters (staging/production)
 - [x] Provision namespaces for projects using PRs
 - [x] Automatically create kubeconfigs for each user that is onboarded
-- [ ] Add RBAC to give full access to the namespaces you are collaborating on
-- [ ] Add RBAC to give read access to the whole cluster
+- [x] Add RBAC to give full access to the namespaces you are collaborating on
+- [x] Add RBAC to give read access to the whole cluster
+- [ ] Host each cluster in a different subdomain `<environment>.domain.se` with wildcard cert for `*.<environment>.domain.se`
 
 See the [open issues](https://github.com/Etimo/etimo-kubernetes/issues) for a full list of proposed features (and known issues).
 
@@ -111,4 +112,3 @@ TODO:
     - read to everything (except other's secrets)
   - should not be able to alter resource quota or namespace itself
 - auto handle oauth2-proxy -->
-
