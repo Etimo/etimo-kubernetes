@@ -9,15 +9,13 @@
 
   <h3>Etimo Kubernetes</h3>
 
-  <!-- <p align="center">
+  <p align="center">
     <a href="https://github.com/Etimo/etimo-kubernetes"><strong>Explore the docs »</strong></a>
-    <br />
-    <a href="https://github.com/Etimo/etimo-kubernetes">View Demo</a>
     ·
     <a href="https://github.com/Etimo/etimo-kubernetes/issues">Report Bug</a>
     ·
     <a href="https://github.com/Etimo/etimo-kubernetes/issues">Request Feature</a>
-  </p> -->
+  </p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -76,13 +74,7 @@ This project was created the certain goals in mind:
 
 ## Getting Started
 
-Head over to the wiki to read more!
-
-### Prerequisites
-
-The following tools are needed:
-
-- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) - to be able to communicate with the cluster
+Head over to the [docs](docs/) to read more!
 
 ## Roadmap
 
