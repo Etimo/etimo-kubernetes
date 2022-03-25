@@ -119,3 +119,12 @@ TODO:
     - read to everything (except other's secrets)
   - should not be able to alter resource quota or namespace itself
 - auto handle oauth2-proxy -->
+
+```mermaid
+graph TD
+    A[Christmas] -->|Get money| B(Go shopping)
+    B --> C{Let me think}
+    C -->|One| D[Laptop]
+    C -->|Two| E[iPhone]
+    C -->|Three| F[fa:fa-car Car]
+```
