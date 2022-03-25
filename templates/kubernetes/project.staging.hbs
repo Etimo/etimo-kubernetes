@@ -1,3 +1,4 @@
+# The actual namespace for the project
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -5,6 +6,7 @@ metadata:
   labels:
     provisioner: etimo-kubernetes
 ---
+# We apply a resource quota to all namespaces to prevent starvation from other projects
 apiVersion: v1
 kind: ResourceQuota
 metadata:
@@ -19,28 +21,30 @@ spec:
     limits.cpu: "1"
     limits.memory: 1Gi
 ---
+# Admin role for the project which gives full access to the namespace
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   namespace: "{{project}}"
-  name: "{{project}}-developer"
+  name: "{{project}}-admin"
 rules:
-- apiGroups: ["", "extensions", "apps"]
-  resources: ["*"]
-  verbs: ["get", "list", "watch"]
+  - apiGroups: ["", "extensions", "apps", "networking.k8s.io"]
+    resources: ["*"]
+    verbs: ["*"]
 ---
+# Bind the admin role to all users in this project
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: "{{project}}-developers"
+  name: "{{project}}-admins"
   namespace: "{{project}}"
 roleRef:
   kind: Role
-  name: "{{project}}-developer"
+  name: "{{project}}-admin"
   apiGroup: ""
 subjects:
 {{#each owners}}
-- kind: User
-  name: "{{this}}"
-  apiGroup: ""
+  - kind: User
+    name: "{{this}}"
+    apiGroup: ""
 {{/each}}
