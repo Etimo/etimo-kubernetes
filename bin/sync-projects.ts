@@ -57,9 +57,7 @@ clusterInfo.forEach((cluster) => {
         stage
       )}...`
     );
-    kubectlWithContext(
-      `apply -f -v ${consts.getKubernetesProjectPath(stage)}/`
-    );
+    kubectlWithContext(`apply -f ${consts.getKubernetesProjectPath(stage)}/`);
     namespacesToRemove.forEach((ns) => {
       console.log(`Removing namespace ${ns}...`);
       kubectlWithContext(`delete namespace ${ns}`);

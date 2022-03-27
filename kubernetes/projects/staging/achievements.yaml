@@ -15,6 +15,11 @@ metadata:
   labels:
     provisioner: etimo-kubernetes
 data:
+  DB_MAIN_NAME: "achievements_staging_main"
+  DB_MAIN_USER: "achievements_staging_main"
+  DB_MAIN_PORT: "25060"
+  DB_MAIN_PUBLIC_HOST: "staging-shared-do-user-11119612-0.b.db.ondigitalocean.com"
+  DB_MAIN_PRIVATE_HOST: "private-staging-shared-do-user-11119612-0.b.db.ondigitalocean.com"
 ---
 # We apply a resource quota to all namespaces to prevent starvation from other projects
 apiVersion: v1

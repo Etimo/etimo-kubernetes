@@ -23,18 +23,11 @@ import {
   getSecretsFromClusterInfoProject,
 } from "../lib/projects";
 
-const options = program
-  .option("--dry-run")
-  .option("--with-cluster-info")
-  .parse()
-  .opts();
+const options = program.option("--dry-run").parse().opts();
 logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
-const withClusterInfo = options.withClusterInfo;
+const withClusterInfo = fs.existsSync(FILENAME_CLUSTER_INFO);
 
-if (withClusterInfo) {
-  assertFile(FILENAME_CLUSTER_INFO, true);
-}
 registerPartialDb(handlebars);
 hbsSeparator(handlebars);
 
