@@ -31,7 +31,6 @@ console.log("Validation terraform output...");
 const terraformOutput = JSON.parse(
   terraformOutputRes.stdout
 ) as TerraformOutput;
-console.log(JSON.stringify(terraformOutput, null, 2));
 const validationResult =
   schemas.schemaTerraformOutput.validate(terraformOutput);
 if (validationResult.error) {
