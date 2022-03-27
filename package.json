@@ -11,7 +11,7 @@
     "render:projects": "ts-node ./bin/render-projects.ts",
     "render:owners": "ts-node ./bin/render-owners.ts",
     "render:csr": "ts-node ./bin/render-csr.ts",
-    "sync": "yarn sync:cluster-info && yarn sync:projects && yarn sync:users && yarn sync:migrations",
+    "sync": "yarn sync:projects && yarn sync:users && yarn sync:migrations",
     "sync:users": "ts-node ./bin/sync-users.ts",
     "sync:projects": "ts-node ./bin/sync-projects.ts",
     "sync:cluster-info": "ts-node ./bin/sync-cluster-info.ts",
@@ -19,7 +19,7 @@
     "clean": "./bin/clean.sh",
     "send:kubeconfigs": "ts-node ./bin/send-kubeconfigs.ts",
     "all:pre-terraform": "yarn clean && yarn render",
-    "all:post-terraform": "yarn render && yarn sync"
+    "all:post-terraform": "yarn sync:cluster-info && yarn render && yarn sync"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",

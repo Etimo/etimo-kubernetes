@@ -26,7 +26,9 @@ const options = program.option("--dry-run").parse().opts();
 logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
-assertFile(FILENAME_CLUSTER_INFO, true);
+if (!dryRun) {
+  assertFile(FILENAME_CLUSTER_INFO, true);
+}
 registerPartialDb(handlebars);
 hbsSeparator(handlebars);
 
@@ -113,17 +115,20 @@ projectFolders.forEach((projectFolder) => {
         databaseClusters: databases.filter((d) => !d.shared),
         sharedDatabases: databases.filter((d) => d.shared),
         tfName: getTerraformSafeVariableName(project) + "_" + stage,
-        configMap: getConfigMapFromClusterInfoProject(
-          clusterInfo[index].projects.find((p) => p.name === project)
-        ),
-        secrets: getSecretsFromClusterInfoProject(
-          clusterInfo[index].projects.find((p) => p.name === project)
-        ),
+        configMap: clusterInfo
+          ? getConfigMapFromClusterInfoProject(
+              clusterInfo[index].projects.find((p) => p.name === project)
+            )
+          : null,
+        secrets: clusterInfo
+          ? getSecretsFromClusterInfoProject(
+              clusterInfo[index].projects.find((p) => p.name === project)
+            )
+          : null,
         stage,
       };
       resources[stage].hasAnyBuckets ||= stageData.buckets.length > 0;
       resources[stage].hasAnySharedDatabases ||= databases.length > 0;
-      console.log(context);
       Object.keys(templates).map((key) => {
         const dest = templates[key];
         const template = handlebars.compile(getFileContent(key));
@@ -138,7 +143,6 @@ projectFolders.forEach((projectFolder) => {
     }
   });
 });
-console.log(resources);
 // // Prepare overall data for each stage
 // const preparedTotalDataPerStage = stages.map((stage) => {
 //   const projectsForStage = totalDataForProjectPerStage.filter((project) =>
