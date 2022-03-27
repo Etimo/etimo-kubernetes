@@ -22,19 +22,26 @@ import {
   getSecretsFromClusterInfoProject,
 } from "../lib/projects";
 
-const options = program.option("--dry-run").parse().opts();
+const options = program
+  .option("--dry-run")
+  .option("--with-cluster-info")
+  .parse()
+  .opts();
 logArgv();
 const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
+const withClusterInfo = options.withClusterInfo;
 
-if (!dryRun) {
+if (withClusterInfo) {
   assertFile(FILENAME_CLUSTER_INFO, true);
 }
 registerPartialDb(handlebars);
 hbsSeparator(handlebars);
 
 const projectFolders = glob.sync("projects/*");
-const clusterInfo = readClusterInfo();
-const stages = clusterInfo.map((c) => c.stage);
+const clusterInfo = withClusterInfo ? readClusterInfo() : null;
+const stages = clusterInfo
+  ? clusterInfo.map((c) => c.stage)
+  : ["staging", "production"];
 console.log("Stages", stages);
 
 // Parse and validate stage configs
