@@ -64,6 +64,10 @@ jobs:
       - run: yarn all:post-terraform
       - run: yarn send:kubeconfigs --mail-username ${{ secrets.MAIL_USERNAME }} --mail-password ${{ secrets.MAIL_PASSWORD }}
 
+      - name: Terraform Format
+        working-directory: terraform
+        run: terraform fmt -recursive
+
       - name: Commit and push release
         continue-on-error: true
         run: |
