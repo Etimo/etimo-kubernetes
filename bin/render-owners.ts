@@ -26,7 +26,7 @@ const projectOwners = projectFolders.reduce((value, projectFolder) => {
   console.log(ownersConfigFile);
   if (fs.existsSync(ownersConfigFile)) {
     console.log(`Validating ${ownersConfigFile}...`);
-    const data = validateYamlFile(ownersConfigFile, schemas.schemaOwners);
+    const data = validateYamlFile(ownersConfigFile, schemas.schemaInfoYaml);
     console.log(`  -> file is valid!`);
     const project = projectFolder.split("/")[1];
     return {

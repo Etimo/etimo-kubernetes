@@ -13,3 +13,4 @@ output "cluster_names" {
 output "stages" {
   value = var.stages
 }
+

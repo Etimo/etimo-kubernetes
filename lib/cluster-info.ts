@@ -1,10 +1,11 @@
 import * as fs from "fs";
 import { FILENAME_CLUSTER_INFO } from "./consts";
-import { Clusters } from "./interfaces";
+import { getFileContent, setFileContent } from "./file";
+import { ICluster, IClusterInfo } from "./interfaces";
 
-export const writeClusterInfo = (clusterInfo: Clusters) =>
+export const writeClusterInfo = (clusterInfo: IClusterInfo) =>
   fs.writeFileSync(FILENAME_CLUSTER_INFO, JSON.stringify(clusterInfo, null, 2));
-export const readClusterInfo = (): Clusters =>
+export const readClusterInfo = (): IClusterInfo =>
   JSON.parse(fs.readFileSync(FILENAME_CLUSTER_INFO).toString());
 
 export const getClusterInfoForStage = (stage: string) => {

@@ -6,7 +6,7 @@
   "author": "Daniel Winther <daniel.winther@etimo.se>",
   "license": "MIT",
   "scripts": {
-    "all": "yarn clean && yarn render && yarn sync",
+    "all": "yarn all:pre-terraform && yarn all:post-terraform",
     "render": "yarn render:projects && yarn render:owners",
     "render:projects": "ts-node ./bin/render-projects.ts",
     "render:owners": "ts-node ./bin/render-owners.ts",
@@ -17,7 +17,9 @@
     "sync:cluster-info": "ts-node ./bin/sync-cluster-info.ts",
     "sync:migrations": "ts-node ./bin/sync-migrations.ts",
     "clean": "./bin/clean.sh",
-    "send:kubeconfigs": "ts-node ./bin/send-kubeconfigs.ts"
+    "send:kubeconfigs": "ts-node ./bin/send-kubeconfigs.ts",
+    "all:pre-terraform": "yarn clean && yarn render",
+    "all:post-terraform": "yarn render && yarn sync"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
@@ -33,10 +35,12 @@
     "hbs-cli": "^1.4.1",
     "husky": "^7.0.4",
     "joi": "^17.6.0",
+    "js-base64": "^3.7.2",
     "nodemailer": "^6.7.2",
     "prettier": "^2.6.0",
     "pretty-quick": "^3.1.3",
     "shelljs": "^0.8.5",
+    "terraform-generator": "^5.1.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2",
     "yaml": "^1.10.2"

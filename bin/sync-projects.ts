@@ -1,5 +1,5 @@
 import { program } from "commander";
-import { getAllProjectsForStage } from "../lib/projects";
+import { getAllProjectNamesForStage } from "../lib/projects";
 import {
   getAllNamespaces,
   getContext,
@@ -8,7 +8,6 @@ import {
 import { readClusterInfo } from "../lib/cluster-info";
 import { assertFile } from "../lib/file";
 import * as consts from "../lib/consts";
-import { getKubernetesProjectYamlFile } from "../lib/consts";
 import { logArgv } from "../lib/utils";
 
 // Cmd
@@ -32,7 +31,7 @@ clusterInfo.forEach((cluster) => {
 
   // Get total list of projects
   console.log(`Getting current projects in repo for stage ${stage}...`);
-  const existingProjects = getAllProjectsForStage(stage);
+  const existingProjects = getAllProjectNamesForStage(stage);
 
   // Get projects already in k8s
   console.log(`Getting existing namespaces from kubernetes in ${stage}...`);
@@ -58,7 +57,9 @@ clusterInfo.forEach((cluster) => {
         stage
       )}...`
     );
-    kubectlWithContext(`apply -f ${consts.getKubernetesProjectPath(stage)}/`);
+    kubectlWithContext(
+      `apply -f -v ${consts.getKubernetesProjectPath(stage)}/`
+    );
     namespacesToRemove.forEach((ns) => {
       console.log(`Removing namespace ${ns}...`);
       kubectlWithContext(`delete namespace ${ns}`);

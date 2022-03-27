@@ -6,6 +6,32 @@ metadata:
   labels:
     provisioner: etimo-kubernetes
 ---
+# Configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: provisioned-config
+  namespace: "{{project}}"
+  labels:
+    provisioner: etimo-kubernetes
+data:
+  {{#each configMap}}
+  {{key}}: "{{value}}"
+  {{/each}}
+---
+# Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: provisioned-secrets
+  namespace: "{{project}}"
+  labels:
+    provisioner: etimo-kubernetes
+data:
+  {{#each secrets}}
+  {{key}}: "{{value}}"
+  {{/each}}
+---
 # We apply a resource quota to all namespaces to prevent starvation from other projects
 apiVersion: v1
 kind: ResourceQuota
@@ -17,9 +43,9 @@ metadata:
 spec:
   hard:
     requests.cpu: "0.5"
-    requests.memory: 0.5Gi
+    requests.memory: 1Gi
     limits.cpu: "1"
-    limits.memory: 1Gi
+    limits.memory: 1.5Gi
 ---
 # Admin role for the project which gives full access to the namespace
 apiVersion: rbac.authorization.k8s.io/v1

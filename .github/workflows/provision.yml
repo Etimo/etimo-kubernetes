@@ -29,6 +29,16 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TERRAFORM_API_TOKEN }}
           terraform_wrapper: false
 
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: |
+          doctl kubernetes cluster kubeconfig save --expiry-seconds 600 etimo-staging
+          # doctl kubernetes cluster kubeconfig save --expiry-seconds 600 etimo-production
+
       - name: Terraform Format
         id: fmt
         working-directory: terraform
@@ -44,21 +54,14 @@ jobs:
         working-directory: terraform
         run: terraform validate -no-color
 
+      - run: yarn all:pre-terraform
+
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: terraform
         run: terraform apply -auto-approve
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: |
-          doctl kubernetes cluster kubeconfig save --expiry-seconds 600 etimo-staging
-          # doctl kubernetes cluster kubeconfig save --expiry-seconds 600 etimo-production
-
-      - run: yarn all
+      - run: yarn all:post-terraform
       - run: yarn send:kubeconfigs --mail-username ${{ secrets.MAIL_USERNAME }} --mail-password ${{ secrets.MAIL_PASSWORD }}
 
       - name: Commit and push release

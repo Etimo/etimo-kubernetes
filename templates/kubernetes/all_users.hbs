@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: "etimo-kubernetes-ro"
+roleRef:
+  kind: ClusterRole
+  name: "view"
+  apiGroup: "rbac.authorization.k8s.io"
+subjects:
+{{#each owners}}
+- kind: User
+  name: "{{this}}"
+  apiGroup: ""
+{{/each}}

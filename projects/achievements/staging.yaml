@@ -1,1 +1,5 @@
 buckets: []
+databases:
+  - name: main
+    type: pg
+    shared: true

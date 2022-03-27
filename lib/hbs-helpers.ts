@@ -1,4 +1,5 @@
 import Handlebars from "handlebars";
+import { getFileContent } from "./file";
 
 export const hbsSeparator = (handlebars: any) =>
   handlebars.registerHelper(
@@ -12,4 +13,10 @@ export const hbsSeparator = (handlebars: any) =>
         return options.fn();
       }
     }
+  );
+
+export const registerPartialDb = (handlebars: any) =>
+  handlebars.registerPartial(
+    "db",
+    getFileContent("templates/terraform/db.hbs")
   );

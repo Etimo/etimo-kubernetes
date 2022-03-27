@@ -14,12 +14,26 @@ export const schemaBuckets = Joi.array().items({
   name: Joi.string().min(1).max(30).required(),
 });
 
-export const schemaProjectStage = Joi.object().keys({
+// Databases
+const schemaDatabaseName = Joi.string().regex(/^[a-zA-Z][a-zA-Z0-9\-_]+$/);
+const schemaDatabaseType = Joi.string().valid("pg");
+const schemaDatabase = Joi.object().keys({
+  shared: Joi.boolean().valid(true),
+  name: schemaDatabaseName.not(Joi.ref("...name")),
+  type: schemaDatabaseType,
+});
+export const schemaDatabases = Joi.array()
+  .items(schemaDatabase)
+  .unique((a, b) => a.name === b.name); // Database names must be unique within project
+
+export const schemaProjectStageYaml = Joi.object().keys({
   project: schemaProjectName,
   buckets: schemaBuckets,
+  databases: schemaDatabases,
 });
 
-export const schemaOwners = Joi.object().keys({
+// info.yaml
+export const schemaInfoYaml = Joi.object().keys({
   owners: Joi.array().items(schemaGithubUsername),
 });
 

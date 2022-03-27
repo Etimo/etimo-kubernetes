@@ -1,0 +1,8 @@
+resource "digitalocean_database_cluster" "{{stage}}-shared" {
+  name       = "{{stage}}-shared"
+  engine     = "pg"
+  version    = "13"
+  size       = "db-s-1vcpu-1gb"
+  region     = var.region
+  node_count = 1
+}

@@ -5,9 +5,9 @@ export const getFileContent = (filename: string) =>
   fs.readFileSync(filename).toString();
 export const setFileContent = (filename: string, s: string) =>
   fs.writeFileSync(filename, s);
-export const getYamlContentParsed = (filename: string): yaml.Document => {
+export const getYamlContentParsed = <T>(filename: string): T => {
   const content = getFileContent(filename);
-  return yaml.parse(content);
+  return yaml.parse(content) as T;
 };
 
 export const assertFile = (filename: string, shouldExist: boolean) => {

@@ -97,6 +97,9 @@ export const getKubectlForContext = (
           .join("\n")
       );
     }
+    if (res.code !== 0) {
+      console.error(res.stderr);
+    }
     return res;
   };
 };
