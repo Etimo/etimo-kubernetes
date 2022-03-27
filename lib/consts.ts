@@ -20,6 +20,10 @@ export const getKubernetesProjectPath = (stage: string) =>
   `kubernetes/projects/${stage}`;
 export const getKubernetesProjectYamlFile = (project: string, stage: string) =>
   `${getKubernetesProjectPath(stage)}/${project}.yaml`;
+export const getKubernetesProjectSecretsYamlFile = (
+  project: string,
+  stage: string
+) => `${getKubernetesProjectPath(stage)}/${project}.secrets.yaml`;
 export const getMigrationYamlFile = (stage: string) =>
   `temp/migrations/${stage}.yaml`;
 export const getUsernameFromKubeconfigFile = (

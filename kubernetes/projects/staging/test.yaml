@@ -16,16 +16,6 @@ metadata:
     provisioner: etimo-kubernetes
 data:
 ---
-# Secret
-apiVersion: v1
-kind: Secret
-metadata:
-  name: provisioned-secrets
-  namespace: "test"
-  labels:
-    provisioner: etimo-kubernetes
-data:
----
 # We apply a resource quota to all namespaces to prevent starvation from other projects
 apiVersion: v1
 kind: ResourceQuota

@@ -10,6 +10,7 @@ import { renderToFile } from "../lib/templates";
 import { logArgv } from "../lib/utils";
 import {
   FILENAME_CLUSTER_INFO,
+  getKubernetesProjectSecretsYamlFile,
   getKubernetesProjectYamlFile,
   getProjectOwnersFile,
 } from "../lib/consts";
@@ -111,6 +112,8 @@ projectFolders.forEach((projectFolder) => {
           "terraform/project_" + project + "_" + stage + ".tf",
         [`templates/kubernetes/project.${stage}.hbs`]:
           getKubernetesProjectYamlFile(project, stage),
+        [`templates/kubernetes/project-secrets.${stage}.hbs`]:
+          getKubernetesProjectSecretsYamlFile(project, stage),
       };
       console.log(
         `Rendering templates for project ${project} stage ${stage}...`

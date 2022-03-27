@@ -19,19 +19,6 @@ data:
   {{key}}: "{{value}}"
   {{/each}}
 ---
-# Secret
-apiVersion: v1
-kind: Secret
-metadata:
-  name: provisioned-secrets
-  namespace: "{{project}}"
-  labels:
-    provisioner: etimo-kubernetes
-data:
-  {{#each secrets}}
-  {{key}}: "{{value}}"
-  {{/each}}
----
 # We apply a resource quota to all namespaces to prevent starvation from other projects
 apiVersion: v1
 kind: ResourceQuota

@@ -6,3 +6,4 @@ node_modules/
 *-kubeconfig-*.yaml
 cluster-info.json
 /temp/
+*.secrets.yaml
