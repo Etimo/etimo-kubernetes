@@ -14,5 +14,4 @@ jobs:
       - uses: actions/checkout@v2
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: yarn
-      - run: yarn render:owners --dry-run
-      - run: yarn render:projects --dry-run
+      - run: yarn validate

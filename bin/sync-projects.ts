@@ -1,7 +1,8 @@
 import { program } from "commander";
 import { getAllProjectNamesForStage } from "../lib/projects";
 import {
-  getAllNamespaces,
+  getAllEtimoNamespaces,
+  getAllOtherNamespaces,
   getContext,
   getKubectlForContext,
 } from "../lib/kubernetes";
@@ -35,7 +36,7 @@ clusterInfo.forEach((cluster) => {
 
   // Get projects already in k8s
   console.log(`Getting existing namespaces from kubernetes in ${stage}...`);
-  const namespaces = getAllNamespaces(kubectlWithContext);
+  const namespaces = getAllEtimoNamespaces(kubectlWithContext);
 
   console.log("Projects in repo:", existingProjects);
   console.log("Namespaces in kubernetes:", namespaces);
@@ -49,6 +50,19 @@ clusterInfo.forEach((cluster) => {
   );
   console.log("Namespaces to add/update to kubernetes:", namespacesToAdd);
   console.log("Namespaces to remove from kubernetes:", namespacesToRemove);
+
+  // Check that ns to add doesnt collide with existing (other) namespaces
+  console.log("Getting all other namespaces in cluster...");
+  const otherNamespaces = new Set(getAllOtherNamespaces(kubectlWithContext));
+  console.log("Existing other namespaces:", otherNamespaces);
+  namespacesToAdd.forEach((n) => {
+    if (otherNamespaces.has(n)) {
+      console.error(
+        `Namespace ${n} already exists. Please change name on project.`
+      );
+      process.exit(1);
+    }
+  });
 
   if (!dryRun) {
     // Apply sync

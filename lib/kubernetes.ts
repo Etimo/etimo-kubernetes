@@ -4,13 +4,37 @@ import { renderToFile, getTemplate } from "./templates";
 import handlebars from "handlebars";
 import { KubeCtlWithContext } from "./interfaces";
 
-export const getAllNamespaces = (kubectlWithContext: KubeCtlWithContext) => {
+export const getAllEtimoNamespaces = (
+  kubectlWithContext: KubeCtlWithContext
+) => {
   const res = kubectlWithContext(
     `get namespace --selector provisioner=etimo-kubernetes`,
     { silent: true }
   );
   if (res.code !== 0) {
-    console.error("Unable to get namespaces in kubernetes.");
+    console.error("Unable to get Etimo namespaces in kubernetes.");
+    console.error(res.stderr);
+    process.exit(1);
+  }
+  return new Set(
+    res.stdout
+      .split("\n")
+      .filter((s) => s.length > 0)
+      .slice(1)
+      .map((s) => s.split(" ")[0])
+  );
+};
+
+export const getAllOtherNamespaces = (
+  kubectlWithContext: KubeCtlWithContext
+) => {
+  const res = kubectlWithContext(
+    `get namespace --selector provisioner!=etimo-kubernetes`,
+    { silent: true }
+  );
+  if (res.code !== 0) {
+    console.error("Unable to other namespaces in kubernetes.");
+    console.error(res.stderr);
     process.exit(1);
   }
   return new Set(

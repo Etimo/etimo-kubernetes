@@ -18,10 +18,7 @@ jobs:
           token: ${{ secrets.PUSH_TOKEN }}
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: yarn
-
-      # Validate everything before trying something
-      - run: yarn render:owners --dry-run
-      - run: yarn render:projects --dry-run
+      - run: yarn validate
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1

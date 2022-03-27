@@ -22,6 +22,11 @@ import {
   getConfigMapFromClusterInfoProject,
   getSecretsFromClusterInfoProject,
 } from "../lib/projects";
+import {
+  getAllEtimoNamespaces,
+  getContext,
+  getKubectlForContext,
+} from "../lib/kubernetes";
 
 const options = program.option("--dry-run").parse().opts();
 logArgv();

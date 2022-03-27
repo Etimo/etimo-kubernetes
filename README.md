@@ -10,7 +10,7 @@
   <h3>Etimo Kubernetes</h3>
 
   <p align="center">
-    <a href="https://github.com/Etimo/etimo-kubernetes"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Etimo/etimo-kubernetes/docs/"><strong>Explore the docs »</strong></a>
     ·
     <a href="https://github.com/Etimo/etimo-kubernetes/issues">Report Bug</a>
     ·
