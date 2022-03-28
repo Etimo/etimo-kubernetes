@@ -20,7 +20,7 @@
     "send:kubeconfigs": "ts-node ./bin/send-kubeconfigs.ts",
     "all:pre-terraform": "yarn clean && yarn render",
     "all:post-terraform": "yarn sync:cluster-info && yarn render && yarn sync",
-    "validate": "yarn render:owners --dry-run && yarn render:projects --dry-run && yarn sync:cluster-info && yarn sync:projects --dry-run"
+    "validate": "yarn clean && yarn render:owners --dry-run && yarn render:projects --dry-run && yarn sync:cluster-info && yarn sync:projects --dry-run"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
