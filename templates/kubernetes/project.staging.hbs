@@ -41,7 +41,7 @@ metadata:
   namespace: "{{project}}"
   name: "{{project}}-admin"
 rules:
-  - apiGroups: ["", "extensions", "apps", "networking.k8s.io"]
+  - apiGroups: ["", "extensions", "apps", "networking.k8s.io", "batch"]
     resources: ["*"]
     verbs: ["*"]
 ---
