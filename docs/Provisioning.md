@@ -2,6 +2,8 @@
 
 Each project should run in its own namespace in Kubernetes. When you provision a namespace you get full access to managing that namespace through kubectl.
 
+Table of contents:
+
 <!-- vscode-markdown-toc -->
 
 - [How to provision a namespace](#how-to-provision-a-namespace)
@@ -110,7 +112,9 @@ buckets: []
 databases: []
 ```
 
-Read more about how to specify resources and how to access them [here](./Resources.md).
+Furhter reading:
+
+- [How to specify resources and how to access them](./Resources.md)
 
 ### <a name='commit,-push-and-create-a-pr'></a>Commit, push and create a PR
 
@@ -163,3 +167,5 @@ Simply removing the project folder will result in the namespace being deleted (a
 ## <a name='renaming-a-project'></a>Renaming a project
 
 Renaming a project is done by renaming the project folder. Please be aware that this will have the same effect as removing the project and adding another one instead.
+
+BE AWARE: removing a namespace means that all resources in that namespace will be removed as well!
