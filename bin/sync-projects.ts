@@ -28,7 +28,11 @@ clusterInfo.forEach((cluster) => {
 
   // Update infra commons
   console.log(`Creating or updating common infra setup for ${stage}...`);
-  kubectlWithContext(`apply -f kubernetes/infra/${stage}/`);
+  if (!dryRun) {
+    kubectlWithContext(`apply -f kubernetes/infra/${stage}/`);
+  } else {
+    console.log("  -> Skipping because of dry run");
+  }
 
   // Get total list of projects
   console.log(`Getting current projects in repo for stage ${stage}...`);
