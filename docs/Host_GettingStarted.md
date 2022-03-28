@@ -14,4 +14,4 @@ To get access to the cluster you will need a configuration file called `kubeconf
 
 Provisioning a project is the process of setting up a project and getting a dedicated namespace assigned for it.
 
-[Provision a namespace for your project](./Projects.md)
+[Provision a namespace for your project](./Provisioning.md)
