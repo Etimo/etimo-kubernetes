@@ -1,6 +1,5 @@
 <div id="top"></div>
 
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
@@ -10,41 +9,13 @@
   <h3>Etimo Kubernetes</h3>
 
   <p align="center">
-    <a href="https://github.com/Etimo/etimo-kubernetes/docs/"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Etimo/etimo-kubernetes/docs/README.md"><strong>Explore the docs »</strong></a>
     ·
     <a href="https://github.com/Etimo/etimo-kubernetes/issues">Report Bug</a>
     ·
     <a href="https://github.com/Etimo/etimo-kubernetes/issues">Request Feature</a>
   </p>
 </div>
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-<!-- ABOUT THE PROJECT -->
 
 ## About The Project
 
@@ -56,7 +27,7 @@ One of the question that always arise when we are starting or want to start a ne
 
 > "Where and how do we host this?"
 
-We want to remove this barrier to simplify the process. Usually everyone does things their own way (which of course can be fine since we all want to learn new stuff) but this results in lots of different accounts registered across different services. Often these accounts are tied to personal accounts. Some of these are paid for by Etimo which creates a lot of hassle and administration.
+We want to remove this barrier to simplify the process. Usually everyone does things their own way (which of course can be fine since we all want to learn new stuff) but this results in lots of different accounts registered across different services. Often these accounts are tied to personal accounts. Some of these are paid for by Etimo which creates a lot of hassle and administration. And some of us don't want to come up with these solutions all the time. Sometimes we just want to get going.
 
 A lot of us also want to work more with Kubernetes. And Kubernetes is a hot technology which makes it even more important for us to be able to work with it and learn more.
 
@@ -74,17 +45,7 @@ This project was created the certain goals in mind:
 
 ## Getting Started
 
-Head over to the [docs](docs/) to read more!
-
-## Roadmap
-
-- [x] Manage infrastructure using Terraform
-- [x] Able to manage multiple clusters (staging/production)
-- [x] Provision namespaces for projects using PRs
-- [x] Automatically create kubeconfigs for each user that is onboarded
-- [x] Add RBAC to give full access to the namespaces you are collaborating on
-- [x] Add RBAC to give read access to the whole cluster
-- [ ] Host each cluster in a different subdomain `<environment>.domain.se` with wildcard cert for `*.<environment>.domain.se`
+Head over to the [docs](./docs/README.md) to read more!
 
 See the [open issues](https://github.com/Etimo/etimo-kubernetes/issues) for a full list of proposed features (and known issues).
 
