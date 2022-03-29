@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "all": "yarn all:pre-terraform && yarn all:post-terraform",
-    "render": "yarn render:projects && yarn render:owners",
-    "render:projects": "ts-node ./bin/render-projects.ts",
+    "render:projects:terraform": "ts-node ./bin/render-projects-terraform.ts",
+    "render:projects:kubernetes": "ts-node ./bin/render-projects-kubernetes.ts",
     "render:owners": "ts-node ./bin/render-owners.ts",
     "render:csr": "ts-node ./bin/render-csr.ts",
     "sync": "yarn sync:projects && yarn sync:users && yarn sync:migrations",
@@ -18,9 +18,9 @@
     "sync:migrations": "ts-node ./bin/sync-migrations.ts",
     "clean": "./bin/clean.sh",
     "send:kubeconfigs": "ts-node ./bin/send-kubeconfigs.ts",
-    "all:pre-terraform": "yarn clean && yarn render",
-    "all:post-terraform": "yarn sync:cluster-info && yarn render && yarn sync",
-    "validate": "yarn clean && yarn render:owners --dry-run && yarn render:projects --dry-run && yarn sync:cluster-info && yarn sync:projects --dry-run"
+    "all:pre-terraform": "yarn clean && yarn render:owners && yarn render:projects:terraform",
+    "all:post-terraform": "yarn sync:cluster-info && yarn render:projects:kubernetes && yarn sync",
+    "validate": "yarn clean && yarn all:pre-terraform && yarn render:projects:kubernetes"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",

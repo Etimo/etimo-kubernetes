@@ -1,6 +1,9 @@
 import shelljs from "shelljs";
 
 export type TemplateMap = Record<string, string>;
+export type ProjectStageCallback<T> = (project: string, stage: string) => T;
+export type StageCallback<T> = (stage: string) => T;
+export type ProjectCallback<T> = (project: string) => T;
 
 export interface TerraformString {
   value: string[];
