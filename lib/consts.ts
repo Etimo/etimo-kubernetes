@@ -39,4 +39,4 @@ export const getKubeconfigsGlob = (stage: string) =>
 export const FILENAME_ALL_OWNERS = "users/all_owners";
 export const FILENAME_CLUSTER_INFO = "temp/cluster-info.json";
 export const CERTIFICATE_VALID_DAYS = 365;
-export const MIGRATIONS_GLOB = "kubernetes/migrations/*.js";
+export const MIGRATIONS_GLOB = "kubernetes/migrations/*.ts";

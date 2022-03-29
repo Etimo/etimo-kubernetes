@@ -55,14 +55,25 @@ clusterInfo.forEach((cluster) => {
       console.log(`  Running migration ${migrationFile}...`);
       const module = require("../" + migrationFile);
       if (!dryRun) {
-        module.up(kubectlWithContext, context);
+        try {
+          module.up(kubectlWithContext, context);
+
+          // Only consider this migration applied if there were no errors
+          return {
+            ...total,
+            [migrationFile]: { checksum, ts: new Date().toISOString() },
+          };
+        } catch (e) {
+          console.error(
+            "    Something went wrong in migration! Will run again next time."
+          );
+          console.error(e);
+          // Something went wrong in the migration, skip it for now so it can be applied next time
+          return { ...total };
+        }
       } else {
-        console.log("-> Skipping due to dry run");
+        console.log("    -> Skipping due to dry run");
       }
-      return {
-        ...total,
-        [migrationFile]: { checksum, ts: new Date().toISOString() },
-      };
       // } else if (appliedMigration && toNumber !== null && number > toNumber) {
       //   console.log(`  Unapply... ${migrationFile}`);
       //   const module from "../" + migrationFile);
