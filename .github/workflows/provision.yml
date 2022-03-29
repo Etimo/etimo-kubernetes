@@ -7,7 +7,7 @@ on:
       - "README.md"
       - "docs/"
 
-concurrency: provision-${{ github.ref }}
+concurrency: provision
 jobs:
   provision:
     timeout-minutes: 10
