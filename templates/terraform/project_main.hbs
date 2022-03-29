@@ -69,3 +69,8 @@ output "project__{{tfName}}" {
   sensitive = true
 }
 
+# Logdna resources
+resource "logdna_view" "{{tfName}}" {
+  name  = "{{project}}"
+  query = "namespace:{{project}}"
+}
