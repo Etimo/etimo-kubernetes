@@ -19,7 +19,7 @@
     "clean": "./bin/clean.sh",
     "send:kubeconfigs": "ts-node ./bin/send-kubeconfigs.ts",
     "all:pre-terraform": "yarn clean && yarn render:owners && yarn render:projects:terraform",
-    "all:post-terraform": "yarn sync:cluster-info && yarn render:projects:kubernetes && yarn sync",
+    "all:post-terraform": "yarn sync:cluster-info && yarn render:projects:kubernetes ", 
     "validate": "yarn clean && yarn all:pre-terraform && yarn render:projects:kubernetes"
   },
   "devDependencies": {
