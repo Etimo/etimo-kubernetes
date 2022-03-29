@@ -17,9 +17,15 @@ export const getCaFileForCluster = (clusterName: string) =>
 export const getProjectOwnersFile = (project: string) =>
   `projects/${project}/info.yaml`;
 export const getKubernetesProjectPath = (stage: string) =>
-  `kubernetes/projects/${stage}`;
+  `${KUBERNETES_PATH}/projects/${stage}`;
+export const getKubernetesNamespacesPath = (stage: string) =>
+  `${KUBERNETES_PATH}/namespaces/${stage}`;
 export const getKubernetesProjectYamlFile = (project: string, stage: string) =>
   `${getKubernetesProjectPath(stage)}/${project}.yaml`;
+export const getKubernetesProjectNamespaceYamlFile = (
+  project: string,
+  stage: string
+) => `${getKubernetesNamespacesPath(stage)}/${project}.yaml`;
 export const getKubernetesProjectSecretsYamlFile = (
   project: string,
   stage: string
@@ -40,3 +46,4 @@ export const FILENAME_ALL_OWNERS = "users/all_owners";
 export const FILENAME_CLUSTER_INFO = "temp/cluster-info.json";
 export const CERTIFICATE_VALID_DAYS = 365;
 export const MIGRATIONS_GLOB = "kubernetes/migrations/*.ts";
+const KUBERNETES_PATH = "kubernetes";

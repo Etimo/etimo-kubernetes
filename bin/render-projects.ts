@@ -10,6 +10,7 @@ import { renderToFile } from "../lib/templates";
 import { logArgv } from "../lib/utils";
 import {
   FILENAME_CLUSTER_INFO,
+  getKubernetesProjectNamespaceYamlFile,
   getKubernetesProjectSecretsYamlFile,
   getKubernetesProjectYamlFile,
   getProjectOwnersFile,
@@ -110,6 +111,8 @@ projectFolders.forEach((projectFolder) => {
           "terraform/project_" + project + "_" + stage + ".tf",
         [`templates/kubernetes/project.${stage}.hbs`]:
           getKubernetesProjectYamlFile(project, stage),
+        [`templates/kubernetes/project-namespace.${stage}.hbs`]:
+          getKubernetesProjectNamespaceYamlFile(project, stage),
         [`templates/kubernetes/project-secrets.${stage}.hbs`]:
           getKubernetesProjectSecretsYamlFile(project, stage),
       };

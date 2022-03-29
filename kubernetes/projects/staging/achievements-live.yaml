@@ -1,11 +1,3 @@
-# The actual namespace for the project
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: "achievements-live"
-  labels:
-    provisioner: etimo-kubernetes
----
 # Configmap
 apiVersion: v1
 kind: ConfigMap
