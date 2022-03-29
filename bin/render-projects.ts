@@ -6,7 +6,7 @@ import * as schemas from "../lib/schemas";
 import glob from "glob";
 import { validateYamlFile } from "../lib/validations";
 import { getYamlContentParsed, getFileContent, assertFile } from "../lib/file";
-import { renderToFile } from "../lib/templates";
+import { renderTemplateMap, renderToFile } from "../lib/templates";
 import { logArgv } from "../lib/utils";
 import {
   FILENAME_CLUSTER_INFO,
@@ -16,22 +16,16 @@ import {
   getProjectOwnersFile,
 } from "../lib/consts";
 import { readClusterInfo } from "../lib/cluster-info";
-import { Owners, ProjectDefinition } from "../lib/interfaces";
+import { Owners, ProjectDefinition, TemplateMap } from "../lib/interfaces";
 import { hbsSeparator, registerPartialDb } from "../lib/hbs-helpers";
 import { getTerraformSafeVariableName } from "../lib/terraform";
 import {
   getConfigMapFromClusterInfoProject,
   getSecretsFromClusterInfoProject,
 } from "../lib/projects";
-import {
-  getAllEtimoNamespaces,
-  getContext,
-  getKubectlForContext,
-} from "../lib/kubernetes";
+import stages from "../lib/stages";
 
-const options = program.option("--dry-run").parse().opts();
 logArgv();
-const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 const withClusterInfo = fs.existsSync(FILENAME_CLUSTER_INFO);
 
 registerPartialDb(handlebars);
@@ -39,10 +33,6 @@ hbsSeparator(handlebars);
 
 const projectFolders = glob.sync("projects/*");
 const clusterInfo = withClusterInfo ? readClusterInfo() : null;
-const stages = clusterInfo
-  ? clusterInfo.map((c) => c.stage)
-  : ["staging", "production"];
-console.log("Stages", stages);
 
 // Parse and validate stage configs
 projectFolders.forEach((projectFolder) => {
@@ -106,7 +96,7 @@ projectFolders.forEach((projectFolder) => {
   stageYamlData.forEach((stageData, index) => {
     if (stageData) {
       const stage = stages[index];
-      const templates: Record<string, string> = {
+      const templates: TemplateMap = {
         "templates/terraform/project_main.hbs":
           "terraform/project_" + project + "_" + stage + ".tf",
         [`templates/kubernetes/project.${stage}.hbs`]:
@@ -140,17 +130,7 @@ projectFolders.forEach((projectFolder) => {
       };
       resources[stage].hasAnyBuckets ||= stageData.buckets.length > 0;
       resources[stage].hasAnySharedDatabases ||= databases.length > 0;
-      Object.keys(templates).map((key) => {
-        const dest = templates[key];
-        const template = handlebars.compile(getFileContent(key));
-
-        if (!dryRun) {
-          renderToFile(template, context, dest);
-          console.log(`  -> Rendered template to ${dest}!`);
-        } else {
-          console.log("  (Skipping rendering due to dryn run)");
-        }
-      });
+      renderTemplateMap(handlebars, templates, context);
     }
   });
 });
@@ -189,15 +169,5 @@ stages.forEach((stage, index) => {
     ...resources[stage],
     stage,
   };
-  Object.keys(templates).map((key) => {
-    const dest = templates[key];
-    const template = handlebars.compile(getFileContent(key));
-
-    if (!dryRun) {
-      renderToFile(template, context, dest);
-      console.log(`  -> Rendered template to ${dest}!`);
-    } else {
-      console.log("  (Skipping rendering due to dryn run)");
-    }
-  });
+  renderTemplateMap(handlebars, templates, context);
 });

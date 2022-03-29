@@ -1,5 +1,7 @@
 import shelljs from "shelljs";
 
+export type TemplateMap = Record<string, string>;
+
 export interface TerraformString {
   value: string[];
 }

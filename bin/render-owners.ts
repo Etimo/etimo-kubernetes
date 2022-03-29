@@ -1,29 +1,26 @@
-import { program } from "commander";
 import fs from "fs";
 import handlebars from "handlebars";
 import glob from "glob";
 import * as schemas from "../lib/schemas";
 import { hbsSeparator } from "../lib/hbs-helpers";
-import { getTemplate, renderToFile } from "../lib/templates";
+import { renderTemplateMap } from "../lib/templates";
 import { validateYamlFile } from "../lib/validations";
-import { FILENAME_ALL_OWNERS, getProjectOwnersFile } from "../lib/consts";
+import { getProjectOwnersFile } from "../lib/consts";
 import { logArgv } from "../lib/utils";
-import { Owners, ProjectOwners } from "../lib/interfaces";
+import { ProjectOwners } from "../lib/interfaces";
+import stages from "../lib/stages";
 
 // Cmd
-const options = program.option("--dry-run").parse().opts();
 logArgv();
-const dryRun = options.dryRun || process.env["DRY_RUN"] === "1";
 
 // Get a list of projects
 const projectFolders = glob.sync("projects/*");
 hbsSeparator(handlebars);
 
-// Parse and validate stage configs
+// Parse and validate configs
 const projectOwners = projectFolders.reduce((value, projectFolder) => {
   const project = projectFolder.split("/")[1];
   const ownersConfigFile = getProjectOwnersFile(project);
-  console.log(ownersConfigFile);
   if (fs.existsSync(ownersConfigFile)) {
     console.log(`Validating ${ownersConfigFile}...`);
     const data = validateYamlFile(ownersConfigFile, schemas.schemaInfoYaml);
@@ -37,39 +34,35 @@ const projectOwners = projectFolders.reduce((value, projectFolder) => {
   return { ...value };
 }, {} as ProjectOwners);
 
-console.log(`Rendering codeowners template...`);
-const dest = ".github/CODEOWNERS";
-
-if (!dryRun) {
-  const template = getTemplate(handlebars, "github", "codeowners.hbs");
-  renderToFile(
-    template,
-    {
-      projects: projectOwners,
-    },
-    dest
-  );
-  console.log(`  -> Rendered template to ${dest}!`);
-} else {
-  console.log("  (Skipping rendering due to dryn run)");
-}
-
-console.log("Rendering all_owners...");
 const allOwners = Object.values(projectOwners).flat();
-const currentOwners = allOwners.reduce(
-  (total, value) => ({
-    ...total,
-    [value]: true,
-  }),
-  {} as Owners
+const uniqueOwners = [...new Set(allOwners)].sort(); // We sort them to get consistency
+
+// Prepare context and rendering
+const context = {
+  projects: projectOwners,
+  uniqueOwners,
+};
+
+// Render general templates
+console.log(`Rendering stageless templates for owners...`);
+renderTemplateMap(
+  handlebars,
+  {
+    "templates/github/all_owners.hbs": "users/all_owners",
+    "templates/github/codeowners.hbs": ".github/CODEOWNERS",
+  },
+  context
 );
 
-if (!dryRun) {
-  fs.writeFileSync(
-    FILENAME_ALL_OWNERS,
-    Object.keys(currentOwners).sort().join("\n")
+// Render templates specific to stage
+console.log(context);
+stages.forEach((stage) => {
+  console.log(`Rendering templates for owners for stage ${stage}...`);
+  renderTemplateMap(
+    handlebars,
+    {
+      "templates/kubernetes/cluster-roles.hbs": `kubernetes/infra/${stage}/cluster-roles.yaml`,
+    },
+    context
   );
-  console.log(`  -> Rendered all_owners!`);
-} else {
-  console.log("  (Skipping rendering due to dry run)");
-}
+});

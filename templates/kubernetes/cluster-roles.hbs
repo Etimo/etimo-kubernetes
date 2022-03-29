@@ -7,7 +7,7 @@ roleRef:
   name: "view"
   apiGroup: "rbac.authorization.k8s.io"
 subjects:
-{{#each owners}}
+{{#each uniqueOwners}}
 - kind: User
   name: "{{this}}"
   apiGroup: ""
@@ -22,7 +22,7 @@ roleRef:
   name: "system:aggregated-metrics-reader"
   apiGroup: "metrics.k8s.io"
 subjects:
-{{#each owners}}
+{{#each uniqueOwners}}
 - kind: User
   name: "{{this}}"
   apiGroup: ""
