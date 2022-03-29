@@ -1,0 +1,63 @@
+# The actual namespace for the project
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "achievements-live"
+  labels:
+    provisioner: etimo-kubernetes
+---
+# Configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: provisioned-config
+  namespace: "achievements-live"
+  labels:
+    provisioner: etimo-kubernetes
+data:
+  DB_MAIN_NAME: "achievements_live_staging_main"
+  DB_MAIN_USER: "achievements_live_staging_main"
+  DB_MAIN_PORT: "25060"
+  DB_MAIN_PUBLIC_HOST: "staging-shared-do-user-11119612-0.b.db.ondigitalocean.com"
+  DB_MAIN_PRIVATE_HOST: "private-staging-shared-do-user-11119612-0.b.db.ondigitalocean.com"
+---
+# We apply a resource quota to all namespaces to prevent starvation from other projects
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mem-cpu
+  namespace: "achievements-live"
+  labels:
+    provisioner: etimo-kubernetes
+spec:
+  hard:
+    requests.cpu: "0.5"
+    requests.memory: 1Gi
+    limits.cpu: "1"
+    limits.memory: 1.5Gi
+---
+# Admin role for the project which gives full access to the namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: "achievements-live"
+  name: "achievements-live-admin"
+rules:
+  - apiGroups: ["", "extensions", "apps", "networking.k8s.io", "batch"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+# Bind the admin role to all users in this project
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: "achievements-live-admins"
+  namespace: "achievements-live"
+roleRef:
+  kind: Role
+  name: "achievements-live-admin"
+  apiGroup: ""
+subjects:
+  - kind: User
+    name: "niclaslindstedt"
+    apiGroup: ""
