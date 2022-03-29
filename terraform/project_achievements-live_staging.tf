@@ -63,3 +63,8 @@ output "project__achievements_live_staging" {
   sensitive = true
 }
 
+# Logdna resources
+resource "logdna_view" "achievements_live_staging" {
+  name  = "achievements-live"
+  query = "namespace:achievements-live"
+}

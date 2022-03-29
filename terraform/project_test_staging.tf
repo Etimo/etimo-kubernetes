@@ -63,3 +63,8 @@ output "project__test_staging" {
   sensitive = true
 }
 
+# Logdna resources
+resource "logdna_view" "test_staging" {
+  name  = "test"
+  query = "namespace:test"
+}
