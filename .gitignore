@@ -7,3 +7,4 @@ node_modules/
 cluster-info.json
 /temp/
 *.secrets.yaml
+*.log

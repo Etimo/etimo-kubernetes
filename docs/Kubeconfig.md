@@ -8,6 +8,7 @@ Table of contents:
 
 - [What is a kubeconfig file?](#what-is-a-kubeconfig-file?)
 - [Using a kubeconfig](#using-a-kubeconfig)
+- [Alias](#alias)
 - [Kubeconfigs for Etimo Kubernetes](#kubeconfigs-for-etimo-kubernetes)
 - [Merging kubeconfigs](#merging-kubeconfigs)
 
@@ -71,6 +72,22 @@ A kubeconfig file can contain entries for multiple clusters, called "contexts". 
 kubectl --kubeconfig=my-kubeconfig.yaml --context staging ...
 ```
 
+## <a name='alias'></a>Alias
+
+You should create an alias for the kubectl so you don't need to constantly write that long command:
+
+```
+alias kube="kubectl --kubeconfig=$HOME/.kube/<your namespace>.yaml --namespace=<your namespace>"
+```
+
+Now put the file in `~/.kube/<your namespace.yaml` e.g. `/home/niclas/.kube/achievements.yaml`.
+
+Now you should be able to write
+
+```
+kube get pods
+```
+
 ## <a name='kubeconfigs-for-etimo-kubernetes'></a>Kubeconfigs for Etimo Kubernetes
 
 Kubeconfigs are automatically created for new users in the cluster(s) and will be sent by email to you when created. You will always receive one kubeconfig file per cluster and they will be named `<github-username>-<stage>.yaml`, for example `indrif-staging.yaml`.
@@ -78,3 +95,5 @@ Kubeconfigs are automatically created for new users in the cluster(s) and will b
 ## <a name='merging-kubeconfigs'></a>Merging kubeconfigs
 
 TODO
+
+[« Back to Getting started](./Host_GettingStarted.md)
