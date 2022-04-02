@@ -2,17 +2,21 @@
 
 <!-- vscode-markdown-toc -->
 
+- [Creating your resources](#creating-your-resources)
+- [Preparing your resources for deployment](#preparing-your-resources-for-deployment)
+  - [Always use specific tags for Docker images](#always-use-specific-tags-for-docker-images)
+
 <!-- vscode-markdown-toc-config
 	numbering=false
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-## Creating your resources
+## <a name='creating-your-resources'></a>Creating your resources
 
 TODO
 
-## Preparing your resources for deployment
+## <a name='preparing-your-resources-for-deployment'></a>Preparing your resources for deployment
 
 There are some gotchas to learn when handling stuff in Kubernetes:
 
@@ -21,7 +25,7 @@ There are some gotchas to learn when handling stuff in Kubernetes:
 - How to deploy
 - How to verify deployment
 
-### Always use specific tags for Docker images
+### <a name='always-use-specific-tags-for-docker-images'></a>Always use specific tags for Docker images
 
 TODO
 

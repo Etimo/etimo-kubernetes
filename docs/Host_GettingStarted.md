@@ -7,6 +7,7 @@ So you want to host your project in Etimo Kubernetes? Nice, you've come to the r
 - [Prerequisites](#prerequisites)
 - [Provision a project](#provision-a-project)
 - [How to get access?](#how-to-get-access?)
+- [How to deploy stuff in the namespace?](#how-to-deploy-stuff-in-the-namespace?)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -32,7 +33,7 @@ When you provision your first project (or when someone else includes you in thei
 
 [» How to use a kubeconfig](./Kubeconfig.md)
 
-## How to deploy stuff in the namespace?
+## <a name='how-to-deploy-stuff-in-the-namespace?'></a>How to deploy stuff in the namespace?
 
 So you are eager to start using your new namespace to deploy stuff? You should be! But before you get started there are some common best practices to learn
 
