@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const schemaProjectName = Joi.string()
-  .regex(/^[a-z][a-z0-9\-\_]+$/)
+  .regex(/^[a-zA-Z][a-z0-9\-\_]+$/)
   .min(1)
   .max(30)
   .required()

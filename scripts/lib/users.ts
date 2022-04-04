@@ -7,7 +7,7 @@ export const getUsernameFromGithubUsername = (
   username: string
 ): string | null => {
   const employees: Employee[] = JSON.parse(getFileContent(EMPLOYEES_JSON));
-  assertValidData(employees, schemaEmployees);
+  // assertValidData(employees, schemaEmployees);
   const found = employees.find(
     (employee) => employee.githubUsername === username
   );
@@ -16,6 +16,6 @@ export const getUsernameFromGithubUsername = (
 
 export const getAllEmployeesGithubusernames = () => {
   const employees: Employee[] = JSON.parse(getFileContent(EMPLOYEES_JSON));
-  assertValidData(employees, schemaEmployees);
+  // assertValidData(employees, schemaEmployees);
   return new Set(employees.map((e) => e.githubUsername));
 };
