@@ -53,7 +53,7 @@ clusterInfo.forEach((cluster) => {
     } else if (!appliedMigration) {
       // Apply migration
       console.log(`  Running migration ${migrationFile}...`);
-      const module = require("../" + migrationFile);
+      const module = require("../../" + migrationFile);
       if (!dryRun) {
         try {
           module.up(kubectlWithContext, context);
