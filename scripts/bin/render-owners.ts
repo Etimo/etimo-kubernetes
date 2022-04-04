@@ -10,6 +10,7 @@ import { logArgv } from "../lib/utils";
 import { ProjectOwners } from "../lib/interfaces";
 import stages from "../lib/stages";
 import { assertFile } from "../lib/file";
+import { getAllEmployeesGithubusernames } from "../lib/users";
 
 // Cmd
 logArgv();
@@ -38,6 +39,15 @@ const projectOwners = projectFolders.reduce((value, projectFolder) => {
 
 const allOwners = Object.values(projectOwners).flat();
 const uniqueOwners = [...new Set(allOwners)].sort(); // We sort them to get consistency
+
+// Validate to see that all users exist in employees
+const allEmployeeGithubUsernames = getAllEmployeesGithubusernames();
+uniqueOwners.forEach((owner) => {
+  if (!allEmployeeGithubUsernames.has(owner)) {
+    console.error(`${owner} does not exist in employees map!`);
+    process.exit(1);
+  }
+});
 
 // Prepare context and rendering
 const context = {

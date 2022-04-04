@@ -13,3 +13,9 @@ export const getUsernameFromGithubUsername = (
   );
   return found?.username ?? null;
 };
+
+export const getAllEmployeesGithubusernames = () => {
+  const employees: Employee[] = JSON.parse(getFileContent(EMPLOYEES_JSON));
+  assertValidData(employees, schemaEmployees);
+  return new Set(employees.map((e) => e.githubUsername));
+};
