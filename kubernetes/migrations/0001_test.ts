@@ -1,4 +1,4 @@
-import { KubeCtlWithContext } from "../../lib/interfaces";
+import { KubeCtlWithContext } from "../../scripts/lib/interfaces";
 
 const up = (kubectlWithContext: KubeCtlWithContext) =>
   kubectlWithContext("create configmap test");

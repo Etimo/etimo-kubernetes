@@ -1,4 +1,4 @@
-import { KubeCtlWithContext } from "../../lib/interfaces";
+import { KubeCtlWithContext } from "../../scripts/lib/interfaces";
 
 const files = [
   "https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml",

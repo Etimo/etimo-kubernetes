@@ -1,5 +1,5 @@
-import { KubeCtlWithContext } from "../../lib/interfaces";
-import { assertEnvVariables } from "../../lib/utils";
+import { KubeCtlWithContext } from "../../scripts/lib/interfaces";
+import { assertEnvVariables } from "../../scripts/lib/utils";
 
 const up = (kubectlWithContext: KubeCtlWithContext) => {
   assertEnvVariables(["LOGDNA_INGESTION_KEY"]);

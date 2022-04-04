@@ -1,4 +1,4 @@
-import { KubeCtlWithContext } from "../../lib/interfaces";
+import { KubeCtlWithContext } from "../../scripts/lib/interfaces";
 
 const files = [
   "https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.2/deploy/static/provider/do/deploy.yaml",
