@@ -107,7 +107,7 @@ if (!dryRun) {
   // Extract ca from cluster
   terraformData.forEach((data) => {
     shelljs.exec(
-      `ts-node ./bin/doctl-extract-ca.ts --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
+      `ts-node ./scripts/bin/doctl-extract-ca.ts --cluster-id ${data.clusterId} --cluster-name ${data.clusterName}`
     );
   });
 }

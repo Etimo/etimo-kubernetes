@@ -50,11 +50,11 @@ clusterInfo.forEach((cluster) => {
     usersToAdd.forEach((username) => {
       console.log(`Generating certificate for ${username}...`);
       shelljs.exec(
-        `ts-node ./bin/generate-user-certificate.ts --username ${username} --cluster-name ${clusterName} --stage ${stage}`
+        `ts-node ./scripts/bin/generate-user-certificate.ts --username ${username} --cluster-name ${clusterName} --stage ${stage}`
       );
       console.log(`Generating kubeconfig for user ${username}...`);
       shelljs.exec(
-        `ts-node ./bin/generate-user-kubeconfig.ts --username ${username} --stage ${stage}`
+        `ts-node ./scripts/bin/generate-user-kubeconfig.ts --username ${username} --stage ${stage}`
       );
       console.log(`Verifying new kubeconfig for user ${username}...`);
       const kubeconfigFile = getKubeconfigFileForUsername(username, stage);

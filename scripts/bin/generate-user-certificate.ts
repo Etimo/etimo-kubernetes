@@ -34,7 +34,7 @@ assertFile(consts.FILENAME_CLUSTER_INFO, true);
 if (!dryRun) {
   console.log(`Generating certificate for ${username}...`);
   shelljs.exec(
-    `ts-node ./bin/generate-csr.ts --username ${username} --stage ${stage}`
+    `ts-node ./scripts/bin/generate-csr.ts --username ${username} --stage ${stage}`
   );
   shelljs.exec(`yarn render:csr --username ${username} --stage ${stage}`);
   kubectlWithContext(`apply -f ${csrOutputFile}`);
