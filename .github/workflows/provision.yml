@@ -18,9 +18,17 @@ jobs:
           token: ${{ secrets.PUSH_TOKEN }}
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: yarn
-      - run: |
-          eval `ssh-agent -s`
-          ssh-add - <<< '${{ secrets.EMPLOYEES_SSH_PRIVATE_KEY }}'
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.EMPLOYEES_SSH_PRIVATE_KEY }}"
+
+      - name: Download private user list
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: ./scripts/download-user-list.sh
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
