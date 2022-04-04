@@ -16,11 +16,13 @@ export const schemaBuckets = Joi.array().items({
   name: Joi.string().min(1).max(30).required(),
 });
 
-export const schemaEmployees = Joi.array().items({
-  githubUsername: schemaGithubUsername,
-  username: Joi.string(),
-  firstName: Joi.string(),
-});
+export const schemaEmployees = Joi.array()
+  .items({
+    githubUsername: schemaGithubUsername,
+    username: Joi.string(),
+    firstName: Joi.string(),
+  })
+  .options({ allowUnknown: true });
 
 // Databases
 const schemaDatabaseName = Joi.string().regex(/^[a-zA-Z][a-zA-Z0-9\-_]+$/);
