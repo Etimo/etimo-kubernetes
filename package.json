@@ -19,7 +19,7 @@
     "clean": "./scripts/bin/clean.sh",
     "download-user-list": "./scripts/bin/download-user-list.sh",
     "send:kubeconfigs": "ts-node ./scripts/bin/send-kubeconfigs.ts",
-    "all:pre-terraform": "yarn clean && yarn download-user-list && yarn render:owners && yarn render:projects:terraform",
+    "all:pre-terraform": "yarn clean && yarn render:owners && yarn render:projects:terraform",
     "all:post-terraform": "yarn sync:cluster-info && yarn render:projects:kubernetes && yarn sync",
     "validate": "yarn clean && yarn all:pre-terraform"
   },
