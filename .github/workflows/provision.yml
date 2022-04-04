@@ -18,6 +18,9 @@ jobs:
           token: ${{ secrets.PUSH_TOKEN }}
       - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
       - run: yarn
+      - run: |
+          eval `ssh-agent -s`
+          ssh-add - <<< '${{ secrets.EMPLOYEES_SSH_PRIVATE_KEY }}'
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
