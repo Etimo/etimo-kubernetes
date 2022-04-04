@@ -1,4 +1,5 @@
 const kubeconfigSuffix = (stage: string) => `.${stage}.yaml`;
+const KUBERNETES_PATH = "kubernetes";
 
 export const getCertFileForUsername = (username: string, stage: string) =>
   `temp/csr/${username}-k8s-access.${stage}.crt`;
@@ -46,4 +47,4 @@ export const FILENAME_ALL_OWNERS = "users/all_owners";
 export const FILENAME_CLUSTER_INFO = "temp/cluster-info.json";
 export const CERTIFICATE_VALID_DAYS = 365;
 export const MIGRATIONS_GLOB = "kubernetes/migrations/*.ts";
-const KUBERNETES_PATH = "kubernetes";
+export const EMPLOYEES_JSON = "employees/employees.json";

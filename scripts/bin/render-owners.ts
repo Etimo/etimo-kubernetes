@@ -5,13 +5,15 @@ import * as schemas from "../lib/schemas";
 import { hbsSeparator } from "../lib/hbs-helpers";
 import { renderTemplateMap } from "../lib/templates";
 import { validateYamlFile } from "../lib/validations";
-import { getProjectOwnersFile } from "../lib/consts";
+import { EMPLOYEES_JSON, getProjectOwnersFile } from "../lib/consts";
 import { logArgv } from "../lib/utils";
 import { ProjectOwners } from "../lib/interfaces";
 import stages from "../lib/stages";
+import { assertFile } from "../lib/file";
 
 // Cmd
 logArgv();
+assertFile(EMPLOYEES_JSON, true);
 
 // Get a list of projects
 const projectFolders = glob.sync("projects/*");

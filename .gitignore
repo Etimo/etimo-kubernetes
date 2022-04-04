@@ -8,3 +8,4 @@ cluster-info.json
 /temp/
 *.secrets.yaml
 *.log
+/employees/

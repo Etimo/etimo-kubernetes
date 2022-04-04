@@ -1,7 +1,15 @@
-const realUsernames: Record<string, string> = {
-  indrif: "daniel.winther",
-  niclaslindstedt: "niclas.lindstedt",
-};
+import { EMPLOYEES_JSON } from "./consts";
+import { getFileContent } from "./file";
+import { Employee } from "./interfaces";
+import { assertValidData, schemaEmployees } from "./schemas";
 
-export const getUsernameFromGithubUsername = (username: string) =>
-  realUsernames[username] ?? null;
+export const getUsernameFromGithubUsername = (
+  username: string
+): string | null => {
+  const employees: Employee[] = JSON.parse(getFileContent(EMPLOYEES_JSON));
+  assertValidData(employees, schemaEmployees);
+  const found = employees.find(
+    (employee) => employee.githubUsername === username
+  );
+  return found?.username ?? null;
+};

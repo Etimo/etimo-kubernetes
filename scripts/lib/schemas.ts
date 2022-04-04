@@ -16,6 +16,12 @@ export const schemaBuckets = Joi.array().items({
   name: Joi.string().min(1).max(30).required(),
 });
 
+export const schemaEmployees = Joi.array().items({
+  githubUsername: schemaGithubUsername,
+  username: Joi.string(),
+  firstName: Joi.string(),
+});
+
 // Databases
 const schemaDatabaseName = Joi.string().regex(/^[a-zA-Z][a-zA-Z0-9\-_]+$/);
 const schemaDatabaseType = Joi.string().valid("pg");

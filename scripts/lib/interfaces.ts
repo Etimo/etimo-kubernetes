@@ -121,3 +121,9 @@ export type KubeCtlWithContext = (
   | shelljs.ShellArray
   | shelljs.ShellString
   | shelljs.ShellReturnValue;
+
+export interface Employee {
+  githubUsername: string;
+  username: string;
+  firstName: string;
+}
