@@ -1,3 +1,3 @@
 #!/bin/bash
 
-git clone git@github.com:Etimo/employees.git
+git clone https://github.com/Etimo/employees.git
