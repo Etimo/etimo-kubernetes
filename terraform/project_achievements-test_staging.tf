@@ -2,7 +2,7 @@
 
 locals {
   achievements_test_staging_database_clusters = toset([])
-  achievements_test_staging_shared_databases  = toset(["main"])
+  achievements_test_staging_shared_databases  = toset(["main", "unleash"])
 }
 
 resource "digitalocean_database_db" "achievements_test_staging_shared" {
