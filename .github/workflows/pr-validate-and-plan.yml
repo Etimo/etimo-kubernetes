@@ -20,6 +20,17 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TERRAFORM_API_TOKEN }}
 
+      - name: Setup SSH Keys and known_hosts
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.EMPLOYEES_SSH_PRIVATE_KEY }}"
+      - name: Download private user list
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: yarn download-user-list
+
       - name: Terraform Init
         id: init
         working-directory: terraform
