@@ -32,11 +32,10 @@ Major libraries used:
 
 ## Structure
 
-- `bin/` - contains all the scripts
-- `lib/` - all common code used by the scripts
 - `docs/` - the documentation
 - `kubernetes/` - all rendered Kubernetes resources. Is automatically created by the scripts.
 - `projects/` - this is the central part for project definitions and the source for all files generated in this repo. To provision a new project a new folder is added here. This is basically the only thing that should be modified by non-contributors.
+- `scripts/` - contains all the scripts
 - `templates/` - all Handlebars templates grouped by category
 - `terraform/` - rendered Terraform files and modules that is used to manage infrastructure
 - `users/` - a list of all unique users currently in use in all the projects

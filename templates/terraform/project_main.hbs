@@ -56,6 +56,7 @@ output "project__{{tfName}}" {
         port: digitalocean_database_cluster.{{stage}}-shared.port
         host: digitalocean_database_cluster.{{stage}}-shared.host
         private_host: digitalocean_database_cluster.{{stage}}-shared.private_host
+        ca: data.digitalocean_database_ca.{{stage}}-db-ca.certificate
       })
     }
     shared_databases_users = {
