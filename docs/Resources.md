@@ -12,6 +12,7 @@ For each project and environment you have a specific `<environment>.yaml` file t
     - [Dedicated database cluster](#dedicated-database-cluster)
 - [Credentials and configuration](#credentials-and-configuration)
   - [How to consume populated configuration](#how-to-consume-populated-configuration)
+  - [How to connect to DB with TLS](#how-to-connect-to-db-with-tls)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -114,7 +115,7 @@ data:
 
 Note how the name `mydb1` relates to all variables being named `DB_MYDB1_...` and the database name, and user `test_staging_mydb1`.
 
-### How to connect to DB with TLS
+### <a name='how-to-connect-to-db-with-tls'></a>How to connect to DB with TLS
 
 All databases require TLS and to be able to connect to them properly you need to use the provisioned CA certificate or the connection will be rejected. In test environments you can also ignore the CA validation. Usually in JS/TS there is a flag called `rejectUnauthorized` that you can set to false. Note that this is considered unsafe in production environments!
 
