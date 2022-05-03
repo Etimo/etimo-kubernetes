@@ -124,8 +124,8 @@ export const renderProjects = (
     });
   });
 
-  // Render terraform for stages
-  stages.forEach((stage, index) => {
+  // Render projects for stages
+  stages.forEach((stage) => {
     console.log(`Rendering templates for stage ${stage}...`);
     const context = {
       ...resources[stage],
