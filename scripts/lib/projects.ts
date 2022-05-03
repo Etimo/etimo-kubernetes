@@ -49,7 +49,7 @@ export const getConfigMapFromClusterInfoProject = (
       d.ca
         ? {
             key: constCase(`DB_${d.key}_CA`),
-            value: d.ca,
+            value: new Handlebars.SafeString(d.ca),
           }
         : {},
     ]),
