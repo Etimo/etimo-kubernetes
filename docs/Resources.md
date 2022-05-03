@@ -96,6 +96,7 @@ data:
   DB_MYDB1_PORT: "25060"
   DB_MYDB1_PUBLIC_HOST: "something-something.domain.com"
   DB_MYDB1_PRIVATE_HOST: "private-something-something.domain.com"
+  DB_MYDB1_CA: "LS0tLS1CRUdJTiBDRVJUSUZ..."
 ```
 
 ```yaml
@@ -112,5 +113,13 @@ data:
 ```
 
 Note how the name `mydb1` relates to all variables being named `DB_MYDB1_...` and the database name, and user `test_staging_mydb1`.
+
+### How to connect to DB with TLS
+
+All databases require TLS and to be able to connect to them properly you need to use the provisioned CA certificate or the connection will be rejected. In test environments you can also ignore the CA validation. Usually in JS/TS there is a flag called `rejectUnauthorized` that you can set to false. Note that this is considered unsafe in production environments!
+
+The CA certificate for shared databases are automatically injected in the `provisioned-config` ConfigMap as `DB_<NAME>_CA` (e.g. `DB_MYDB1_CA`). You can mount these as a file in your container and reference that file when connecting to the database.
+
+More information and example [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#populate-a-volume-with-data-stored-in-a-configmap).
 
 [« Back to Provisioning](./Provisioning.md#commit,-push-and-create-a-pr)

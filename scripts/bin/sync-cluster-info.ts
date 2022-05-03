@@ -1,14 +1,10 @@
 import { program } from "commander";
 import shelljs from "shelljs";
 import { writeClusterInfo } from "../lib/cluster-info";
-import {
-  ICluster,
-  IClusterDatabase,
-  TerraformOutput,
-  TerramformProjectOutput,
-} from "../lib/interfaces";
+import { ICluster, IClusterDatabase, TerraformOutput } from "../lib/interfaces";
 import * as schemas from "../lib/schemas";
 import { logArgv } from "../lib/utils";
+import { Base64 } from "js-base64";
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -84,18 +80,9 @@ Object.keys(terraformOutput)
         privateHost: db.private_host,
         host: db.host,
         port: db.port,
+        ca: Base64.encode(db.ca),
       } as IClusterDatabase;
     });
-
-    // sharedDatabases: Object.keys(project.shared_databases).map((key) => {
-    //   const dbu = project.shared_databases[key];
-    //   return {
-    //     name: dbu.name,
-    //     host: dbu.host,
-    //     port: dbu.port,
-    //     privateHost: dbu.private_host,
-    //   };
-    // }),
 
     terraformDataStage?.projects.push({
       name: project.project,

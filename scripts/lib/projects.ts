@@ -46,6 +46,12 @@ export const getConfigMapFromClusterInfoProject = (
         key: constCase(`DB_${d.key}_PRIVATE_HOST`),
         value: d.privateHost,
       },
+      d.ca
+        ? {
+            key: constCase(`DB_${d.key}_CA`),
+            value: d.ca,
+          }
+        : {},
     ]),
   ].flat();
 };

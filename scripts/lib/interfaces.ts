@@ -39,6 +39,7 @@ export interface TerraformDatabaseCluster {
   private_host: string;
   user: string;
   password: string;
+  ca: string;
 }
 export type TerraformOutput = TerraformClusterOutput & TerramformProjectOutput;
 export interface TerraformDatabaseUser {
@@ -88,6 +89,7 @@ export interface IClusterDatabase {
   port: number;
   host: string;
   privateHost: string;
+  ca?: string;
 }
 
 export interface IClusterProject {
