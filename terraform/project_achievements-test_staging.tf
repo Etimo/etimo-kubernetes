@@ -50,6 +50,7 @@ output "project__achievements_test_staging" {
         port : digitalocean_database_cluster.staging-shared.port
         host : digitalocean_database_cluster.staging-shared.host
         private_host : digitalocean_database_cluster.staging-shared.private_host
+        ca : data.digitalocean_database_ca.staging-db-ca.certificate
       })
     }
     shared_databases_users = {

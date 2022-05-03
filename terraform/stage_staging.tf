@@ -8,3 +8,7 @@ resource "digitalocean_database_cluster" "staging-shared" {
   node_count = 1
 }
 
+data "digitalocean_database_ca" "staging-db-ca" {
+  cluster_id = digitalocean_database_cluster.staging-shared.id
+}
+
