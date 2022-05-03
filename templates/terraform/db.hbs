@@ -10,7 +10,3 @@ resource "digitalocean_database_cluster" "{{stage}}-shared" {
 data "digitalocean_database_ca" "{{stage}}-db-ca" {
   cluster_id = digitalocean_database_cluster.{{stage}}-shared.id
 }
-
-output "{{stage}}_shared_database_ca" {
-  value = data.digitalocean_database_ca.{{stage}}-db-ca.certificate
-}
