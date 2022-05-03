@@ -118,6 +118,8 @@ Note how the name `mydb1` relates to all variables being named `DB_MYDB1_...` an
 
 All databases require TLS and to be able to connect to them properly you need to use the provisioned CA certificate or the connection will be rejected. In test environments you can also ignore the CA validation. Usually in JS/TS there is a flag called `rejectUnauthorized` that you can set to false. Note that this is considered unsafe in production environments!
 
-TODO
+The CA certificate for shared databases are automatically injected in the `provisioned-config` ConfigMap as `DB_<NAME>_CA` (e.g. `DB_MYDB1_CA`). You can mount these as a file in your container and reference that file when connecting to the database.
+
+More information and example [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#populate-a-volume-with-data-stored-in-a-configmap).
 
 [« Back to Provisioning](./Provisioning.md#commit,-push-and-create-a-pr)
