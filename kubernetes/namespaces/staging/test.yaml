@@ -1,7 +1,0 @@
-# The actual namespace for the project
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: "test"
-  labels:
-    provisioner: etimo-kubernetes
