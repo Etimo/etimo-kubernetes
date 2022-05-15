@@ -35,7 +35,7 @@ The point of this project is not in any way to abstract the Kubernetes part. We 
 
 ## Goals
 
-This project was created the certain goals in mind:
+This project was created with the following goals in mind:
 
 1. **Don't abstract away Kubernetes** - i.e. don't create a lot of custom tooling to hide Kubernetes from the projects. We want the tooling to be as light-weight as possible and do the bare minimum to get you started.
 2. **Easy onboarding for new projects** - it should be easy and quick to setup a project.

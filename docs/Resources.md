@@ -20,6 +20,13 @@ For each project and environment you have a specific `<environment>.yaml` file t
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
+## Resource matrix
+
+| Resource  | Tag       | Availability |
+| --------- | --------- | ------------ |
+| Bucket    | buckets   | N/A          |
+| Databases | databases | Beta         |
+
 ## <a name='creating-resources'></a>Creating resources
 
 ### <a name='schema'></a>Schema
