@@ -9,7 +9,7 @@ resource "digitalocean_kubernetes_cluster" "cluster" {
   name          = "etimo-${lower(var.stage)}"
   region        = var.region
   version       = data.digitalocean_kubernetes_versions.cluster.latest_version
-  auto_upgrade  = true
+  auto_upgrade  = false
   surge_upgrade = true
 
   vpc_uuid = data.digitalocean_vpc.cluster-vpc.id
