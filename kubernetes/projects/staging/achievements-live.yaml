@@ -58,5 +58,5 @@ roleRef:
   apiGroup: ""
 subjects:
   - kind: User
-    name: "niclaslindstedt"
+    name: "indrif"
     apiGroup: ""

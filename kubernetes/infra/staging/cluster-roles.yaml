@@ -10,6 +10,3 @@ subjects:
 - kind: User
   name: "indrif"
   apiGroup: ""
-- kind: User
-  name: "niclaslindstedt"
-  apiGroup: ""
