@@ -11,6 +11,7 @@ resource "digitalocean_kubernetes_cluster" "cluster" {
   version       = data.digitalocean_kubernetes_versions.cluster.latest_version
   auto_upgrade  = false
   surge_upgrade = true
+  version       = "1.27.10-do.0"
 
   vpc_uuid = data.digitalocean_vpc.cluster-vpc.id
 
