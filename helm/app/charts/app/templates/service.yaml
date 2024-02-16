@@ -1,0 +1,20 @@
+{{ if .Values.deployment.port }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.global.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.global.name }}
+    helm.sh/chart: {{ include "app.chart" . }}
+    app.kubernetes.io/instance: {{ .Values.global.name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  selector:
+    app.kubernetes.io/name: {{ .Values.global.name }}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.deployment.port }}
+  type: ClusterIP
+{{ end }}

@@ -1,0 +1,6 @@
+global:
+  name: app
+  author: author-name
+  baseDomain: etimo-test.live
+  cluster: staging
+  clusterDomain: "{{ .Values.global.cluster }}.{{ .Values.global.baseDomain }}"

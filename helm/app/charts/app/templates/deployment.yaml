@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.global.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.global.name }}
+    helm.sh/chart: {{ include "app.chart" . }}
+    app.kubernetes.io/instance: {{ .Values.global.name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.global.name }}
+      app.kubernetes.io/instance: {{ .Values.global.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.global.name }}
+        app.kubernetes.io/instance: {{ .Values.global.name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.deployment.image.name }}:{{ tpl .Values.deployment.image.tag $ }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          {{- if .Values.deployment.port }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.deployment.port }}
+              protocol: TCP
+          {{- end }}
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 64Mi
+            limits:
+              cpu: 0.1
+              memory: 128Mi
+      {{- if .Values.deployment.restartPolicy }}
+      restartPolicy: {{ .Values.deployment.restartPolicy }}
+      {{- end }}
+      {{- if .Values.deployment.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
+      {{- end }}
+  revisionHistoryLimit: 3
+  {{- if .Values.deployment.progressDeadlineSeconds }}
+  progressDeadlineSeconds: {{ .Values.deployment.progressDeadlineSeconds }}
+  {{- end }}
