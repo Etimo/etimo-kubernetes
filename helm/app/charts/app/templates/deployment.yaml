@@ -4,16 +4,21 @@ metadata:
   name: {{ .Values.global.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "app.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ .Values.global.name }}
+    helm.sh/chart: {{ include "app.chart" . }}
+    app.kubernetes.io/instance: {{ .Values.global.name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      {{- include "app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ .Values.global.name }}
+      app.kubernetes.io/instance: {{ .Values.global.name }}
   template:
     metadata:
       labels:
-        {{- include "app.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: {{ .Values.global.name }}
+        app.kubernetes.io/instance: {{ .Values.global.name }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
