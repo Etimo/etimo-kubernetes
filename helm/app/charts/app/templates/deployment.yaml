@@ -26,12 +26,12 @@ spec:
               protocol: TCP
           {{- end }}
           resources:
-            cpu:
-              request: 0.1
-              limit: 0.1
-            memory:
-              request: 64Mi
-              limit: 128Mi
+            requests:
+              cpu: 0.1
+              memory: 64Mi
+            limits:
+              cpu: 0.1
+              memory: 128Mi
       {{- if .Values.deployment.restartPolicy }}
       restartPolicy: {{ .Values.deployment.restartPolicy }}
       {{- end }}

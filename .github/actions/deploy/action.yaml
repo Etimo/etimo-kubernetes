@@ -39,8 +39,11 @@ runs:
       uses: WyriHaximus/github-action-helm3@v3
       with:
         exec: |
-          helm upgrade ${{ inputs.name }} ./helm/app --kube-context=etimo-staging --install --atomic --namespace=${{ inputs.namespace }} \
-            --set app.name=${{ inputs.name }} \
+          helm upgrade ${{ inputs.name }} ./helm/app --kube-context=etimo-staging \
+            --install --atomic --namespace=${{ inputs.namespace }} \
+            --debug \
+            --set global.name=${{ inputs.name }} \
+            --set global.author=${{ github.actor }} \
             --set app.deployment.image.name=${{ inputs.image }} \
             --set app.deployment.image.tag=${{ inputs.tag }} \
             --set app.ingress.enabled="${{ inputs.ingress }}" \
