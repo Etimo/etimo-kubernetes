@@ -5,7 +5,7 @@ on:
     branches-ignore:
       - main
 jobs:
-  check-syntax:
+  deploy:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
