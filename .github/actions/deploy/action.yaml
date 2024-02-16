@@ -39,7 +39,7 @@ runs:
       uses: WyriHaximus/github-action-helm3@v3
       with:
         exec: |
-          helm upgrade app ./helm --kube-context=etimo-staging --install --atomic --namespace=${{ inputs.namespace }} \
+          helm upgrade ${{ inputs.name }} ./helm/app --kube-context=etimo-staging --install --atomic --namespace=${{ inputs.namespace }} \
             --set app.name=${{ inputs.name }} \
             --set app.deployment.image.name=${{ inputs.image }} \
             --set app.deployment.image.tag=${{ inputs.tag }} \
