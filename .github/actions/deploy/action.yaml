@@ -35,25 +35,15 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Step 1
-      shell: bash
-      id: step1
-      run: |
-        echo "Running Step 1"
-        echo "Input 1: ${{ inputs.input1 }}"
-        # Add your commands here
-
-    - name: Step 2
-      shell: bash
-      id: step2
-      run: |
-        echo "Running Step 2"
-        echo "Output from Step 1: ${{ steps.step1.outputs.output1 }}"
-        # Add your commands here
-
-    # Add more steps as needed
-
-outputs:
-  output1:
-    description: 'Output 1 description'
-    value: ${{ steps.step2.outputs.output2 }}
+    - name: Deploy
+      uses: WyriHaximus/github-action-helm3@v3
+      with:
+        exec: |
+          helm upgrade app ./helm --install --atomic --namespace=${{ inputs.namespace }} \
+            --set app.name=${{ inputs.name }} \
+            --set app.deployment.image.name=${{ inputs.image }} \
+            --set app.deployment.image.tag=${{ inputs.tag }} \
+            --set app.ingress.enabled="${{ inputs.ingress }}" \
+            --set app.deployment.port="${{ inputs.targetPort }}" \
+        kubeconfig: '${{ inputs.kubeconfig }}'
+        overrule_existing_kubeconfig: "true"

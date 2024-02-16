@@ -1,0 +1,24 @@
+name: deploy
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+jobs:
+  check-syntax:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+      - uses: ./.github/actions/deploy
+        with:
+          image: dockerbogo/docker-nginx-hello-world
+          tag: latest
+          namespace: test-mogge
+          cluster: staging
+          name: hello-world
+          ingress: true
+          private: false
+          targetPort: 80
+          kubeconfig: ${{ secrets.KUBECONFIG_TEST }}
