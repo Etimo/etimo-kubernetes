@@ -10,7 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'  
 spec:
   rules:
-    - host: "{{ tpl .Release.Namespace $ }}-{{ .Values.global.name }}.{{ tpl .Values.global.clusterDomain $ }}"
+    - host: "{{ .Values.global.name }}.{{ tpl .Release.Namespace $ }}.{{ tpl .Values.global.clusterDomain $ }}"
       http:
         paths:
           - path: /
