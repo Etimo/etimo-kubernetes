@@ -1,0 +1,59 @@
+name: Deploy to Etimo Kubernetes
+description: Deploy to Etimo Kubernetes
+
+inputs:
+  image:
+    description: The image to deploy
+    required: true
+  tag:
+    description: The tag of the image to deploy
+    required: true
+  namespace:
+    description: The namespace to deploy to
+    required: true
+  cluster:
+    description: The cluster to deploy to
+    required: true
+  name:
+    description: The name of the deployment
+    required: true
+  ingress:
+    description: Whether to create an ingress for the deployment
+    required: false
+    default: "false"
+  private:
+    description: Whether the ingress is private
+    required: false
+    default: "false"
+  targetPort:
+    description: The target port for the ingress and the port that the deployment listens on
+    required: false
+  kubeconfig:
+    description: The kubeconfig to use
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Step 1
+      shell: bash
+      id: step1
+      run: |
+        echo "Running Step 1"
+        echo "Input 1: ${{ inputs.input1 }}"
+        # Add your commands here
+
+    - name: Step 2
+      shell: bash
+      id: step2
+      run: |
+        echo "Running Step 2"
+        echo "Output from Step 1: ${{ steps.step1.outputs.output1 }}"
+        # Add your commands here
+
+    # Add more steps as needed
+
+outputs:
+  output1:
+    description: 'Output 1 description'
+    value: ${{ steps.step2.outputs.output2 }}

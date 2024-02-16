@@ -1,0 +1,2 @@
+App url:
+https://{{ .Values.global.name }}.{{ .Release.Namespace }}.{{ tpl .Values.global.clusterDomain $ }}
