@@ -5,7 +5,9 @@ metadata:
   name: "{{ .Values.global.name }}"
   namespace: {{ .Release.Namespace }}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: le-staging-wildcard-issuer
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'  
 spec:
   rules:
     - host: "{{ tpl .Release.Namespace $ }}-{{ .Values.global.name }}.{{ tpl .Values.global.clusterDomain $ }}"
