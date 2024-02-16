@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.deployment.image.repository }}/{{ .Values.deployment.image.name }}:{{ tpl .Values.deployment.image.tag $ }}"
+          image: "{{ .Values.deployment.image.name }}:{{ tpl .Values.deployment.image.tag $ }}"
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           {{- if .Values.deployment.port }}
           ports:
@@ -25,6 +25,13 @@ spec:
               containerPort: {{ .Values.deployment.port }}
               protocol: TCP
           {{- end }}
+          resources:
+            cpu:
+              request: 0.1
+              limit: 0.1
+            memory:
+              request: 64Mi
+              limit: 128Mi
       {{- if .Values.deployment.restartPolicy }}
       restartPolicy: {{ .Values.deployment.restartPolicy }}
       {{- end }}
