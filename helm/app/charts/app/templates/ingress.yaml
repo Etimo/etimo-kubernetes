@@ -8,7 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: "{{ .Values.global.name }}.{{ tpl .Release.Namespace $ }}.{{ tpl .Values.global.clusterDomain $ }}"
+    - host: "{{ .Values.global.name }}-{{ tpl .Release.Namespace $ }}.{{ tpl .Values.global.clusterDomain $ }}"
       http:
         paths:
           - path: /
