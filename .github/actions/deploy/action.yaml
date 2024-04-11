@@ -1,0 +1,52 @@
+name: Deploy to Etimo Kubernetes
+description: Deploy to Etimo Kubernetes
+
+inputs:
+  image:
+    description: The image to deploy
+    required: true
+  tag:
+    description: The tag of the image to deploy
+    required: true
+  namespace:
+    description: The namespace to deploy to
+    required: true
+  cluster:
+    description: The cluster to deploy to
+    required: true
+  name:
+    description: The name of the deployment
+    required: true
+  ingress:
+    description: Whether to create an ingress for the deployment
+    required: false
+    default: "false"
+  private:
+    description: Whether the ingress is private
+    required: false
+    default: "false"
+  targetPort:
+    description: The target port for the ingress and the port that the deployment listens on
+    required: false
+  kubeconfig:
+    description: The kubeconfig to use
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Deploy
+      uses: WyriHaximus/github-action-helm3@v3
+      with:
+        exec: |
+          helm upgrade ${{ inputs.name }} ./helm/app --kube-context=etimo-staging \
+            --install --atomic --namespace=${{ inputs.namespace }} \
+            --debug \
+            --set global.name=${{ inputs.name }} \
+            --set global.author=${{ github.actor }} \
+            --set app.deployment.image.name=${{ inputs.image }} \
+            --set app.deployment.image.tag=${{ inputs.tag }} \
+            --set app.ingress.enabled="${{ inputs.ingress }}" \
+            --set app.deployment.port="${{ inputs.targetPort }}" \
+        kubeconfig: '${{ inputs.kubeconfig }}'
+        overrule_existing_kubeconfig: "true"

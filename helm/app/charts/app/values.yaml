@@ -1,0 +1,22 @@
+deployment:
+  port: 8080
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600
+
+  image:
+    repository: imageRepo
+    name: imageName
+    tag: latest
+    pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  oauth2proxy:
+    enabled: true
+  domain: "{{ .Values.global.domains.base }}"
+  path: /api/admin2/
+  pathType: Prefix
+  serverSnippet: |
+    large_client_header_buffers 4 64k;
