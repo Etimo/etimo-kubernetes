@@ -8,7 +8,7 @@ export const schemaProjectName = Joi.string()
   .lowercase()
   .invalid("index"); // index is reserved
 export const schemaGithubUsername = Joi.string()
-  .regex(/^[a-z0-9\-\_\.]+$/)
+  .regex(/^[A-z0-9\-\_\.]+$/)
   .min(1)
   .max(38)
   .required();
