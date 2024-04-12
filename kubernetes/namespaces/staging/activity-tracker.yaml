@@ -1,0 +1,7 @@
+# The actual namespace for the project
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "activity-tracker"
+  labels:
+    provisioner: etimo-kubernetes

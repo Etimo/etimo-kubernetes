@@ -8,6 +8,12 @@ roleRef:
   apiGroup: "rbac.authorization.k8s.io"
 subjects:
 - kind: User
+  name: "H4zze"
+  apiGroup: ""
+- kind: User
+  name: "bjornkonrad"
+  apiGroup: ""
+- kind: User
   name: "indrif"
   apiGroup: ""
 - kind: User
