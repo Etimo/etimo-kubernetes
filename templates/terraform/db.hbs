@@ -10,3 +10,29 @@ resource "digitalocean_database_cluster" "{{stage}}-shared" {
 data "digitalocean_database_ca" "{{stage}}-db-ca" {
   cluster_id = digitalocean_database_cluster.{{stage}}-shared.id
 }
+
+resource "digitalocean_database_cluster" "{{stage}}-mysql-shared" {
+  name       = "{{stage}}-mysql-shared"
+  engine     = "mysql"
+  version    = "8"
+  size       = "db-s-1vcpu-1gb"
+  region     = var.region
+  node_count = 1
+}
+
+data "digitalocean_database_ca" "{{stage}}-mysql-db-ca" {
+  cluster_id = digitalocean_database_cluster.{{stage}}-mysql-shared.id
+}
+
+resource "digitalocean_database_cluster" "{{stage}}-redis-shared" {
+  name       = "{{stage}}-redis-shared"
+  engine     = "redis"
+  version    = "7"
+  size       = "db-s-1vcpu-1gb"
+  region     = var.region
+  node_count = 1
+}
+
+data "digitalocean_database_ca" "{{stage}}-redis-db-ca" {
+  cluster_id = digitalocean_database_cluster.{{stage}}-redis-shared.id
+} 

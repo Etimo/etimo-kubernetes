@@ -1,10 +1,10 @@
 import { program } from "commander";
+import { Base64 } from "js-base64";
 import shelljs from "shelljs";
 import { writeClusterInfo } from "../lib/cluster-info";
 import { ICluster, IClusterDatabase, TerraformOutput } from "../lib/interfaces";
 import * as schemas from "../lib/schemas";
 import { logArgv } from "../lib/utils";
-import { Base64 } from "js-base64";
 
 // Cmd
 const options = program.option("--dry-run").parse().opts();
@@ -56,20 +56,7 @@ Object.keys(terraformOutput)
       (d) => d.stage === project.stage
     );
 
-    const databases = Object.keys(project.database_clusters).map((key) => {
-      const db = project.database_clusters[key];
-      return {
-        key,
-        host: db.host,
-        name: db.name,
-        privateHost: db.private_host,
-        password: db.password,
-        port: db.port,
-        user: db.user,
-      };
-    });
-
-    const sharedDatabases = Object.keys(project.shared_databases).map((key) => {
+    const databases = Object.keys(project.shared_databases).map((key) => {
       const db = project.shared_databases[key];
       const dbu = project.shared_databases_users[key];
       return {
@@ -86,7 +73,7 @@ Object.keys(terraformOutput)
 
     terraformDataStage?.projects.push({
       name: project.project,
-      databases: [...databases, ...sharedDatabases],
+      databases,
     });
   });
 if (!dryRun) {
