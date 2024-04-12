@@ -5,7 +5,6 @@ export const getTerraformSafeVariableName = (s: string) =>
   s.replace(/[^a-zA-Z0-9]/, "_");
 
 export class Terraform {
-  private hasSharedDatabase = false;
   private hasDatabase = false;
   private tfg: TerraformGenerator;
 
@@ -15,7 +14,6 @@ export class Terraform {
 
   addDatabase(database: Database) {
     this.hasDatabase = !!database;
-    this.hasSharedDatabase ||= database.shared;
   }
 
   addDatabases(databases: Database[]) {
