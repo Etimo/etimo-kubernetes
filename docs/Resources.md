@@ -8,7 +8,6 @@ For each project and environment you have a specific `<environment>.yaml` file t
   - [Schema](#schema)
   - [Buckets](#buckets)
   - [Databases](#databases)
-    - [Shared databases](#shared-databases)
     - [Dedicated database cluster](#dedicated-database-cluster)
 - [Credentials and configuration](#credentials-and-configuration)
   - [How to consume populated configuration](#how-to-consume-populated-configuration)
@@ -40,9 +39,8 @@ interface Resources {
 }
 
 interface Database {
-  shared: boolean; // Shared cluster or not
   name: string; // The name of the database
-  type: "pg"; // The type of database. Only supports postgres as of now
+  type: "pg"; // The type of database.
 }
 ```
 
@@ -52,17 +50,7 @@ A bucket is an S3 compatible bucket for storing assets and can potentially be se
 
 ### <a name='databases'></a>Databases
 
-There is currently support for managed Postgres databases. More will be added later on when needed. You can choose to provision a shared database or a dedicated one.
-
-#### <a name='shared-databases'></a>Shared databases
-
-A shared database is sort of misleading as it is not the actual database that is shared but the actual cluster. Each environment has a database cluster that can be used by multiple projects. This is mostly to reduce the cost since most of our projects don't require a separate cluster.
-
-A shared database cluster can contain multiple separated databases each having their own credentials.
-
-#### <a name='dedicated-database-cluster'></a>Dedicated database cluster
-
-If you don't want a shared database cluster you can provision your own separate database cluster.
+There is currently support for managed Postgres, mysql and redis databases. More will be added later on when needed.
 
 ## <a name='credentials-and-configuration'></a>Credentials and configuration
 
@@ -84,7 +72,6 @@ buckets: []
 databases:
   - name: mydb1
     type: pg
-    shared: true
 ```
 
 This would create the following resources in the `test` namespace:
@@ -126,7 +113,7 @@ Note how the name `mydb1` relates to all variables being named `DB_MYDB1_...` an
 
 All databases require TLS and to be able to connect to them properly you need to use the provisioned CA certificate or the connection will be rejected. In test environments you can also ignore the CA validation. Usually in JS/TS there is a flag called `rejectUnauthorized` that you can set to false. Note that this is considered unsafe in production environments!
 
-The CA certificate for shared databases are automatically injected in the `provisioned-config` ConfigMap as `DB_<NAME>_CA` (e.g. `DB_MYDB1_CA`). You can mount these as a file in your container and reference that file when connecting to the database.
+The CA certificate for databases are automatically injected in the `provisioned-config` ConfigMap as `DB_<NAME>_CA` (e.g. `DB_MYDB1_CA`). You can mount these as a file in your container and reference that file when connecting to the database.
 
 More information and example [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#add-configmap-data-to-a-specific-path-in-the-volume).
 
