@@ -9,12 +9,11 @@ export interface TerraformString {
   value: string[];
 }
 
-export type DatabaseType = "pg";
+export type DatabaseType = "pg" | "mysql" | "redis";
 
 export interface Database {
   name: string;
   type: DatabaseType;
-  shared: boolean;
 }
 
 export interface ProjectDefinition {

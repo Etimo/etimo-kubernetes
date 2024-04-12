@@ -26,9 +26,8 @@ export const schemaEmployees = Joi.array()
 
 // Databases
 const schemaDatabaseName = Joi.string().regex(/^[a-zA-Z][a-zA-Z0-9\-_]+$/);
-const schemaDatabaseType = Joi.string().valid("pg");
+const schemaDatabaseType = Joi.string().valid("pg", "mysql", "redis");
 const schemaDatabase = Joi.object().keys({
-  shared: Joi.boolean().valid(true),
   name: schemaDatabaseName.not(Joi.ref("...name")),
   type: schemaDatabaseType,
 });

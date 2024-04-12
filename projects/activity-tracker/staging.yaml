@@ -1,2 +1,4 @@
 buckets: []
-databases: []
+databases:
+  - name: main
+    type: mysql

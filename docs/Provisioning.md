@@ -102,7 +102,6 @@ buckets:
 databases:
   - name: db1
     type: pg
-    shared: true
 ```
 
 If you don't need anything you can just have empty lists:

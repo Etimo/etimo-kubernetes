@@ -2,7 +2,5 @@ buckets: []
 databases:
   - name: main
     type: pg
-    shared: true
   - name: unleash
     type: pg
-    shared: true
