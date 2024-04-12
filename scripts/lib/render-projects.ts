@@ -1,11 +1,8 @@
-import path from "path";
 import fs from "fs";
-import * as schemas from "../lib/schemas";
 import glob from "glob";
-import { validateYamlFile } from "../lib/validations";
-import { getYamlContentParsed } from "../lib/file";
-import { renderTemplateMap } from "../lib/templates";
+import path from "path";
 import { getProjectOwnersFile } from "../lib/consts";
+import { getYamlContentParsed } from "../lib/file";
 import {
   IClusterInfo,
   Owners,
@@ -14,12 +11,15 @@ import {
   StageCallback,
   TemplateMap,
 } from "../lib/interfaces";
-import { getTerraformSafeVariableName } from "../lib/terraform";
 import {
   getConfigMapFromClusterInfoProject,
   getSecretsFromClusterInfoProject,
 } from "../lib/projects";
+import * as schemas from "../lib/schemas";
 import stages from "../lib/stages";
+import { renderTemplateMap } from "../lib/templates";
+import { getTerraformSafeVariableName } from "../lib/terraform";
+import { validateYamlFile } from "../lib/validations";
 
 export const renderProjects = (
   handlebars: any,
@@ -58,7 +58,7 @@ export const renderProjects = (
   // Perform action
   interface StageOverallResources {
     [key: string]: /* stage */ {
-      hasAnySharedDatabases: boolean;
+      hasAnyDatabases: boolean;
       hasAnyBuckets: boolean;
     };
   }
@@ -66,7 +66,7 @@ export const renderProjects = (
     (total, s) => ({
       ...total,
       [s]: {
-        hasAnySharedDatabases: false,
+        hasAnyDatabases: false,
         hasAnyBuckets: false,
       },
     }),
@@ -98,8 +98,7 @@ export const renderProjects = (
         const buckets = stageData.buckets ?? [];
         const context = {
           ...stageData,
-          databaseClusters: databases.filter((d) => !d.shared),
-          sharedDatabases: databases.filter((d) => d.shared),
+          databases,
           tfName: getTerraformSafeVariableName(project) + "_" + stage,
           configMap: clusterInfo
             ? getConfigMapFromClusterInfoProject(
@@ -114,7 +113,7 @@ export const renderProjects = (
           stage,
         };
         resources[stage].hasAnyBuckets ||= stageData.buckets.length > 0;
-        resources[stage].hasAnySharedDatabases ||= databases.length > 0;
+        resources[stage].hasAnyDatabases ||= databases.length > 0;
         renderTemplateMap(
           handlebars,
           templatesPerProjectStage(project, stage),

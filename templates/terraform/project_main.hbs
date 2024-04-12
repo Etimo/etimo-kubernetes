@@ -6,66 +6,44 @@ resource "digitalocean_spaces_bucket" "{{../project}}-{{../stage}}-{{name}}" {
 }
 {{/each}}
 
-locals {
-  {{tfName}}_database_clusters = toset([{{#each databaseClusters}}"{{name}}"{{#sep}},{{/sep}}{{/each}}])
-  {{tfName}}_shared_databases = toset([{{#each sharedDatabases}}"{{name}}"{{#sep}},{{/sep}}{{/each}}])
+
+{{#each databases}}
+resource "digitalocean_database_db" "{{@root.tfName}}_{{name}}_shared" {
+  cluster_id = local.{{@root.stage}}_db_clusters["{{type}}"].id
+  name       = "{{@root.tfName}}_{{name}}"
 }
 
-resource "digitalocean_database_db" "{{tfName}}_shared" {
-  for_each   = local.{{tfName}}_shared_databases
-  cluster_id = digitalocean_database_cluster.{{stage}}-shared.id
-  name       = "{{tfName}}_${each.key}"
+resource "digitalocean_database_user" "{{@root.tfName}}_{{name}}_shared" {
+  cluster_id = local.{{@root.stage}}_db_clusters["{{type}}"].id
+  name       = "{{@root.tfName}}_{{name}}"
 }
-
-resource "digitalocean_database_user" "{{tfName}}_shared" {
-  for_each   = local.{{tfName}}_shared_databases
-  cluster_id = digitalocean_database_cluster.{{stage}}-shared.id
-  name       = "{{tfName}}_${each.key}"
-}
-
-resource "digitalocean_database_cluster" "{{tfName}}" {
-  for_each   = local.{{tfName}}_database_clusters
-  name       = "{{tfName}}_${each.key}"
-  engine     = "pg"
-  version    = "13"
-  size       = "db-s-1vcpu-1gb"
-  region     = var.region
-  node_count = 1
-}
+{{/each}}
 
 # Outputs
 output "project__{{tfName}}" {
   value = {
     project = "{{project}}"
     stage = "{{stage}}"
-    database_clusters = {
-      for key, obj in digitalocean_database_cluster.{{tfName}}:
-      key => ({
-        name: obj.name,
-        user: obj.user,
-        password: obj.password,
-        port: obj.port
-        host: obj.host
-        private_host: obj.private_host
-      })
-    }
     shared_databases = {
-      for key, obj in digitalocean_database_db.{{tfName}}_shared:
-      key => ({
-        name: obj.name,
-        port: digitalocean_database_cluster.{{stage}}-shared.port
-        host: digitalocean_database_cluster.{{stage}}-shared.host
-        private_host: digitalocean_database_cluster.{{stage}}-shared.private_host
-        ca: data.digitalocean_database_ca.{{stage}}-db-ca.certificate
-      })
-    }
+      {{#each databases}}
+      {{name}} = {
+        db_type = "{{type}}",
+        name = "{{@root.tfName}}_{{name}}",
+        port = local.{{@root.stage}}_db_clusters["{{type}}"].port,
+        host = local.{{@root.stage}}_db_clusters["{{type}}"].host,
+        private_host = local.{{@root.stage}}_db_clusters["{{type}}"].private_host,
+        ca = local.{{@root.stage}}_db_certs["{{type}}"].certificate,
+      },
+      {{/each}}
+    },
     shared_databases_users = {
-      for key, obj in digitalocean_database_user.{{tfName}}_shared:
-      key => ({
-        name: obj.name,
-        password: obj.password,
-      })
-    }
+      {{#each databases}}
+      {{name}} = {
+        name = "{{@root.tfName}}_{{name}}",
+        password = digitalocean_database_user.{{@root.tfName}}_{{name}}_shared.password,
+      },
+     {{/each}}
+    },
   }
   sensitive = true
 }
