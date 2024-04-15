@@ -9,7 +9,7 @@ export const getUsernameFromGithubUsername = (
   const employees: Employee[] = JSON.parse(getFileContent(EMPLOYEES_JSON));
   // assertValidData(employees, schemaEmployees);
   const found = employees.find(
-    (employee) => employee.githubUsername === username
+    (employee) => employee.githubUsername.toLocaleLowerCase() === username.toLocaleLowerCase()
   );
   return found?.username ?? null;
 };
