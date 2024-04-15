@@ -60,3 +60,6 @@ subjects:
   - kind: User
     name: "indrif"
     apiGroup: ""
+  - kind: User
+    name: "h4zze"
+    apiGroup: ""

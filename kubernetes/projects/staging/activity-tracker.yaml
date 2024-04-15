@@ -52,7 +52,13 @@ roleRef:
   apiGroup: ""
 subjects:
   - kind: User
+    name: "morgan-cromell"
+    apiGroup: ""
+  - kind: User
     name: "indrif"
+    apiGroup: ""
+  - kind: User
+    name: "h4zze"
     apiGroup: ""
   - kind: User
     name: "bjornkonrad"
