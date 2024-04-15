@@ -4,7 +4,7 @@
 # Projects
 projects/achievements-live @indrif
 projects/achievements-test @indrif
-projects/activity-tracker @morgan-cromell @indrif @H4zze @bjornkonrad
+projects/activity-tracker @indrif @bjornkonrad
 projects/test @indrif
 projects/test-mogge @morgan-cromell
-projects/utbetalning-test @indrif @H4zze
+projects/utbetalning-test @indrif
