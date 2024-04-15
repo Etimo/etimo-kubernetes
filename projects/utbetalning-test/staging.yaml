@@ -1,0 +1,6 @@
+buckets: []
+databases:
+  - name: auth
+    type: mysql
+  - name: main
+    type: mysql
