@@ -130,4 +130,4 @@ export const getKubectlForContext = (
 
 export const getContext = (clusterName: string) => `do-fra1-${clusterName}`;
 
-export const getConfigMapKey = (key: string) => key.replace(/[^a-z0-9]/g, "_");
+export const getConfigMapKey = (key: string) => key.replace(/[^A-z0-9\-_\.]/g, "_");
