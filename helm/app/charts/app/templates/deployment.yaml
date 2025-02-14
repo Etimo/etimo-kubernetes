@@ -45,6 +45,7 @@ spec:
               cpu: 0.1
               memory: {{ .Values.deployment.memory.requests}} 
             limits:
+              cpu: 0.1
               memory: {{ .Values.deployment.memory.limit}}
       {{- if .Values.deployment.restartPolicy }}
       restartPolicy: {{ .Values.deployment.restartPolicy }}
