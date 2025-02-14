@@ -30,13 +30,20 @@ spec:
               containerPort: {{ .Values.deployment.port }}
               protocol: TCP
           {{- end }}
+          {{- if or .Values.deployment.env }}
+          env:
+            {{- range $key, $value := .Values.deployment.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
           resources:
             requests:
               cpu: 0.1
-              memory: 64Mi
+              memory: {{ .Values.deployment.memory.requests}} 
             limits:
-              cpu: 0.1
-              memory: 128Mi
+              memory: {{ .Values.deployment.memory.limit}}
       {{- if .Values.deployment.restartPolicy }}
       restartPolicy: {{ .Values.deployment.restartPolicy }}
       {{- end }}

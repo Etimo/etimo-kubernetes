@@ -4,6 +4,9 @@ deployment:
   terminationGracePeriodSeconds: 30
   revisionHistoryLimit: 5
   progressDeadlineSeconds: 600
+  memory:
+    requests: 128Mi
+    limit: 256Mi
 
   image:
     repository: imageRepo

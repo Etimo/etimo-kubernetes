@@ -28,6 +28,9 @@ inputs:
   targetPort:
     description: The target port for the ingress and the port that the deployment listens on
     required: false
+  env:
+    description: Environment variables in KEY=value format
+    required: false
   kubeconfig:
     description: The kubeconfig to use
     required: true
@@ -35,6 +38,16 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Process Environment Variables
+      if: inputs.env != ''
+      shell: bash
+      run: |
+        echo '${{ inputs.env }}' | while IFS='=' read -r key value; do
+          if [ ! -z "$key" ]; then
+            echo "ENV_VARS=\"${ENV_VARS:-}--set app.deployment.env.${key}=${value} \"" >> $GITHUB_ENV
+          fi
+        done
+
     - name: Deploy
       uses: WyriHaximus/github-action-helm3@v3
       with:
@@ -48,5 +61,6 @@ runs:
             --set app.deployment.image.tag=${{ inputs.tag }} \
             --set app.ingress.enabled="${{ inputs.ingress }}" \
             --set app.deployment.port="${{ inputs.targetPort }}" \
+            ${{ env.ENV_VARS }}
         kubeconfig: '${{ inputs.kubeconfig }}'
         overrule_existing_kubeconfig: "true"
