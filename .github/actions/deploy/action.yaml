@@ -31,6 +31,14 @@ inputs:
   env:
     description: Environment variables in KEY=value format
     required: false
+  memoryRequests:
+    description: The memory requests for the deployment
+    required: false
+    default: "128Mi"
+  memoryLimit:
+    description: The memory limit for the deployment
+    required: false
+    default: "256Mi"
   kubeconfig:
     description: The kubeconfig to use
     required: true
@@ -61,6 +69,8 @@ runs:
             --set app.deployment.image.tag=${{ inputs.tag }} \
             --set app.ingress.enabled="${{ inputs.ingress }}" \
             --set app.deployment.port="${{ inputs.targetPort }}" \
+            --set app.deployment.memory.requests="${{ inputs.memoryRequests }}"\
+            --set app.deployment.memory.limit="${{ inputs.memoryLimit }}" \
             ${{ env.ENV_VARS }}
         kubeconfig: '${{ inputs.kubeconfig }}'
         overrule_existing_kubeconfig: "true"
