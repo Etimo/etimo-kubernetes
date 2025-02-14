@@ -50,11 +50,18 @@ runs:
       if: inputs.env != ''
       shell: bash
       run: |
-        echo '${{ inputs.env }}' | while IFS='=' read -r key value; do
+        env_json="{"
+        while IFS='=' read -r key value; do
           if [ ! -z "$key" ]; then
-            echo "ENV_VARS=\"${ENV_VARS:-}--set app.deployment.env.${key}=${value} \"" >> $GITHUB_ENV
+            # Add comma if not the first entry
+            if [ "$env_json" != "{" ]; then
+              env_json+=","
+            fi
+            env_json+="\"$key\":\"$value\""
           fi
-        done
+        done <<< "${{ inputs.env }}"
+        env_json+="}"
+        echo "ENV_JSON=${env_json}" >> $GITHUB_ENV
 
     - name: Deploy
       uses: WyriHaximus/github-action-helm3@v3
@@ -71,6 +78,6 @@ runs:
             --set app.deployment.port="${{ inputs.targetPort }}" \
             --set app.deployment.memory.requests="${{ inputs.memoryRequests }}"\
             --set app.deployment.memory.limit="${{ inputs.memoryLimit }}" \
-            ${{ env.ENV_VARS }}
+            --set-json 'app.deployment.env=${{ env.ENV_JSON }}'
         kubeconfig: '${{ inputs.kubeconfig }}'
         overrule_existing_kubeconfig: "true"
