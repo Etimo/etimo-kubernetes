@@ -10,6 +10,7 @@ resource "digitalocean_kubernetes_cluster" "cluster" {
   region        = var.region
   auto_upgrade  = false
   surge_upgrade = true
+  version       = "1.32.2-do.0"
 
   vpc_uuid = data.digitalocean_vpc.cluster-vpc.id
 
