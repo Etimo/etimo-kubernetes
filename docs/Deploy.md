@@ -57,11 +57,11 @@ TODO show example
 
 ## Ingresses
 
-Ingresses are used when you want to expose a service to the public by an endpoint. Please note that Etimo Kubernetes has a custom policy in place for ingresses at the moment that restrict projects to only use hostnames in the form of `<project>.<cluster>.<domain>` or `<project>-<something>.<cluster>.<domain>`. You can for example use `myproject.staging.etimo-test.live` or `myproject-test.staging.etimo-test.live`. This is to prevent havoc among ingresses and to naturally tie them to the projects that owns them. Otherwise you will get an error similar to this one:
+Ingresses are used when you want to expose a service to the public by an endpoint. Please note that Etimo Kubernetes has a custom policy in place for ingresses at the moment that restrict projects to only use hostnames in the form of `<project>.<cluster>.<domain>` or `<project>-<something>.<cluster>.<domain>`. You can for example use `myproject.k8s.etimo.se` or `myproject-test.k8s.etimo.se`. This is to prevent havoc among ingresses and to naturally tie them to the projects that owns them. Otherwise you will get an error similar to this one:
 
 ```bash
 $ kubectl apply -f invalid-ingress.yaml
-Error from server: error when creating "invalid-ingress.yaml": admission webhook "admission-server.default.svc" denied the request: ingress host must be default.staging.etimo-test.live or default-<something>.staging.etimo-test.live
+Error from server: error when creating "invalid-ingress.yaml": admission webhook "admission-server.default.svc" denied the request: ingress host must be default.k8s.etimo.se or default-<something>.k8s.etimo.se
 ```
 
 ## <a name='how-to-verify-deployment'></a>How to verify deployment
