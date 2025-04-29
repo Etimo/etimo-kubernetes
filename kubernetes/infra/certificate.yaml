@@ -7,9 +7,9 @@ spec:
   issuerRef:
     name: le-staging-wildcard-issuer
     kind: ClusterIssuer
-  commonName: "*.app.etimo.se"
+  commonName: "*.k8s.etimo.se"
   dnsNames:
-    - "*.app.etimo.se"
+    - "*.k8s.etimo.se"
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
