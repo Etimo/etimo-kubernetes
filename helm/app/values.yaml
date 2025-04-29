@@ -3,4 +3,4 @@ global:
   author: author-name
   baseDomain: k8s.etimo.se
   cluster: staging
-  clusterDomain: "{{ .Values.global.cluster }}.{{ .Values.global.baseDomain }}"
+  clusterDomain: "{{ .Values.global.baseDomain }}"
