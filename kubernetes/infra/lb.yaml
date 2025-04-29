@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
-    service.beta.kubernetes.io/do-loadbalancer-hostname: "staging.etimo-test.live"
+    service.beta.kubernetes.io/do-loadbalancer-hostname: "k8s.etimo.se"
   name: ingress-nginx-controller-staging
   namespace: ingress-nginx
 spec:
